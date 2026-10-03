@@ -321,13 +321,15 @@ _renderQbit() {
   // Sort
   const [sortField, sortDir] = this._sort.split('_'); // e.g. 'progress','desc'
   torrents.sort((a, b) => {
-    const av = sortField === 'speed' ? (a.dlspeed || 0) : (a.progress || 0);
-    const bv = sortField === 'speed' ? (b.dlspeed || 0) : (b.progress || 0);
+    if (sortField === 'speed')   { const av = a.dlspeed || 0; const bv = b.dlspeed || 0; return sortDir === 'asc' ? av - bv : bv - av; }
+    if (sortField === 'added')   { const av = a.added_on || 0; const bv = b.added_on || 0; return sortDir === 'asc' ? av - bv : bv - av; }
+    const av = a.progress || 0; const bv = b.progress || 0;
     return sortDir === 'asc' ? av - bv : bv - av;
   });
 
   const progressActive = sortField === 'progress';
   const speedActive    = sortField === 'speed';
+  const addedActive    = sortField === 'added';
   const dir = sortDir === 'asc' ? '↑' : '↓';
 
   // Global paused = all non-completed torrents are paused
@@ -351,6 +353,9 @@ _renderQbit() {
           </button>
           <button class="sb${speedActive ? ' on' : ''}" data-sort="${speedActive ? (sortDir === 'desc' ? 'speed_asc' : 'speed_desc') : 'speed_desc'}" title="${this._t('sortBySpeed')}">
             <ha-icon icon="mdi:speedometer" class="icon-15"></ha-icon><span class="sb-dir" style="${speedActive ? '' : 'visibility:hidden'}">${dir}</span>
+          </button>
+          <button class="sb${addedActive ? ' on' : ''}" data-sort="${addedActive ? (sortDir === 'desc' ? 'added_asc' : 'added_desc') : 'added_desc'}" title="${this._t('sortByAdded')}">
+            <ha-icon icon="mdi:clock-plus-outline" class="icon-15"></ha-icon><span class="sb-dir" style="${addedActive ? '' : 'visibility:hidden'}">${dir}</span>
           </button>
         </div>
         ${this._cfgGet('downloads','allowControls',true) !== false
@@ -471,13 +476,15 @@ _renderDeluge() {
 
   const [sortField, sortDir] = this._sortDeluge.split('_');
   torrents.sort((a, b) => {
-    const av = sortField === 'speed' ? (a.download_payload_rate || 0) : (a.progress || 0);
-    const bv = sortField === 'speed' ? (b.download_payload_rate || 0) : (b.progress || 0);
+    if (sortField === 'speed') { const av = a.download_payload_rate || 0; const bv = b.download_payload_rate || 0; return sortDir === 'asc' ? av - bv : bv - av; }
+    if (sortField === 'added') { const av = a.time_added || 0; const bv = b.time_added || 0; return sortDir === 'asc' ? av - bv : bv - av; }
+    const av = a.progress || 0; const bv = b.progress || 0;
     return sortDir === 'asc' ? av - bv : bv - av;
   });
 
   const progressActive = sortField === 'progress';
   const speedActive    = sortField === 'speed';
+  const addedActive    = sortField === 'added';
   const dir = sortDir === 'asc' ? '↑' : '↓';
 
   const activeTorrents = torrents.filter(t => {
@@ -501,6 +508,9 @@ _renderDeluge() {
           </button>
           <button class="sb${speedActive ? ' on' : ''}" data-sort="${speedActive ? (sortDir === 'desc' ? 'speed_asc' : 'speed_desc') : 'speed_desc'}" data-client="deluge" title="${this._t('sortBySpeed')}">
             <ha-icon icon="mdi:speedometer" class="icon-15"></ha-icon><span class="sb-dir" style="${speedActive ? '' : 'visibility:hidden'}">${dir}</span>
+          </button>
+          <button class="sb${addedActive ? ' on' : ''}" data-sort="${addedActive ? (sortDir === 'desc' ? 'added_asc' : 'added_desc') : 'added_desc'}" data-client="deluge" title="${this._t('sortByAdded')}">
+            <ha-icon icon="mdi:clock-plus-outline" class="icon-15"></ha-icon><span class="sb-dir" style="${addedActive ? '' : 'visibility:hidden'}">${dir}</span>
           </button>
         </div>
         ${this._cfgGet('downloads','allowControls',true) !== false
@@ -979,13 +989,15 @@ _renderRtorrent() {
 
   const [sortField, sortDir] = this._sortRtorrent.split('_');
   torrents.sort((a, b) => {
-    const av = sortField === 'speed' ? (a.download_payload_rate || 0) : (a.progress || 0);
-    const bv = sortField === 'speed' ? (b.download_payload_rate || 0) : (b.progress || 0);
+    if (sortField === 'speed') { const av = a.download_payload_rate || 0; const bv = b.download_payload_rate || 0; return sortDir === 'desc' ? bv - av : av - bv; }
+    if (sortField === 'added') { const av = a.time_added || 0; const bv = b.time_added || 0; return sortDir === 'desc' ? bv - av : av - bv; }
+    const av = a.progress || 0; const bv = b.progress || 0;
     return sortDir === 'desc' ? bv - av : av - bv;
   });
 
   const progressActive = sortField === 'progress';
   const speedActive    = sortField === 'speed';
+  const addedActive    = sortField === 'added';
   const dir = sortDir === 'desc' ? '↓' : '↑';
   const allPaused = torrents.length > 0 && torrents.every(t => (t.state || '').toLowerCase() === 'paused');
 
@@ -1004,6 +1016,9 @@ _renderRtorrent() {
         </button>
         <button class="sb${speedActive ? ' on' : ''}" data-sort="${speedActive ? (sortDir === 'desc' ? 'speed_asc' : 'speed_desc') : 'speed_desc'}" data-client="rtorrent" title="${this._t('sortBySpeed')}">
           <ha-icon icon="mdi:speedometer" class="icon-15"></ha-icon><span class="sb-dir" style="${speedActive ? '' : 'visibility:hidden'}">${dir}</span>
+        </button>
+        <button class="sb${addedActive ? ' on' : ''}" data-sort="${addedActive ? (sortDir === 'desc' ? 'added_asc' : 'added_desc') : 'added_desc'}" data-client="rtorrent" title="${this._t('sortByAdded')}">
+          <ha-icon icon="mdi:clock-plus-outline" class="icon-15"></ha-icon><span class="sb-dir" style="${addedActive ? '' : 'visibility:hidden'}">${dir}</span>
         </button>
       </div>
       ${this._cfgGet('downloads','allowControls',true) !== false
@@ -1105,13 +1120,15 @@ _renderTransmission() {
 
   const [sortField, sortDir] = this._sortTransmission.split('_');
   torrents.sort((a, b) => {
-    const av = sortField === 'speed' ? (a.download_payload_rate || 0) : (a.progress || 0);
-    const bv = sortField === 'speed' ? (b.download_payload_rate || 0) : (b.progress || 0);
+    if (sortField === 'speed') { const av = a.download_payload_rate || 0; const bv = b.download_payload_rate || 0; return sortDir === 'desc' ? bv - av : av - bv; }
+    if (sortField === 'added') { const av = a.time_added || 0; const bv = b.time_added || 0; return sortDir === 'desc' ? bv - av : av - bv; }
+    const av = a.progress || 0; const bv = b.progress || 0;
     return sortDir === 'desc' ? bv - av : av - bv;
   });
 
   const progressActive = sortField === 'progress';
   const speedActive    = sortField === 'speed';
+  const addedActive    = sortField === 'added';
   const dir = sortDir === 'desc' ? '↓' : '↑';
   const allPaused = torrents.length > 0 && torrents.every(t => (t.state || '').toLowerCase() === 'paused');
 
@@ -1130,6 +1147,9 @@ _renderTransmission() {
         </button>
         <button class="sb${speedActive ? ' on' : ''}" data-sort="${speedActive ? (sortDir === 'desc' ? 'speed_asc' : 'speed_desc') : 'speed_desc'}" data-client="transmission" title="${this._t('sortBySpeed')}">
           <ha-icon icon="mdi:speedometer" class="icon-15"></ha-icon><span class="sb-dir" style="${speedActive ? '' : 'visibility:hidden'}">${dir}</span>
+        </button>
+        <button class="sb${addedActive ? ' on' : ''}" data-sort="${addedActive ? (sortDir === 'desc' ? 'added_asc' : 'added_desc') : 'added_desc'}" data-client="transmission" title="${this._t('sortByAdded')}">
+          <ha-icon icon="mdi:clock-plus-outline" class="icon-15"></ha-icon><span class="sb-dir" style="${addedActive ? '' : 'visibility:hidden'}">${dir}</span>
         </button>
       </div>
       ${this._cfgGet('downloads','allowControls',true) !== false
