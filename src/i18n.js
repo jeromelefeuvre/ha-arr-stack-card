@@ -135,6 +135,7 @@ export const ARR_I18N = {
     // Torrent akce
     sortByProgress:   'Seřadit podle progressu',
     sortBySpeed:      'Seřadit podle rychlosti',
+    sortByAdded:      'Seřadit podle data přidání',
     resumeAll:        'Spustit vše',
     pauseAll:         'Pozastavit vše',
     resumeSab:        'Spustit SAB',
@@ -1289,6 +1290,7 @@ export const ARR_I18N = {
     complete:         'Complete',
     sortByProgress:   'Sort by progress',
     sortBySpeed:      'Sort by speed',
+    sortByAdded:      'Sort by date added',
     resumeAll:        'Resume all',
     pauseAll:         'Pause all',
     resumeSab:        'Resume SAB',
@@ -2432,6 +2434,7 @@ export const ARR_I18N = {
     complete:         'Terminé',
     sortByProgress:   'Trier par progression',
     sortBySpeed:      'Trier par vitesse',
+    sortByAdded:      'Trier par date d\'ajout',
     resumeAll:        'Tout reprendre',
     pauseAll:         'Tout mettre en pause',
     resumeSab:        'Reprendre SAB',
