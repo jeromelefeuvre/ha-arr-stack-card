@@ -8,7 +8,7 @@ The card's source is in [`src/`](src); `arr-stack-card.js` is built from it, tog
 
 ```bash
 npm install
-npm run build   # src/ → arr-stack-card.js + arr-stack-card-*.js
+npm run build   # src/ → dist/arr-stack-card.js + dist/arr-stack-card-*.js
 npm test        # Node's own test runner against the source
 ```
 
