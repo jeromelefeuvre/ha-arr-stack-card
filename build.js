@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Builds arr-stack-card.js from src/.
+// Builds dist/arr-stack-card.js from src/.
 //
 // On the maintainer's machine it also deploys: the card and the integration
 // into Home Assistant, and both into the release checkouts under output/.
@@ -19,6 +19,10 @@ const HA_INT  = process.env.ARR_HA_INT || local.haInt || null;
 const INT_SRC = resolve('./integration/custom_components/arr_stack');
 const OUT_DIR = resolve('./output');
 const hasIntegration = existsSync(INT_SRC);
+// Where the bundle is written: the repository keeps the built files in dist/,
+// which HACS installs whole (see hacs.json, content_in_root: false)
+const BUILD_DIR = 'dist';
+mkdirSync(BUILD_DIR, { recursive: true });
 
 const watch = process.argv.includes('--watch');
 // The bundle's name on the maintainer's Home Assistant, behind the dev loader
@@ -52,8 +56,8 @@ const clearChunks = dir => {
   for (const f of readdirSync(dir)) if (IS_CHUNK.test(f)) rmSync(`${dir}/${f}`);
   rmSync(`${dir}/arr-stack-card-chunks`, { recursive: true, force: true });
 };
-const chunkFiles = () => readdirSync('.').filter(f => IS_CHUNK.test(f));
-if (!watch) clearChunks('.');
+const chunkFiles = () => readdirSync(BUILD_DIR).filter(f => IS_CHUNK.test(f));
+if (!watch) clearChunks(BUILD_DIR);
 
 const SHARED = {
   bundle: true,
@@ -82,11 +86,11 @@ const LAZY = [
 ];
 
 async function buildAll() {
-  clearChunks('.');
+  clearChunks(BUILD_DIR);
   const built = new Map();
   for (const [specifier, entry, name] of LAZY) {
     const out = await esbuild.build({
-      ...SHARED, entryPoints: [entry], outdir: '.',
+      ...SHARED, entryPoints: [entry], outdir: BUILD_DIR,
       entryNames: `arr-stack-card-${name}-[hash]`, metafile: true, logLevel: 'silent',
     });
     const file = Object.keys(out.metafile.outputs).find(p => p.endsWith('.js'));
@@ -107,7 +111,7 @@ async function buildAll() {
     },
   };
   await esbuild.build({
-    ...SHARED, entryPoints: { 'arr-stack-card': 'src/index.js' }, outdir: '.',
+    ...SHARED, entryPoints: { 'arr-stack-card': 'src/index.js' }, outdir: BUILD_DIR,
     entryNames: '[name]', plugins: [lazyWindows], logLevel: 'info',
   });
   return built;
@@ -132,8 +136,8 @@ if (watch) {
   // are hashed, so stale ones would never be overwritten, only pile up.
   const deployCard = (dir, entry = 'arr-stack-card.js') => {
     clearChunks(dir);
-    copyFileSync('arr-stack-card.js', `${dir}/${entry}`);
-    for (const f of chunkFiles()) copyFileSync(f, `${dir}/${f}`);
+    copyFileSync(`${BUILD_DIR}/arr-stack-card.js`, `${dir}/${entry}`);
+    for (const f of chunkFiles()) copyFileSync(`${BUILD_DIR}/${f}`, `${dir}/${f}`);
   };
 
   // Deploy do HA
@@ -157,7 +161,7 @@ if (watch) {
   // resource either; an unchanged build stays cached. The version is a hash of
   // the bundle, which covers its chunks, whose names are hashed.
   if (HA_WWW) {
-    const version = createHash('sha256').update(readFileSync('arr-stack-card.js')).digest('hex').slice(0, 12);
+    const version = createHash('sha256').update(readFileSync(`${BUILD_DIR}/arr-stack-card.js`)).digest('hex').slice(0, 12);
     writeFileSync(`${HA_WWW}/arr-stack-card.version`, version + '\n');
     const loader = `// Development loader for the Arr Stack Card, written by build.js — see there.
 const v = await fetch('/local/arr-stack-card.version', { cache: 'no-store' })
