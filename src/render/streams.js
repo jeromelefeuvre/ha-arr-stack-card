@@ -1,4 +1,5 @@
 import { RANGE_MARKS, rangeMarkSvg } from '../shared/logos.js';
+import { fmtRate } from '../shared/playback.js';
 // Now Playing: the stream cards and their timer. Split out of render/right.js.
 
 class _StreamsRenderMethods {
@@ -336,6 +337,11 @@ _renderStreamCard({ id, state, attr }) {
   // a badge against.
   const rangeTag = this._streamRangeBadge(attr._dynRange, { cls: 'stream-hdr-tag stream-hdr-line' });
 
+  // From what, how, to what — only when asked for in the card's settings
+  const techLine = this._cfgGet('streams', 'showTechInfo', false)
+    ? this._streamTechLine(plexMatch?.attr?._tech || attr._tech)
+    : '';
+
   // User name — for Plex match against _plexSessions (has _plexUser from API)
   //             Jellyfin: parse from entity_id segment
   let userName = '';
@@ -401,17 +407,35 @@ _renderStreamCard({ id, state, attr }) {
       ${userBadge}
       ${this._mcGrad(grad, isMusic ? `
         ${this._musStreamRating(attr)}
+        ${techLine}
         <div style="font-size:10px;font-weight:700;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(title)}</div>
         ${sub}
       ` : `
         ${epLabel ? `<div style="margin-bottom:3px"><span class="imdb">${epLabel}</span></div>` : ''}
         ${isLiveTV && channel ? `<div style="margin-bottom:3px"><span class="imdb">${this._escHtml(channel)}</span></div>` : ''}
         ${rangeTag ? `<div style="margin-bottom:3px">${rangeTag}</div>` : ''}
+        ${techLine}
         <div style="font-size:10px;font-weight:700;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(title)}</div>
         ${sub}
       `)}
       ${progBar}
     </div>`;
+}
+
+// "SD › Direct Play › SD · 8.2 Mbps". Each piece keeps to itself on a narrow
+// poster, so the line wraps between them rather than inside one. The method
+// takes the colour the activity pages give it.
+_streamTechLine(tech) {
+  if (!tech?.method) return '';
+  const key = { direct: 'tlFilterDirectPlay', stream: 'tlFilterDirectStream', transcode: 'tlFilterTranscode' }[tech.method];
+  const sep = '<span class="stream-tech-sep">›</span>';
+  const parts = [];
+  if (tech.from) parts.push(`<span>${this._escHtml(tech.from)}</span>`, sep);
+  parts.push(`<span class="stream-tech-m stream-tech-${tech.method}">${this._escHtml(this._t(key))}</span>`);
+  if (tech.to) parts.push(sep, `<span>${this._escHtml(tech.to)}</span>`);
+  const rate = fmtRate(tech.kbps);
+  if (rate) parts.push('<span class="stream-tech-sep">·</span>', `<span>${rate}</span>`);
+  return `<div class="stream-tech">${parts.join('')}</div>`;
 }
 
 // The playing artist's own score, where Lidarr holds them — the same badge the
