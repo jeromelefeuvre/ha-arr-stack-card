@@ -20,14 +20,14 @@ async _fetchCapabilities() {
   try {
     const caps = await this._callApi('GET', 'arr_stack/capabilities/info');
     this._capsLoaded = true;
-    if (!caps.qbit)      this._qbitConfigured      = false;
-    if (!caps.sabnzbd)   this._sabConfigured        = false;
-    if (!caps.nzbget)    this._nzbgetConfigured     = false;
-    if (!caps.deluge)    this._delugeConfigured     = false;
-    if (caps.rtorrent)   this._rtorrentConfigured   = true;
-    else                 this._rtorrentConfigured   = false;
-    if (caps.transmission) this._transmissionConfigured = true;
-    else                   this._transmissionConfigured = false;
+    // Download clients get a definite answer either way: they are polled every
+    // five seconds, and a flag left unknown is a flag that gets polled.
+    this._qbitConfigured         = !!caps.qbit;
+    this._sabConfigured          = !!caps.sabnzbd;
+    this._nzbgetConfigured       = !!caps.nzbget;
+    this._delugeConfigured       = !!caps.deluge;
+    this._rtorrentConfigured     = !!caps.rtorrent;
+    this._transmissionConfigured = !!caps.transmission;
     if (!caps.radarr2)   this._radarr2Configured    = false;
     if (!caps.sonarr2)   this._sonarr2Configured    = false;
     if (!caps.bazarr)    this._bazarrConfigured      = false;

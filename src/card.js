@@ -193,9 +193,12 @@ class ArrStackCard extends HTMLElement {
     this._sabDeleteBusy = null;      // nzo_id položky, jejíž smazání z history probíhá
     this._qbCookies = null;
     this._capsLoaded = false;       // true after first capabilities fetch
-    this._qbitConfigured   = true; // false pokud proxy vrátí 503 (není nakonfigurován)
-    this._sabConfigured    = true; // false pokud proxy vrátí 503 (není nakonfigurován)
-    this._nzbgetConfigured = true;
+    // null = unknown until capabilities answer; a fetch that succeeds sets true,
+    // a 503 sets false. Starting at true made the card poll clients that were
+    // never set up whenever the capabilities call failed.
+    this._qbitConfigured   = null;
+    this._sabConfigured    = null;
+    this._nzbgetConfigured = null;
     this._nzbget           = null;   // status { DownloadRate, DownloadPaused, FreeDiskSpaceMB, TotalDiskSpaceMB }
     this._nzbgetQueue      = [];     // queue items from listgroups
     this._nzbgetFailed     = [];     // failed items from history
@@ -204,7 +207,7 @@ class ArrStackCard extends HTMLElement {
     this._nzbgetItemBusy   = null;   // NZBID of item with pending action
     this._nzbgetConfirm    = null;   // NZBID awaiting delete confirm
     this._nzbgetRetryBusy  = null;   // NZBID of item being retried
-    this._delugeConfigured = true;
+    this._delugeConfigured = null;
     this._deluge           = null;   // { download_rate, upload_rate }
     this._delugeQueue      = [];     // active torrents
     this._delugeBusy       = false;  // global action in progress
