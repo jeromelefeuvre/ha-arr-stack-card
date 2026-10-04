@@ -161,6 +161,15 @@ _streamPlexSession(id, attr) {
   const sessions = this._plexSessions || [];
   if (id.startsWith('plex:')) return sessions.find(s => s.id === id) || null;
   if (!id.startsWith('media_player.plex_')) return null;
+  // The item first: Home Assistant's Plex player carries the rating key in
+  // media_content_id, and the session carries it too. Names are the fallback
+  // — two players can play the same title, and the moment a track changes the
+  // name on one side runs ahead of the other.
+  const key = attr.media_content_id != null ? String(attr.media_content_id) : '';
+  if (key) {
+    const byKey = sessions.find(s => String(s._plexRatingKey || '') === key);
+    if (byKey) return byKey;
+  }
   return sessions.find(s => {
     const sTitle = s.attr.media_title || '';
     const hTitle = attr.media_title || '';
@@ -337,10 +346,6 @@ _renderStreamCard({ id, state, attr }) {
   // a badge against.
   const rangeTag = this._streamRangeBadge(attr._dynRange, { cls: 'stream-hdr-tag stream-hdr-line' });
 
-  // From what, how, to what — only when asked for in the card's settings
-  const techLine = this._cfgGet('streams', 'showTechInfo', false)
-    ? this._streamTechLine(plexMatch?.attr?._tech || attr._tech)
-    : '';
 
   // User name — for Plex match against _plexSessions (has _plexUser from API)
   //             Jellyfin: parse from entity_id segment
@@ -385,6 +390,13 @@ _renderStreamCard({ id, state, attr }) {
       </div>`
     : '';
 
+  // How the stream reaches that person, in the stack of tags it belongs to —
+  // device, who, how — rather than among the title's own lines. Only when
+  // asked for in the card's settings.
+  const techTag = this._cfgGet('streams', 'showTechInfo', false)
+    ? this._streamTechTag(plexMatch?.attr?._tech || attr._tech, { below: !!userBadge })
+    : '';
+
   // A track playing by an artist the library holds opens that artist rather
   // than the plain stream popup — the same detail every other music poster
   // opens, with the transport added.
@@ -405,16 +417,15 @@ _renderStreamCard({ id, state, attr }) {
       ${svcBadge}
       ${pausedOverlay}
       ${userBadge}
+      ${techTag}
       ${this._mcGrad(grad, isMusic ? `
         ${this._musStreamRating(attr)}
-        ${techLine}
         <div style="font-size:10px;font-weight:700;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(title)}</div>
         ${sub}
       ` : `
         ${epLabel ? `<div style="margin-bottom:3px"><span class="imdb">${epLabel}</span></div>` : ''}
         ${isLiveTV && channel ? `<div style="margin-bottom:3px"><span class="imdb">${this._escHtml(channel)}</span></div>` : ''}
         ${rangeTag ? `<div style="margin-bottom:3px">${rangeTag}</div>` : ''}
-        ${techLine}
         <div style="font-size:10px;font-weight:700;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(title)}</div>
         ${sub}
       `)}
@@ -422,20 +433,30 @@ _renderStreamCard({ id, state, attr }) {
     </div>`;
 }
 
-// "SD › Direct Play › SD · 8.2 Mbps". Each piece keeps to itself on a narrow
-// poster, so the line wraps between them rather than inside one. The method
-// takes the colour the activity pages give it.
-_streamTechLine(tech) {
+// How the stream reaches the person watching, as a capsule under them: the
+// method on top, the picture (or the codec, for music) and the rate beneath —
+// "Direct Play / 4K · 5.2 Mbps", "Transcode / 4K→720p · 4.0 Mbps". The
+// resolution is named once when it does not change; "4K › … › 4K" said it twice.
+//
+// The method is coloured by what it costs the server, since that is what anyone
+// looking at it wants to know: a direct play costs nothing and reads green, a
+// direct stream — a new container around the same picture — reads blue, and a
+// transcode keeps the processor busy and reads orange. Only the word: the icon
+// and the figures stay the colour of the tags around them.
+_streamTechTag(tech, { below = false } = {}) {
   if (!tech?.method) return '';
-  const key = { direct: 'tlFilterDirectPlay', stream: 'tlFilterDirectStream', transcode: 'tlFilterTranscode' }[tech.method];
-  const sep = '<span class="stream-tech-sep">›</span>';
-  const parts = [];
-  if (tech.from) parts.push(`<span>${this._escHtml(tech.from)}</span>`, sep);
-  parts.push(`<span class="stream-tech-m stream-tech-${tech.method}">${this._escHtml(this._t(key))}</span>`);
-  if (tech.to) parts.push(sep, `<span>${this._escHtml(tech.to)}</span>`);
+  const key  = { direct: 'tlFilterDirectPlay', stream: 'tlFilterDirectStream', transcode: 'tlFilterTranscode' }[tech.method];
+  const icon = { direct: 'mdi:play-circle-outline', stream: 'mdi:swap-horizontal', transcode: 'mdi:cog-sync-outline' }[tech.method];
+  const pic = tech.from && tech.to && tech.from !== tech.to
+    ? `${this._escHtml(tech.from)}→${this._escHtml(tech.to)}`
+    : this._escHtml(tech.to || tech.from || '');
   const rate = fmtRate(tech.kbps);
-  if (rate) parts.push('<span class="stream-tech-sep">·</span>', `<span>${rate}</span>`);
-  return `<div class="stream-tech">${parts.join('')}</div>`;
+  const detail = [pic, rate].filter(Boolean).join(' · ');
+  const cls = `stream-tech-tag stream-tech-${tech.method}${below ? '' : ' stream-tech-up'}`;
+  return `<div class="${cls}"><ha-icon icon="${icon}" style="--mdc-icon-size:10px;flex-shrink:0"></ha-icon>`
+    + `<span class="stream-tech-txt"><span class="stream-tech-m">${this._escHtml(this._t(key))}</span>`
+    + (detail ? `<span class="stream-tech-rate">${detail}</span>` : '')
+    + `</span></div>`;
 }
 
 // The playing artist's own score, where Lidarr holds them — the same badge the

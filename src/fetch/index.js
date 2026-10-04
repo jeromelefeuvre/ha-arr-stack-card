@@ -45,6 +45,8 @@ async _fetchCapabilities() {
     if (!caps.suggestarr) this._suggestarrConfigured  = false;
     // Opted out in the integration — the ping never fires for this install
     if (caps.metrics === false) this._metricsOptOut = true;
+    // The installation's own id for the usage ping (see _pingSid)
+    if (typeof caps.iid === 'string' && /^[0-9a-f]{16}$/.test(caps.iid)) this._iid = caps.iid;
     if (!caps.prowlarr)    this._prowlarrConfigured     = false;
     if (!caps.maintainerr) this._maintainerrConfigured  = false;
     if (!caps.gluetun)  this._gluetunConfigured      = false;
@@ -54,6 +56,19 @@ async _fetchCapabilities() {
   } catch (_) {
     // fallback: leave flags at defaults, services auto-detect via 503
   }
+}
+
+// What Now Playing shows of each session that is not in Home Assistant's own
+// state: which item, and how it travels. A new track or a stream that started
+// transcoding has to redraw the tiles, and nothing else would — they follow
+// Home Assistant's state changes, and these arrive by polling.
+_streamSessionSig() {
+  const row = (x, item) => `${x.id}|${item || ''}|${x.attr?._tech?.method || ''}|${x.attr?._tech?.kbps || ''}`;
+  return [
+    ...(this._plexSessions || []).map(x => row(x, x._plexRatingKey)),
+    ...(this._jellyfinSessions || []).map(x => row(x, x.attr?._jfItemId)),
+    ...(this._embySessions || []).map(x => row(x, x.attr?._embyItemId)),
+  ].sort().join(',');
 }
 
 async _fetchAll() {
@@ -289,6 +304,9 @@ async _fetchDownloadsAndRender() {
   const prevTransmission = new Set((this._transmissionQueue || []).map(t => t.hash));
   const hadItems = prevQbit.size > 0 || prevSab.size > 0 || prevNzbget.size > 0 || prevDeluge.size > 0 || prevRtorrent.size > 0 || prevTransmission.size > 0;
 
+  // Compared after the fetch (see _streamSessionSig)
+  const prevSessions = this._streamSessionSig();
+
   // Sessions at 5s only when streams are currently active — avoids ~4 calls/5s when idle
   const hasActiveStreams = (this._jellyfinSessions?.length > 0)
                         || (this._embySessions?.length > 0)
@@ -309,6 +327,7 @@ async _fetchDownloadsAndRender() {
     hasActiveStreams ? this._fetchKodiSessions()     : Promise.resolve(),
     this._lidarrConfigured !== false ? this._fetchLidarrQueue() : Promise.resolve(),
   ]);
+  if (this._streamSessionSig() !== prevSessions) this._reRenderSection('streams');
 
   if (hadItems) {
     const currQbit     = new Set((this._qbit || []).map(t => t.hash));

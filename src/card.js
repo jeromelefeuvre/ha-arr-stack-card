@@ -489,6 +489,21 @@ class ArrStackCard extends HTMLElement {
       // 0b) The track in an open artist window changed on its own
       if (this._musicModal?.stream) this._musWatchStream();
 
+      // 0c) A Plex player moved on to another item. What the tile shows beyond
+      // Home Assistant's state — who, how it travels — comes from the session
+      // list, which is only polled every few seconds; asked again now, the
+      // tile catches up as soon as Plex has the new item.
+      for (const id of Object.keys(cur)) {
+        if (!id.startsWith('media_player.plex_')) continue;
+        const a = cur[id]?.attributes?.media_content_id;
+        const b = old[id]?.attributes?.media_content_id;
+        if (a != null && a !== b) {
+          this._plexLastFetch = 0;
+          Promise.resolve(this._fetchPlexSessions?.()).then(() => this._reRenderSection('streams'));
+          break;
+        }
+      }
+
       // 1) New stream started (idle/off → playing/paused)
       for (const id of Object.keys(cur)) {
         if (!(id.startsWith('media_player.plex_') || id.startsWith('media_player.jellyfin_'))) continue;

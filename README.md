@@ -89,7 +89,7 @@ Services not configured in the integration are hidden automatically — no manua
 
 The left panel appears when at least one download manager is configured. You can enable, disable, and reorder clients from the visual editor (Left Panel — Download Clients section).
 
-- **qBittorrent** — active torrents with download and upload speed, progress, seeder/leecher counts. Pause, resume, stop seeding, delete (with or without files), global pause/resume, sort by progress or speed. Total speed chip shows combined download and upload across all active torrents.
+- **qBittorrent** — active torrents with download and upload speed, progress, seeder/leecher counts. Pause, resume, stop seeding, delete (with or without files), global pause/resume, sort by progress, speed or the date it was added. Total speed chip shows combined download and upload across all active torrents.
 - **Deluge** — same feature set as qBittorrent: active torrents, speed, progress, seeds/peers, pause/resume per torrent and globally, delete with or without files.
 - **rTorrent / ruTorrent** — same feature set as qBittorrent: active torrents, speed, progress, seeds/peers, pause/resume per torrent and globally, delete with or without files. Connects via the ruTorrent XMLRPC endpoint.
 - **Transmission** — same feature set as qBittorrent: active torrents, speed, progress, seeds/peers, pause/resume per torrent and globally, delete with or without files. Connects over Transmission's own RPC, so Home Assistant's Transmission integration is not needed.
@@ -183,6 +183,8 @@ Fill in Lidarr and the card handles music the same way it handles films and show
 #### Now Playing
 
 Live view of what's playing across your media servers — title, poster, progress bar, and source badge. Auto-hidden when nothing is playing. Supports Plex, Jellyfin, Emby, and Kodi simultaneously.
+
+Turn on *Show playback details* in the editor and each stream also says how it reaches its player — **Direct Play**, **Direct Stream** or **Transcode**, with the resolution and bitrate. The method is coloured by what it costs your server: green costs nothing, blue next to nothing, orange keeps the processor busy.
 
 Films, episodes and music alike, from whichever client is playing them — a TV app, a browser tab, Plexamp on a phone. A track shows its cover and artist, and clicking it opens that artist with play, pause and skip under the name, so the row doubles as a remote for whatever is playing.
 
@@ -425,17 +427,20 @@ Available settings (card editor → One-click Request):
 
 ## Analytics
 
-Arr Stack Card sends one anonymous ping per browser session. The following data is collected:
+Arr Stack Card sends one anonymous ping when it loads in a browser, one more the first time you use it in that session, and one if a part of the card fails to download. The following data is collected:
 
 | Field | What it contains |
 |-------|-----------------|
-| **Card version** | e.g. `1.8.0` |
-| **Anonymous site ID** | Short hash of your Home Assistant hostname — cannot be reversed to identify you or your server |
+| **Card version** | e.g. `1.9.7` |
+| **Installation ID** | A random-looking value, the same for your whole Home Assistant installation. It is a salted SHA-256 hash of Home Assistant's own instance ID, so it cannot be turned back into that ID or matched with Home Assistant's own analytics. Without the Arr Stack integration, a random value kept in your browser is used instead |
 | **Enabled integrations** | Which services are configured (e.g. Plex, Bazarr, qBittorrent) — no credentials, URLs, or settings |
 | **Mobile flag** | Whether the card is shown on a screen narrower than 600 px |
 | **Activation flag** | Whether you interacted with the card during this session (clicked anything) |
+| **Failed window** | The name of a part of the card that could not be downloaded (e.g. `activity`), if that happens |
 
-No IP addresses, hostnames, usernames, media titles, or any personally identifiable information are sent or stored. Rate-limited to one ping per IP per minute on the server side. Data is retained for 6 months.
+No IP addresses, hostnames, usernames, media titles, or any personally identifiable information are stored. Rate-limited to one ping per IP per minute on the server side. Data is retained for 6 months.
+
+> **A correction.** Up to v1.9.6 the site ID was not a hash, as this section used to say: it was the first 12 characters of the address you open Home Assistant at, base64-encoded, which can be read back. Every value already stored has been replaced with a one-way hash, and from v1.9.7 the card no longer derives anything from your address. To keep your history continuous, a browser updating to v1.9.7 sends its old ID one last time; the server hashes it on arrival and never stores it as sent.
 
 Live usage stats (public): [argalas.org/arr-stats](https://argalas.org/arr-stats)
 

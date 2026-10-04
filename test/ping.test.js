@@ -97,3 +97,66 @@ test('an opted-out install reports no failed window either', () => {
   const sent = captureAll(card, () => card._reportChunkFailure('tracearr'));
   assert.deepEqual(sent, []);
 });
+
+// The install id: a hash the integration hands over, never anything derived
+// from the address Home Assistant is reached at.
+test('the integration\'s installation id is the sid', () => {
+  const card = makeCard();
+  card._iid = '0123456789abcdef';
+  const [body] = capture(card);
+  assert.equal(body.sid, '0123456789abcdef');
+});
+
+test('without it, a random id is kept in this browser', () => {
+  const store = new Map();
+  globalThis.localStorage = {
+    getItem: k => (store.has(k) ? store.get(k) : null),
+    setItem: (k, v) => store.set(k, String(v)),
+  };
+  const card = makeCard();
+  card._iid = null;
+  const [first] = capture(card);
+  assert.match(first.sid, /^[0-9a-f]{16}$/);
+  const again = makeCard();
+  again._iid = null;
+  const [second] = capture(again);
+  assert.equal(second.sid, first.sid, 'the same browser keeps its id');
+});
+
+test('the sid never carries the hostname', () => {
+  const card = makeCard();
+  card._iid = null;
+  const legacy = btoa(location.hostname).replace(/=/g, '').slice(0, 16);
+  const [body] = capture(card);
+  assert.notEqual(body.sid, legacy);
+});
+
+test('the old id goes once, so the history can follow, and then never again', () => {
+  // The test page has no hostname at all; a real one always does
+  const prevLoc = Object.getOwnPropertyDescriptor(globalThis, 'location');
+  Object.defineProperty(globalThis, 'location', { value: { hostname: 'homeassistant.local' }, configurable: true });
+  const store = new Map();
+  globalThis.localStorage = {
+    getItem: k => (store.has(k) ? store.get(k) : null),
+    setItem: (k, v) => store.set(k, String(v)),
+  };
+  const card = makeCard();
+  card._iid = '0123456789abcdef';
+  const [first] = capture(card);
+  assert.ok(first.lsid, 'the first ping names the old id');
+  const [second] = capture(card);
+  assert.ok(!('lsid' in second), 'and only the first');
+  const other = makeCard();
+  other._iid = '0123456789abcdef';
+  const [third] = capture(other);
+  assert.ok(!('lsid' in third), 'not even after the page is reloaded');
+  if (prevLoc) Object.defineProperty(globalThis, 'location', prevLoc);
+});
+
+test('a malformed id from the integration is not used', async () => {
+  const card = makeCard();
+  card._capsLoaded = false;
+  card._callApi = async () => ({ iid: 'not-a-hash', metrics: true });
+  await card._fetchCapabilities();
+  assert.ok(!card._iid);
+});

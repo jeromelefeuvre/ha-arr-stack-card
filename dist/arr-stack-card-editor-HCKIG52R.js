@@ -398,6 +398,16 @@ var ArrStackCardEditor=class extends HTMLElement{constructor(){super(),this.atta
           <div class="hint">Tags show status badges on posters. Stripes show a coloured bar at the bottom with download progress. Both combines them.</div>
         </div>
 
+        <!-- Now Playing -->
+        <div class="section">
+          <div class="section-title">Now Playing</div>
+          <div class="row">
+            <span class="row-label">Show playback details</span>
+            <label class="toggle"><input type="checkbox" data-group="streams" data-key="showTechInfo" ${this._cfg("streams","showTechInfo",!1)?"checked":""}><span class="toggle-slider"></span></label>
+          </div>
+          <div class="hint">Adds a line to each stream: the source, Direct Play / Direct Stream / Transcode, what reaches the player, and the bitrate \u2014 e.g. 1080p \u203A Transcode \u203A 720p \xB7 4.0 Mbps. Plex, Jellyfin and Emby only.</div>
+        </div>
+
         <!-- Categories -->
         <div class="section">
           <div class="section-title">Categories</div>

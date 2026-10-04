@@ -106,12 +106,66 @@ test('the line stays off unless the card asks for it', () => {
 
 test('switched on, the tile says how the stream travels', () => {
   const html = tile({ streams: { showTechInfo: true } }, TECH);
-  assert.match(html, /class="stream-tech"/);
-  assert.match(html, /stream-tech-direct">Direct Play</);
-  assert.match(html, /8\.2 Mbps/);
-  assert.equal((html.match(/>SD</g) || []).length, 2, 'from and to');
+  assert.match(html, /class="stream-tech-tag stream-tech-direct/);
+  assert.match(html, /<span class="stream-tech-m">Direct Play<\/span><span class="stream-tech-rate">SD · 8\.2 Mbps<\/span>/,
+    'how on top; the picture once, then the rate');
+});
+
+test('a transcode names both ends', () => {
+  const html = tile({ streams: { showTechInfo: true } }, { from: '4K', method: 'transcode', to: '720p', kbps: 4000 });
+  assert.match(html, /stream-tech-transcode/);
+  assert.match(html, /<span class="stream-tech-m">Transcode<\/span><span class="stream-tech-rate">4K→720p · 4\.0 Mbps/);
+});
+
+test('each method is told apart by what it costs the server', () => {
+  const on = { streams: { showTechInfo: true } };
+  assert.match(tile(on, { from: '4K', method: 'direct', to: '4K', kbps: 1 }), /stream-tech-direct/);
+  assert.match(tile(on, { from: '4K', method: 'stream', to: '4K', kbps: 1 }), /stream-tech-stream/);
+  assert.match(tile(on, { from: '4K', method: 'transcode', to: '1080p', kbps: 1 }), /stream-tech-transcode/);
+});
+
+test('it sits under the person watching, or where that tag would be', () => {
+  const c = makeCard();
+  const on = { streams: { showTechInfo: true } };
+  c._config = { ...(c._config || {}), ...on };
+  const alone = c._renderStreamCard({ id: 'jellyfin:s1', state: 'playing', attr: { media_content_type: 'movie', media_title: 'Film', _tech: TECH } });
+  assert.match(alone, /stream-tech-tag stream-tech-direct stream-tech-up/, 'no user tag: it moves up into its place');
+  const withUser = c._renderStreamCard({ id: 'jellyfin:s1', state: 'playing', attr: { media_content_type: 'movie', media_title: 'Film', _jfUser: 'argi', _tech: TECH } });
+  assert.match(withUser, /stream-user-tag/);
+  assert.match(withUser, /class="stream-tech-tag stream-tech-direct"/, 'with one: underneath it');
 });
 
 test('switched on with nothing known, the tile is unchanged', () => {
   assert.doesNotMatch(tile({ streams: { showTechInfo: true } }, undefined), /stream-tech/);
+});
+
+// A Plex player in Home Assistant and the session behind it are the same item,
+// and the item is what pairs them — the names fall out of step the moment a
+// track changes.
+test('a Plex player is paired with its session by the item, not the name', () => {
+  const c = makeCard();
+  c._plexSessions = [
+    { id: 'plex:a', _plexRatingKey: '111', attr: { media_title: 'Old track', _tech: { method: 'direct' } } },
+    { id: 'plex:b', _plexRatingKey: '222', attr: { media_title: 'Something else', _tech: { method: 'transcode' } } },
+  ];
+  const hit = c._streamPlexSession('media_player.plex_plexamp', { media_content_id: 222, media_title: 'New track' });
+  assert.equal(hit?.id, 'plex:b');
+});
+
+test('without an item id the name still pairs them', () => {
+  const c = makeCard();
+  c._plexSessions = [{ id: 'plex:a', attr: { media_title: 'Film', media_series_title: '' } }];
+  assert.equal(c._streamPlexSession('media_player.plex_tv', { media_title: 'Film' })?.id, 'plex:a');
+});
+
+test('a session that moved on reads differently, an unchanged one the same', () => {
+  const c = makeCard();
+  c._plexSessions = [{ id: 'plex:a', _plexRatingKey: '1', attr: { _tech: { method: 'direct', kbps: 1000 } } }];
+  const before = c._streamSessionSig();
+  assert.equal(c._streamSessionSig(), before, 'nothing changed, nothing to redraw');
+  c._plexSessions = [{ id: 'plex:a', _plexRatingKey: '2', attr: { _tech: { method: 'direct', kbps: 1000 } } }];
+  assert.notEqual(c._streamSessionSig(), before, 'the next track');
+  const next = c._streamSessionSig();
+  c._plexSessions[0].attr._tech = { method: 'transcode', kbps: 4000 };
+  assert.notEqual(c._streamSessionSig(), next, 'or the same one, now transcoded');
 });

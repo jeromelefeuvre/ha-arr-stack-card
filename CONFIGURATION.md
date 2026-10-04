@@ -73,8 +73,9 @@ posters:
 
 # Now Playing
 streams:
-  showTechInfo: false          # source › Direct Play / Direct Stream / Transcode › output · bitrate
-                               # on each stream (Plex, Jellyfin, Emby)  (default: false)
+  showTechInfo: false          # a tag under the viewer: Direct Play / Direct Stream / Transcode,
+                               # then resolution (4K→720p when it changes) · bitrate
+                               # (Plex, Jellyfin, Emby)  (default: false)
 
 # Category order & visibility
 categories:
