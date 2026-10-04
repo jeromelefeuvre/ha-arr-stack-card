@@ -270,6 +270,14 @@ export const STYLES = `
       .stream-hdr-tag.hdr-logo { color: rgba(255,255,255,0.92); }
       .stream-hdr-tag.hdr-logo.hdr-dv, .pp-hdr-chip.hdr-logo.hdr-dv { color: #e8c469; }
       .pp-hdr-chip { display: inline-flex; align-items: center; font-size: 9px; font-weight: 800; letter-spacing: 0.6px; padding: 2px 6px; border-radius: 4px; color: #ffd166; border: 1px solid rgba(255,209,102,0.35); background: rgba(255,209,102,0.08); }
+      /* How the stream travels — source, method, what arrives, and the rate.
+         Each piece stays whole so a narrow tile wraps between them. */
+      .stream-tech { display: flex; flex-wrap: wrap; align-items: center; column-gap: 3px; row-gap: 1px; margin-bottom: 3px; font-size: 8px; font-weight: 700; line-height: 1.25; color: rgba(var(--arr-pt-rgb,255,255,255),0.72); }
+      .stream-tech > span { white-space: nowrap; }
+      .stream-tech-sep { opacity: 0.5; }
+      .stream-tech-m.stream-tech-direct    { color: #34C759; }
+      .stream-tech-m.stream-tech-stream    { color: #5AC8FA; }
+      .stream-tech-m.stream-tech-transcode { color: #FF9500; }
       .stream-user-tag { position: absolute; top: 28px; left: 6px; z-index: 2; background: rgba(0,0,0,0.62); backdrop-filter: blur(4px); color: rgba(var(--arr-st-rgb,255,255,255),0.92); font-size: 9px; font-weight: 700; padding: 2px 5px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px; pointer-events: none; max-width: calc(100% - 12px); overflow: hidden; }
       .popup-ctrl-btn { background: rgba(255,255,255,0.08); border: none; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: rgba(255,255,255,0.85); transition: background 0.15s; }
       .popup-ctrl-btn:hover { background: rgba(255,255,255,0.16); }

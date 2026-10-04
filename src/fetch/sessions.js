@@ -1,4 +1,5 @@
 import { plexRange, rangeLabel } from '../shared/range.js';
+import { jfTech, plexTech } from '../shared/playback.js';
 class _SessionsMethods {
 
 async _fetchPlexSessions() {
@@ -87,7 +88,10 @@ _normalizePlexSession(s) {
       // Plex words the picture its own way — a Dolby Vision flag and a
       // colour transfer — reduced to the same name Jellyfin's is
       _dynRange:               plexRange(s),
+      // From what to what, and how — read again once the file itself is known
+      _tech:                   plexTech(s),
     },
+    _plexRaw:           s,
     _machineIdentifier: player.machineIdentifier,
     // Plex says which of its players will take a command. Plex Web takes none
     // — it never registers as controllable — so a card that offered pause and
@@ -127,14 +131,25 @@ async _plexIdsForKey(key) {
   if (!key) return { tmdbId: null, tvdbId: null };
   this._plexIdCache = this._plexIdCache || {};
   if (this._plexIdCache[key]) return this._plexIdCache[key];
-  let ids = { tmdbId: null, tvdbId: null };
-  try {
-    const meta = await this._callApi('GET', `arr_stack/plex/metadata?ratingKey=${encodeURIComponent(key)}`);
-    const md = meta?.MediaContainer?.Metadata?.[0];
-    ids = this._plexIdsFromGuids([md?.guid, ...((md?.Guid || []).map(g => g?.id))].filter(Boolean));
-  } catch (_) {}
+  const md = await this._plexMetaForKey(key);
+  const ids = this._plexIdsFromGuids([md?.guid, ...((md?.Guid || []).map(g => g?.id))].filter(Boolean));
   this._plexIdCache[key] = ids;
   return ids;
+}
+
+// One library item's metadata, remembered: a session list is polled every few
+// seconds and the item behind it does not change.
+async _plexMetaForKey(key) {
+  if (!key) return null;
+  this._plexMetaCache = this._plexMetaCache || {};
+  if (key in this._plexMetaCache) return this._plexMetaCache[key];
+  let md = null;
+  try {
+    const meta = await this._callApi('GET', `arr_stack/plex/metadata?ratingKey=${encodeURIComponent(key)}`);
+    md = meta?.MediaContainer?.Metadata?.[0] || null;
+  } catch (_) {}
+  this._plexMetaCache[key] = md;
+  return md;
 }
 
 async _resolvePlexSessionIds() {
@@ -149,6 +164,11 @@ async _resolvePlexSessionIds() {
     }
     s._tmdbId = ids.tmdbId;
     s._tvdbId = ids.tvdbId;
+    // A transcoding session describes only what it sends; what it starts from
+    // is the library item's, fetched once per title
+    if (s.attr._tech?.method === 'transcode' && s._plexRatingKey) {
+      s.attr._tech = plexTech(s._plexRaw, await this._plexMetaForKey(s._plexRatingKey));
+    }
   }
 }
 
@@ -303,6 +323,7 @@ _normalizeJellyfinSession(s, serverUrl, apiToken) {
       // the transport. Jellyfin says it in the session; Plex has to be asked.
       _audioCodec:               (np.MediaStreams || []).find(x => (x.Type || '') === 'Audio')?.Codec || '',
       _audioBitrate:             Math.round(((np.MediaStreams || []).find(x => (x.Type || '') === 'Audio')?.BitRate || 0) / 1000),
+      _tech:                     jfTech(s),
       _jfItemId:                 itemId,
       _jfServerUrl:              serverUrl || '',
       _jfServerId:               s.ServerId || np.ServerId || '',
@@ -374,6 +395,7 @@ _normalizeEmbySession(s, serverUrl, apiToken) {
       // The same three Jellyfin's session carries, for the same reason
       _audioCodec:               (np.MediaStreams || []).find(x => (x.Type || '') === 'Audio')?.Codec || '',
       _audioBitrate:             Math.round(((np.MediaStreams || []).find(x => (x.Type || '') === 'Audio')?.BitRate || 0) / 1000),
+      _tech:                     jfTech(s),
       _embyItemId:               itemId,
       _embyServerUrl:            serverUrl || '',
       _embyServerId:             s.ServerId || np.ServerId || '',
