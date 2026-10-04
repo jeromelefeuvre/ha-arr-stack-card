@@ -71,6 +71,11 @@ posters:
   langDisplay: flags           # flags | tags  (default: flags)
   goneTag: all                 # all | maintainerr | off  (default: all)
 
+# Now Playing
+streams:
+  showTechInfo: false          # source › Direct Play / Direct Stream / Transcode › output · bitrate
+                               # on each stream (Plex, Jellyfin, Emby)  (default: false)
+
 # Category order & visibility
 categories:
   - id: recentlyAdded
