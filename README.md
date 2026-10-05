@@ -5,12 +5,17 @@
 [![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2024.1%2B-brightgreen.svg)](https://www.home-assistant.io)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Discord](https://img.shields.io/discord/1503764189057908798?logo=discord&label=chat&color=5865F2&logoColor=white)](https://discord.gg/WVCyejJfKd)
+[![Website](https://img.shields.io/badge/website-arrcard.argalas.org-0a84ff)](https://arrcard.argalas.org)
+
+<a href="https://arrcard.argalas.org" target="_blank"><img src="https://img.shields.io/badge/Live%20demo%20%26%20screenshots-0a84ff?style=for-the-badge" alt="Live demo and screenshots" height="50"></a>
 
 <a href="https://buymeacoffee.com/argii" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50"></a>
 
 <a href="https://discord.gg/WVCyejJfKd" target="_blank"><img src="https://img.shields.io/badge/Join%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Join Discord" height="50"></a>
 
 Manage your full media server stack — Radarr, Sonarr, Lidarr, qBittorrent, Deluge, rTorrent, Transmission, SABnzbd, NZBGet, Seerr (Overseerr/Jellyseerr), Bazarr, Plex, Jellyfin, Emby, Kodi, Tautulli, Jellystat, Tracearr, Prowlarr, Maintainerr, SuggestArr, Trakt, and Last.fm — directly from Home Assistant with a single unified dashboard card.
+
+**[See it at arrcard.argalas.org](https://arrcard.argalas.org)** — screenshots for every screen, and a live demo you can click through with just the apps you run.
 
 ### At a glance
 
