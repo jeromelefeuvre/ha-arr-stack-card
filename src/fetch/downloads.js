@@ -1,13 +1,15 @@
 class _DownloadsMethods {
 
 async _fetchSab() {
+  if (this._sabConfigured === false) return;
   if (this._dlHeld('SABnzbd')) return;
   try {
     const data = await this._callApi('GET', 'arr_stack/sabnzbd/queue');
-    // SABnzbd returns HTTP 200 with {status:false} on wrong API key — treat as unconfigured
+    // SABnzbd returns HTTP 200 with {status:false} on a wrong API key. That is
+    // a fault, not a client that is not set up: it backs off like an outage and
+    // comes back once the key is fixed, without a page reload.
     if (data?.status === false) {
-      console.error('[arr-card] SABnzbd API error:', data?.error);
-      this._sabConfigured = false;
+      this._dlFetchFailed('SABnzbd', '_sabConfigured', { status_code: 200, body: { error: data?.error } });
       return;
     }
     const queue = data.queue || {};
@@ -42,6 +44,7 @@ async _fetchSab() {
 }
 
 async _fetchVpnIp() {
+  if (this._sabConfigured === false) return;
   if (this._vpnIpFetching) return;
   this._vpnIpFetching = true;
   try {
@@ -58,7 +61,11 @@ async _fetchVpnIp() {
   }
 }
 
+// The history has no back-off of its own and runs on every five-second poll,
+// so without this a SABnzbd that was never set up was asked twelve times a
+// minute. The same goes for NZBGet below.
 async _fetchSabHistory() {
+  if (this._sabConfigured === false) return;
   try {
     const data = await this._callApi('GET', 'arr_stack/sabnzbd/history');
     const slots = data?.history?.slots || [];
@@ -114,6 +121,7 @@ async _sabRetry(nzoId) {
 }
 
 async _fetchNzbget() {
+  if (this._nzbgetConfigured === false) return;
   if (this._dlHeld('NZBGet')) return;
   try {
     const [statusResp, queueResp] = await Promise.all([
@@ -130,6 +138,7 @@ async _fetchNzbget() {
 }
 
 async _fetchNzbgetHistory() {
+  if (this._nzbgetConfigured === false) return;
   try {
     const data = await this._callApi('GET', 'arr_stack/nzbget/history');
     const items = data?.result || [];
@@ -188,17 +197,20 @@ async _nzbgetItemDelete(nzbId) {
 
 // What a failed fetch of a download client means, in one place.
 //
-// Three different things arrive here. 503 says the client is not set up, and
-// the card stops asking. 502 says it is set up but not answering — a stopped
-// container, a web server in front of it — so the client stays and the next
-// poll tries again. Anything else is a real fault and reads the same way.
+// Three different things arrive here. A body saying "not configured" means the
+// client is not set up, and the card stops asking. 502 says it is set up but
+// not answering — a stopped container, a web server in front of it — so the
+// client stays and the next poll tries again. Anything else is a real fault and
+// reads the same way. A bare 503 is one of those: the integration also answers
+// 503 when it cannot connect, and taking that for "not set up" hid a client for
+// good after a container restart.
 //
 // Either way the console gets one line per change of state, not one per poll:
 // a client that is down for an hour used to write hundreds of them.
 _dlFetchFailed(name, flag, e) {
   const status = e?.status_code ?? e?.status ?? e?.response?.status;
   const body   = typeof e?.body === 'string' ? e.body : JSON.stringify(e?.body ?? e?.message ?? e);
-  const notConfigured = status === 503 || body.includes('not configured');
+  const notConfigured = body.includes('not configured');
   this[flag] = !notConfigured;
   this._dlLastError = this._dlLastError || {};
   const signature = `${status}:${notConfigured}`;
@@ -231,6 +243,7 @@ _dlHeld(name) {
 }
 
 async _fetchQbit() {
+  if (this._qbitConfigured === false) return;
   if (this._dlHeld('qBittorrent')) return;
   try {
     const [torrents, transfer, maindata] = await Promise.all([

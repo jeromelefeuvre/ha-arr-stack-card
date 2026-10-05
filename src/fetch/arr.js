@@ -183,6 +183,7 @@ _fetchSonarr2Diskspace() { return this._fetchArrList('sonarr2', 'diskspace', '_s
 // ──────────────────────────────────────────────────────────────────────────
 
 async _fetchBazarr() {
+  if (this._bazarrConfigured === false) return;
   try {
     const data = await this._callApi('GET', 'arr_stack/bazarr/movies');
     const map = {};
@@ -197,7 +198,9 @@ async _fetchBazarr() {
   } catch (e) {
     const status = e?.status_code ?? e?.status ?? e?.response?.status;
     const body   = typeof e?.body === 'string' ? e.body : JSON.stringify(e?.body ?? e?.message ?? e);
-    this._bazarrConfigured = !(status === 503 || body.includes('not configured'));
+    // Only the integration's own words drop Bazarr: it also answers 503 when it
+    // cannot connect, and a Bazarr dropped is never asked again
+    this._bazarrConfigured = !body.includes('not configured');
     console.error('[arr-card] Bazarr fetch error:', e);
   }
 }

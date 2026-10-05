@@ -332,12 +332,14 @@ _normalizeJellyfinSession(s, serverUrl, apiToken) {
 }
 
 async _fetchEmbySessions() {
+  if (this._embyConfigured === false) return;
   const now = Date.now();
   if (now - (this._embyLastFetch || 0) < 5000) return;
   this._embyLastFetch = now;
   try {
     const raw = await this._callApi('GET', 'arr_stack/emby/sessions');
-    if (raw?._notConfigured) { this._embySessions = []; return; }
+    if (raw?._notConfigured) { this._embyConfigured = false; this._embySessions = []; return; }
+    this._embyConfigured = true;
     const sessions  = raw?.sessions  || [];
     const serverUrl = raw?.server_url || '';
     const apiToken  = raw?.api_token  || '';
@@ -404,11 +406,19 @@ _normalizeEmbySession(s, serverUrl, apiToken) {
 }
 
 async _fetchKodiSessions() {
+  if (this._kodiConfigured === false) return;
   const now = Date.now();
   if (now - (this._kodiLastFetch || 0) < 5000) return;
   this._kodiLastFetch = now;
   try {
     const raw = await this._callApi('GET', 'arr_stack/kodi/sessions');
+    // An empty list of players means no Kodi in Home Assistant. A failure on
+    // the integration's side sends no list at all and is asked again.
+    if (Array.isArray(raw?.known_ids) && !raw.known_ids.length) {
+      this._kodiConfigured = false;
+      this._kodiSessions = [];
+      return;
+    }
     const sessions = raw?.sessions || [];
     if (raw?.known_ids?.length) this._kodiEntityIds = new Set(raw.known_ids);
     this._kodiSessions = sessions.map(s => ({

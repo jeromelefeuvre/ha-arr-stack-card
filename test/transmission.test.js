@@ -73,7 +73,7 @@ test('a Transmission that is not set up is left alone after one refusal', async 
   const c = makeCard();
   c._transmissionConfigured = null;
   let calls = 0;
-  c._callApi = async () => { calls++; const e = new Error('nope'); e.status_code = 503; throw e; };
+  c._callApi = async () => { calls++; const e = new Error('nope'); e.status_code = 503; e.body = { error: 'Transmission not configured' }; throw e; };
   await c._fetchTransmission();
   assert.equal(c._transmissionConfigured, false);
   await c._fetchTransmission();

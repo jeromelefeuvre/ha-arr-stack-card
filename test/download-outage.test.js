@@ -88,6 +88,85 @@ test('a client that comes back says so, so the next outage is heard', async () =
   assert.equal(lines.length, 1, 'the second outage is reported too');
 });
 
+test('a client known not to be set up is never asked', async () => {
+  const card = makeCard();
+  for (const [fetchName, flag] of [
+    ['_fetchQbit', '_qbitConfigured'],
+    ['_fetchSab', '_sabConfigured'],
+    ['_fetchSabHistory', '_sabConfigured'],
+    ['_fetchVpnIp', '_sabConfigured'],
+    ['_fetchNzbget', '_nzbgetConfigured'],
+    ['_fetchNzbgetHistory', '_nzbgetConfigured'],
+    ['_fetchDeluge', '_delugeConfigured'],
+    ['_fetchTransmission', '_transmissionConfigured'],
+    ['_fetchRtorrent', '_rtorrentConfigured'],
+  ]) {
+    const asked = [];
+    card._callApi = async (m, path) => { asked.push(path); return {}; };
+    card[flag] = false;
+    card._dlHoldUntil = {};
+    await withConsole(() => card[fetchName]());
+    assert.deepEqual(asked, [], `${fetchName} asked ${asked.join(', ')}`);
+  }
+});
+
+test('capabilities give every download client a definite answer', async () => {
+  const card = makeCard();
+  card._capsLoaded = false;
+  card._callApi = async () => ({ qbit: false, sabnzbd: true, nzbget: false, deluge: false, rtorrent: false, transmission: true });
+  await card._fetchCapabilities();
+  assert.equal(card._qbitConfigured, false);
+  assert.equal(card._sabConfigured, true);
+  assert.equal(card._nzbgetConfigured, false);
+  assert.equal(card._delugeConfigured, false);
+  assert.equal(card._rtorrentConfigured, false);
+  assert.equal(card._transmissionConfigured, true);
+});
+
+test('without capabilities a client is still found, or dropped on its first 503', async () => {
+  const card = makeCard();
+  card._qbitConfigured = null;
+  card._callApi = async () => [];
+  await card._fetchQbit();
+  assert.equal(card._qbitConfigured, true, 'an answer means it is set up');
+  card._nzbgetConfigured = null;
+  failing(card, 503, { error: 'NZBGet not configured' });
+  await withConsole(() => card._fetchNzbget());
+  assert.equal(card._nzbgetConfigured, false);
+  let asked = 0;
+  card._callApi = async () => { asked++; return {}; };
+  card._dlHoldUntil = {};
+  await card._fetchNzbget();
+  await card._fetchNzbgetHistory();
+  assert.equal(asked, 0, 'and is not asked again');
+});
+
+test('a 503 from a connection error keeps the client, and it comes back', async () => {
+  const card = makeCard();
+  card._qbitConfigured = true;
+  failing(card, 503, { error: 'Nelze se připojit: Cannot connect to host qbittorrent:8080' });
+  await withConsole(() => card._fetchQbit());
+  assert.equal(card._qbitConfigured, true, 'a restart is not "not set up"');
+  card._dlHoldUntil = {};
+  card._callApi = async () => [];
+  await card._fetchQbit();
+  assert.equal(card._qbitConfigured, true);
+  assert.equal(card._dlHoldUntil.qBittorrent, undefined, 'and is polled at the usual rate again');
+});
+
+test('a wrong SABnzbd key backs off but is asked again once fixed', async () => {
+  const card = makeCard();
+  card._sabConfigured = true;
+  card._callApi = async () => ({ status: false, error: 'API Key Incorrect' });
+  await withConsole(() => card._fetchSab());
+  assert.equal(card._sabConfigured, true);
+  assert.ok(card._dlHeld('SABnzbd'), 'it backs off');
+  card._dlHoldUntil = {};
+  card._callApi = async () => ({ queue: { slots: [] } });
+  await card._fetchSab();
+  assert.ok(card._sab, 'the queue arrives once the key is right');
+});
+
 test('every download client goes through the same handler', async () => {
   const card = makeCard();
   for (const [fetchName, flag] of [
