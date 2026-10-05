@@ -344,7 +344,7 @@ _qaStatusHtml() {
   // Same treatment as the Prowlarr and Maintainerr pills: on a phone it has to
   // leave the flow, or the text beside it reads straight through.
   const pos = mob
-    ? ';position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1200;padding:5px 14px;box-shadow:0 4px 16px rgba(0,0,0,0.55)'
+    ? ';position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1200;padding:5px 14px;box-shadow:0 4px 16px rgba(var(--_shadow, 0, 0, 0), 0.55)'
     : '';
   return `<span style="font-size:11px;font-weight:600;color:rgba(${rgb},0.9);background:${bg};border:1px solid rgba(${rgb},0.45);border-radius:999px;padding:2px 12px;white-space:nowrap;flex-shrink:0${pos}">${spin}${this._escHtml(st.msg)}</span>`;
 }

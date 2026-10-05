@@ -4,17 +4,17 @@
 import { MT_BTN } from './mt-kit.js';
 
 const _TL_G_HEX = {
-  'Movies':        '#FF9500',
-  'TV':            '#007AFF',
-  'Music':         '#34C759',
+  'Movies':        'rgb(var(--arr-warning-rgb, 255, 149, 0))',
+  'TV':            'rgb(var(--arr-accent-rgb, 0, 122, 255))',
+  'Music':         'rgb(var(--arr-success-rgb, 52, 199, 89))',
   'Live TV':       '#FF2D55',
-  'Direct Play':   '#34C759',
-  'Direct Stream': '#007AFF',
-  'Transcode':     '#FF3B30',
+  'Direct Play':   'rgb(var(--arr-success-rgb, 52, 199, 89))',
+  'Direct Stream': 'rgb(var(--arr-accent-rgb, 0, 122, 255))',
+  'Transcode':     'rgb(var(--arr-error-rgb, 255, 59, 48))',
 };
 
 // macOS system color palette — used for dynamic series (e.g. Jellystat library names)
-const _TL_G_FALLBACK = ['#007AFF','#FF9500','#34C759','#FF2D55','#BF5AF2','#FF3B30','#5AC8FA','#FFCC00'];
+const _TL_G_FALLBACK = ['rgb(var(--arr-accent-rgb, 0, 122, 255))','rgb(var(--arr-warning-rgb, 255, 149, 0))','rgb(var(--arr-success-rgb, 52, 199, 89))','#FF2D55','#BF5AF2','rgb(var(--arr-error-rgb, 255, 59, 48))','rgb(var(--arr-info-rgb, 90, 200, 250))','#FFCC00'];
 
 const _TL_G_VBW  = 1000;
 const _TL_G_SVH  = 200;
@@ -170,7 +170,7 @@ class _TautulliGraphsMethods {
       <span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--is-text-muted);flex-shrink:0;padding:0 4px">
         ${isMob ? '' : `<span>${this._t('tlGLast')}</span>`}
         <input id="tl-g-range" type="number" value="${range}" min="1" max="${isTot?60:365}"
-          style="width:42px;height:26px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);border-radius:999px;color:var(--is-text);padding:0;font-size:12px;text-align:center;font-family:inherit;outline:none;box-sizing:border-box;-webkit-appearance:none;appearance:none">
+          style="width:42px;height:26px;background:rgba(var(--_fill, 255, 255, 255), 0.06);border:1px solid rgba(var(--_line, 255, 255, 255), 0.10);border-radius:999px;color:var(--is-text);padding:0;font-size:12px;text-align:center;font-family:inherit;outline:none;box-sizing:border-box;-webkit-appearance:none;appearance:none">
         <span>${rangeUnit}</span>
       </span>`;
 
@@ -244,7 +244,7 @@ class _TautulliGraphsMethods {
       </div>
       <div style="position:relative">
         ${chartHtml}
-        <div class="tl-g-tip" style="display:none;position:absolute;top:0;left:0;background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:7px;padding:7px 10px;font-size:11px;pointer-events:none;z-index:50;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div>
+        <div class="tl-g-tip" style="display:none;position:absolute;top:0;left:0;background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:7px;padding:7px 10px;font-size:11px;pointer-events:none;z-index:50;white-space:nowrap;box-shadow:0 4px 12px rgba(var(--_shadow, 0, 0, 0), 0.3)"></div>
       </div>
     </div>`;
   }
@@ -295,8 +295,8 @@ class _TautulliGraphsMethods {
     const defs = '<defs>' + series.map((s, si) => {
       const h = colMapB[s.name];
       return `<linearGradient id="tl-gb-${cid}-${si}" x1="0" y1="0" x2="0" y2="1">`
-           + `<stop offset="0%"   stop-color="${h}" stop-opacity="0.92"/>`
-           + `<stop offset="100%" stop-color="${h}" stop-opacity="0.42"/>`
+           + `<stop offset="0%"   stop-opacity="0.92" style="stop-color:${h}"/>`
+           + `<stop offset="100%" stop-opacity="0.42" style="stop-color:${h}"/>`
            + `</linearGradient>`;
     }).join('') + '</defs>';
 
@@ -414,8 +414,8 @@ class _TautulliGraphsMethods {
     let di = series.map((s, si) => {
       const h = colMapL[s.name];
       return `<linearGradient id="tl-gl-${cid}-${si}" x1="0" y1="0" x2="0" y2="1">`
-           + `<stop offset="0%"   stop-color="${h}" stop-opacity="0.18"/>`
-           + `<stop offset="100%" stop-color="${h}" stop-opacity="0"/>`
+           + `<stop offset="0%"   stop-opacity="0.18" style="stop-color:${h}"/>`
+           + `<stop offset="100%" stop-opacity="0" style="stop-color:${h}"/>`
            + `</linearGradient>`;
     }).join('');
 
@@ -450,7 +450,7 @@ class _TautulliGraphsMethods {
       const hex = colMapL[ser.name];
       out += `<path d="${this._tlGSmoothArea(pts, baseY)}" style="fill:url(#tl-gl-${cid}-${si});animation:fade-in 0.8s ease-out both"/>`;
 
-      out += `<path d="${this._tlGSmoothLine(pts)}" fill="none" stroke="${hex}" stroke-width="2"`
+      out += `<path d="${this._tlGSmoothLine(pts)}" fill="none" style="stroke:${hex}" stroke-width="2"`
            + ` stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"`
            + ` class="tl-g-anim-line"${noDots ? '' : ` mask="url(#tl-lmask-${cid}-${si})"`}/>`;
     });
@@ -555,7 +555,7 @@ class _TautulliGraphsMethods {
       <button id="tl-g-dd-btn" class="mt-tb-btn" title="${title}" style="white-space:nowrap;padding:0 20px 0 ${this._isMob ? 8 : 10}px;position:relative;${narrowed ? 'color:#4da3ff' : 'opacity:0.55'}">
         ${btnLabel}${chevron}
       </button>
-      <div id="tl-g-dd-panel" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:14px;min-width:160px;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,0.35);overflow:hidden">
+      <div id="tl-g-dd-panel" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:14px;min-width:160px;z-index:200;box-shadow:0 4px 16px rgba(var(--_shadow, 0, 0, 0), 0.35);overflow:hidden">
         <div style="display:flex;gap:6px;padding:6px 8px 8px;border-bottom:1px solid var(--is-divider)">
           <button id="tl-g-dd-all"  class="tl-page-btn" style="flex:1;height:26px;font-size:10px;padding:0">${this._t('tlGSelectAll')}</button>
           <button id="tl-g-dd-none" class="tl-page-btn" style="flex:1;height:26px;font-size:10px;padding:0">${this._t('tlGDeselectAll')}</button>

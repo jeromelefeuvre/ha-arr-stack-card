@@ -104,9 +104,9 @@ class _ActivityHistoryRenderMethods {
 
     const evColor = ev => {
       if (ev === 'grabbed')                  return 'rgba(99,140,255,0.9)';
-      if (ev === 'downloadFolderImported')   return 'rgba(60,200,120,0.9)';
-      if (ev === 'downloadFailed' || ev === 'importFailed') return 'rgba(255,100,100,0.9)';
-      return 'rgba(255,255,255,0.45)';
+      if (ev === 'downloadFolderImported')   return 'rgba(var(--arr-success-rgb, 60, 200, 120), 0.9)';
+      if (ev === 'downloadFailed' || ev === 'importFailed') return 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)';
+      return 'rgba(var(--_fg3, 255, 255, 255), 0.45)';
     };
     const evLabel = ev => ({
       grabbed:                 this._t('actEvtGrabbed'),

@@ -164,7 +164,7 @@ class _TautulliTableMethods {
         </div>
         <table style="width:100%;border-collapse:collapse">
           <thead>
-            <tr style="border-bottom:1px solid rgba(255,255,255,0.08)">
+            <tr style="border-bottom:1px solid rgba(var(--_line, 255, 255, 255), 0.08)">
               <th style="padding:3px 8px;font-size:10px;font-weight:600;color:var(--is-text-muted);text-align:left">${this._t('tlColIPAddress')}</th>
               <th style="padding:3px 8px;font-size:10px;font-weight:600;color:var(--is-text-muted);text-align:left">${this._t('tlColLastSeen')}</th>
               <th style="padding:3px 8px;font-size:10px;font-weight:600;color:var(--is-text-muted);text-align:right">${this._t('tlColPlays')}</th>
@@ -179,7 +179,7 @@ class _TautulliTableMethods {
       ? `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>`
       : `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>`;
 
-    return `<div style="background:rgba(180,30,30,0.12);border:1px solid rgba(255,100,100,0.2);border-radius:8px;margin-bottom:10px;overflow:hidden">
+    return `<div style="background:rgba(180,30,30,0.12);border:1px solid rgba(var(--arr-error-rgb, 255, 100, 100), 0.2);border-radius:8px;margin-bottom:10px;overflow:hidden">
       <div id="tl-ip-report-toggle" style="display:flex;align-items:center;gap:8px;padding:10px 12px;cursor:pointer;user-select:none">
         <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="rgba(255,150,150,0.9)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
         <span style="font-size:12px;font-weight:700;color:rgba(255,150,150,0.95);flex:1">${this._t('tlSharingDetected')} · ${users.length} user${users.length !== 1 ? 's' : ''} · ${threshold}+ unique IPs</span>

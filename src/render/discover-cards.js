@@ -77,7 +77,7 @@ _renderTvUpcomingCard(m, { showDate = true, showRating = false, typeTag = '', ov
   const stripe = (badgeCls && showStripe) ? this._statusStripe(this._statusStripeColor(badgeCls), badgeCls === 'b-dl', _stripePct2) : '';
 
   const grad = 'rgba(0,0,0,0.88)';
-  const tc   = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const tc   = 'rgba(var(--_ptx, 255, 255, 255), 1)';
   const effectiveTypeTag = typeTag || (showDate ? this._t('typeTv') : '');
   const img = this._mcImg(m.posterPath ? (m.posterPath.startsWith('http') ? m.posterPath : `https://image.tmdb.org/t/p/w342${m.posterPath}`) : null, '📺', m.id);
   const _tvLangs = this._arrLangCodes(sonarrEntry, false);
@@ -99,10 +99,10 @@ _renderTvUpcomingCard(m, { showDate = true, showRating = false, typeTag = '', ov
 
 _renderTraktCard(m, overlayIndex = null) {
   if (m._traktLoading) {
-    return `<div class="mc trakt-loading-card" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);animation:trakt-pulse 1.8s ease-in-out infinite">
+    return `<div class="mc trakt-loading-card" style="display:flex;align-items:center;justify-content:center;background:rgba(var(--_fill, 255, 255, 255), 0.03);animation:trakt-pulse 1.8s ease-in-out infinite">
       <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
-        <span class="action-spinner" style="width:18px;height:18px;border-width:2px;border-color:rgba(255,255,255,0.12);border-top-color:rgba(255,255,255,0.5)"></span>
-        <span style="font-size:9px;color:rgba(255,255,255,0.3);text-align:center;letter-spacing:0.5px">${this._t('traktRefreshing')}</span>
+        <span class="action-spinner" style="width:18px;height:18px;border-width:2px;border-color:rgba(var(--_line, 255, 255, 255), 0.12);border-top-color:rgba(var(--_line, 255, 255, 255), 0.5)"></span>
+        <span style="font-size:9px;color:rgba(var(--_fg3, 255, 255, 255), 0.3);text-align:center;letter-spacing:0.5px">${this._t('traktRefreshing')}</span>
       </div>
     </div>`;
   }
@@ -236,7 +236,7 @@ _renderUpcomingCard(m, { showDate = true, showRating = !showDate, typeTag = '', 
     : '';
 
   const grad = 'rgba(0,0,0,0.88)';
-  const tc   = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const tc   = 'rgba(var(--_ptx, 255, 255, 255), 1)';
   const posterPath = m.posterPath || m.poster_path || null;
   const img = this._mcImg(posterPath ? (posterPath.startsWith('http') ? posterPath : `https://image.tmdb.org/t/p/w342${posterPath}`) : null, '🎬', m.id);
   const effectiveTypeTag = typeTag || (showDate ? this._t('typeMovie') : '');

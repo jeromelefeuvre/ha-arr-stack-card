@@ -45,9 +45,9 @@ _renderCalendarModal() {
 
   const DOTS = `<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" style="display:block"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>`;
   // A 30%-alpha blue with a white glyph disappears on a light backdrop
-  const _dotsBg  = this._isDay ? 'rgba(0,122,255,0.85)' : 'rgba(0,122,255,0.30)';
-  const _dotsBdr = this._isDay ? 'rgba(0,122,255,0.95)' : 'rgba(0,122,255,0.50)';
-  const _dotsBtn = (dateStr, n, size = 34) => `<button data-cal-day="${dateStr}" title="${n}" style="width:${size}px;height:${size}px;padding:0;border-radius:50%;border:1px solid ${_dotsBdr};background:${_dotsBg};color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:0;flex-shrink:0;backdrop-filter:blur(8px)">${DOTS}</button>`;
+  const _dotsBg  = this._isDay ? 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.85)' : 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.30)';
+  const _dotsBdr = this._isDay ? 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.95)' : 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.50)';
+  const _dotsBtn = (dateStr, n, size = 34) => `<button data-cal-day="${dateStr}" title="${n}" style="width:${size}px;height:${size}px;padding:0;border-radius:50%;border:1px solid ${_dotsBdr};background:${_dotsBg};color:rgb(var(--_fg, 255, 255, 255));cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:0;flex-shrink:0;backdrop-filter:blur(8px)">${DOTS}</button>`;
 
   let gridHtml, rangeLabel;
 
@@ -130,7 +130,7 @@ _renderCalendarModal() {
   }
 
   const loading = this._calendarModalLoading
-    ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);border-radius:inherit;z-index:10"><span class="action-spinner" style="width:28px;height:28px"></span></div>`
+    ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(var(--_shade, 0, 0, 0), 0.55);border-radius:inherit;z-index:10"><span class="action-spinner" style="width:28px;height:28px"></span></div>`
     : '';
 
   const closeX = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;

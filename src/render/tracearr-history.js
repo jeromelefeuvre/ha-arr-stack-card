@@ -52,10 +52,10 @@ class _TracearrHistoryMethods {
       const t   = parseInt(h.totalDurationMs || 0, 10);
       const pct = t ? Math.round(p / t * 100) : 0;
       let label, color, bg;
-      if (h.watched || pct >= 90)     { label = this._t('traWatchedOf');   color = '#34C759'; bg = 'rgba(52,199,89,0.15)'; }
-      else if (pct >= 50)             { label = this._t('traEngaged');   color = '#007AFF'; bg = 'rgba(0,122,255,0.15)'; }
-      else if (pct >= 10)             { label = this._t('traAbandoned'); color = '#FF9500'; bg = 'rgba(255,149,0,0.15)'; }
-      else                            { label = this._t('traSampled');   color = 'rgba(255,255,255,0.35)'; bg = 'rgba(255,255,255,0.07)'; }
+      if (h.watched || pct >= 90)     { label = this._t('traWatchedOf');   color = 'rgb(var(--arr-success-rgb, 52, 199, 89))'; bg = 'rgba(var(--arr-success-rgb, 52, 199, 89), 0.15)'; }
+      else if (pct >= 50)             { label = this._t('traEngaged');   color = 'rgb(var(--arr-accent-rgb, 0, 122, 255))'; bg = 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.15)'; }
+      else if (pct >= 10)             { label = this._t('traAbandoned'); color = 'rgb(var(--arr-warning-rgb, 255, 149, 0))'; bg = 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.15)'; }
+      else                            { label = this._t('traSampled');   color = 'rgba(var(--_fg3, 255, 255, 255), 0.35)'; bg = 'rgba(var(--_fill, 255, 255, 255), 0.07)'; }
       return { label, color, bg, pct };
     };
 
@@ -115,8 +115,8 @@ class _TracearrHistoryMethods {
         const { label, color, bg, pct } = watchBadge(h);
         const dt     = fmtDt(h.startedAt);
         const decTag = h.isTranscode
-          ? `${this._uiBadge(`${_TC_ICO}Transcode`, this._hexToRgbTriple('#FF9500'), { small: true })}`
-          : `${this._uiBadge(`${_DP_ICO}Direct Play`, this._hexToRgbTriple('#34C759'), { small: true })}`;
+          ? `${this._uiBadge(`${_TC_ICO}Transcode`, this._hexToRgbTriple('rgb(var(--arr-warning-rgb, 255, 149, 0))'), { small: true })}`
+          : `${this._uiBadge(`${_DP_ICO}Direct Play`, this._hexToRgbTriple('rgb(var(--arr-success-rgb, 52, 199, 89))'), { small: true })}`;
         const metaParts = [
           yearLbl ? `<span>${yearLbl}</span>` : '',
           user    ? `<span>${user}</span>`    : '',
@@ -161,12 +161,12 @@ class _TracearrHistoryMethods {
       const srv    = srvMapF[h.serverId] || null;
       const srvType = srv?.type ? String(srv.type) : null;
       const srvLabel = srvType ? this._escHtml(srvType.charAt(0).toUpperCase() + srvType.slice(1)) : null;
-      const srvColor = srvType ? (_SRV_CLR_F[srvType] || 'rgba(255,255,255,0.4)') : null;
+      const srvColor = srvType ? (_SRV_CLR_F[srvType] || 'rgba(var(--_fg3, 255, 255, 255), 0.4)') : null;
       const _DP_ICO = `<svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor" style="flex-shrink:0"><polygon points="5,3 19,12 5,21"/></svg>`;
       const _TC_ICO = `<svg viewBox="0 0 24 24" width="9" height="9" fill="currentColor" style="flex-shrink:0"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`;
       const dec    = h.isTranscode
-        ? `${this._uiBadge(`${_TC_ICO}Transcode`, this._hexToRgbTriple('#FF9500'), { small: true })}`
-        : `${this._uiBadge(`${_DP_ICO}Direct Play`, this._hexToRgbTriple('#34C759'), { small: true })}`;
+        ? `${this._uiBadge(`${_TC_ICO}Transcode`, this._hexToRgbTriple('rgb(var(--arr-warning-rgb, 255, 149, 0))'), { small: true })}`
+        : `${this._uiBadge(`${_DP_ICO}Direct Play`, this._hexToRgbTriple('rgb(var(--arr-success-rgb, 52, 199, 89))'), { small: true })}`;
       const _CLK   = `<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;opacity:0.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
       const durRaw = h.durationMs ? (() => { const s=Math.round(h.durationMs/1000); const h2=Math.floor(s/3600); const m2=Math.floor((s%3600)/60); const s2=s%60; return h2>0 ? `${h2}h ${String(m2).padStart(2,'0')}m` : `${m2}m ${String(s2).padStart(2,'0')}s`; })() : '—';
       const dur    = h.durationMs ? `<div style="display:inline-flex;align-items:center;gap:4px">${_CLK}<span>${durRaw}</span></div>` : '—';
@@ -228,7 +228,7 @@ class _TracearrHistoryMethods {
     };
     // Values are text unless the caller built the markup itself.
     const row = (label, value, html = false) => (value != null && value !== '' && value !== '—')
-      ? `<div style="display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);gap:8px">
+      ? `<div style="display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(var(--_line, 255, 255, 255), 0.05);gap:8px">
            <span style="font-size:11px;color:var(--is-text-muted);flex-shrink:0">${label}</span>
            <span style="font-size:11px;color:var(--is-text);text-align:right;word-break:break-all">${html ? value : this._escHtml(value)}</span>
          </div>` : '';
@@ -239,9 +239,9 @@ class _TracearrHistoryMethods {
        </div>`;
     const badge = (txt, color, bg) =>
       `${this._uiBadge(`${txt}`, this._hexToRgbTriple(color), { small: true })}`;
-    const decisionBadge = dec => dec === 'transcode' ? badge(this._t('tlFilterTranscode'),'#FF9500','rgba(255,149,0,0.14)')
-      : dec === 'copy' ? badge(this._t('traCopy'),'#007AFF','rgba(0,122,255,0.14)')
-      : badge(this._t('tlFilterDirectPlay'),'#34C759','rgba(52,199,89,0.14)');
+    const decisionBadge = dec => dec === 'transcode' ? badge(this._t('tlFilterTranscode'),'rgb(var(--arr-warning-rgb, 255, 149, 0))','rgba(var(--arr-warning-rgb, 255, 149, 0), 0.14)')
+      : dec === 'copy' ? badge(this._t('traCopy'),'rgb(var(--arr-accent-rgb, 0, 122, 255))','rgba(var(--arr-accent-rgb, 0, 122, 255), 0.14)')
+      : badge(this._t('tlFilterDirectPlay'),'rgb(var(--arr-success-rgb, 52, 199, 89))','rgba(var(--arr-success-rgb, 52, 199, 89), 0.14)');
 
     // ── Media header ────────────────────────────────────────────────────────
     const title    = this._escHtml(h.showTitle || h.mediaTitle || '—');
@@ -251,8 +251,8 @@ class _TracearrHistoryMethods {
     const p = parseInt(h.progressMs || 0), t = parseInt(h.totalDurationMs || 0);
     const pct = t ? Math.round(p / t * 100) : 0;
     const stateBadge = h.state === 'playing'
-      ? badge(this._t('traPlaying'),'#34C759','rgba(52,199,89,0.14)')
-      : badge(this._t('tlColStopped'),'rgba(255,255,255,0.5)','rgba(255,255,255,0.08)');
+      ? badge(this._t('traPlaying'),'rgb(var(--arr-success-rgb, 52, 199, 89))','rgba(var(--arr-success-rgb, 52, 199, 89), 0.14)')
+      : badge(this._t('tlColStopped'),'rgba(var(--_fg2, 255, 255, 255), 0.5)','rgba(var(--_fill, 255, 255, 255), 0.08)');
     const decBadge = decisionBadge(h.videoDecision || (h.isTranscode ? 'transcode' : 'directplay'));
 
     // ── Calculated watch time from timestamps ────────────────────────────────
@@ -265,8 +265,8 @@ class _TracearrHistoryMethods {
     const srv      = srvMapF[h.serverId];
     const srvType  = String(srv?.type || h.serverName || '').toLowerCase();
     const srvName  = this._escHtml(h.serverName || srv?.name || '');
-    const srvClr   = _SRV_CLR[srvType] || '#fff';
-    const srvBadge = srvName ? badge(srvName, srvClr, 'rgba(255,255,255,0.07)') : '';
+    const srvClr   = _SRV_CLR[srvType] || 'rgb(var(--_fg, 255, 255, 255))';
+    const srvBadge = srvName ? badge(srvName, srvClr, 'rgba(var(--_fill, 255, 255, 255), 0.07)') : '';
 
     // ── Source/Stream comparison table ───────────────────────────────────────
     const streamTbl = (fields) => {
@@ -288,8 +288,8 @@ class _TracearrHistoryMethods {
           return `<tr>
             <td style="color:var(--is-text-muted);padding:3px 0;vertical-align:top">${lbl}</td>
             <td style="color:var(--is-text);font-weight:600;padding:3px 4px;vertical-align:top">${svStr}</td>
-            <td style="color:rgba(255,255,255,0.2);text-align:center;padding:3px 0;vertical-align:top">→</td>
-            <td style="color:${same?'rgba(255,255,255,0.38)':'#0a84ff'};font-weight:600;padding:3px 4px;vertical-align:top">${dvStr}</td>
+            <td style="color:rgba(var(--_fg3, 255, 255, 255), 0.2);text-align:center;padding:3px 0;vertical-align:top">→</td>
+            <td style="color:${same?'rgba(var(--_fg3, 255, 255, 255), 0.38)':'rgb(var(--arr-accent-rgb, 10, 132, 255))'};font-weight:600;padding:3px 4px;vertical-align:top">${dvStr}</td>
           </tr>`;
         }).join('')}</tbody>
       </table>`;
@@ -306,8 +306,8 @@ class _TracearrHistoryMethods {
 
     // ── LEFT panel ──────────────────────────────────────────────────────────
     const leftPanel = `<div style="flex:1;min-width:0">
-      <div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
-        ${poster ? `<img id="tra-hist-poster" style="width:60px;min-width:60px;border-radius:6px;object-fit:cover;aspect-ratio:2/3;background:rgba(255,255,255,0.05)">` : ''}
+      <div style="background:rgba(var(--_fill, 255, 255, 255), 0.04);border-radius:10px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+        ${poster ? `<img id="tra-hist-poster" style="width:60px;min-width:60px;border-radius:6px;object-fit:cover;aspect-ratio:2/3;background:rgba(var(--_fill, 255, 255, 255), 0.05)">` : ''}
         <div style="flex:1;min-width:0">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap">
             ${this._tlMediaIcon(h.mediaType || '', 15)}
@@ -315,8 +315,8 @@ class _TracearrHistoryMethods {
             ${stateBadge}
           </div>
           ${subtitle ? `<div style="font-size:11px;color:var(--is-text-muted);margin-bottom:6px">${subtitle}</div>` : ''}
-          <div style="height:4px;border-radius:2px;background:rgba(255,255,255,0.1);margin:8px 0 2px;overflow:hidden">
-            <div style="height:100%;width:${pct}%;background:#0a84ff;border-radius:2px"></div>
+          <div style="height:4px;border-radius:2px;background:rgba(var(--_fill, 255, 255, 255), 0.1);margin:8px 0 2px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:rgb(var(--arr-accent-rgb, 10, 132, 255));border-radius:2px"></div>
           </div>
           <div style="font-size:10px;color:var(--is-text-muted);text-align:right">${pct}%</div>
         </div>
@@ -507,8 +507,8 @@ class _TracearrHistoryMethods {
 
     // ── Donut helpers for Quality + Platforms ─────────────────────────────────
 
-    const DONUT_HEX = ['#34C759','#007AFF','#FF3B30','#FF9500','#BF5AF2','#FF2D55','#5AC8FA','#FFCC00'];
-    const QUAL_HEX  = { 'Direct Play': '#34C759', 'Direct Stream': '#007AFF', 'Transcode': '#FF3B30' };
+    const DONUT_HEX = ['rgb(var(--arr-success-rgb, 52, 199, 89))','rgb(var(--arr-accent-rgb, 0, 122, 255))','rgb(var(--arr-error-rgb, 255, 59, 48))','rgb(var(--arr-warning-rgb, 255, 149, 0))','#BF5AF2','#FF2D55','rgb(var(--arr-info-rgb, 90, 200, 250))','#FFCC00'];
+    const QUAL_HEX  = { 'Direct Play': 'rgb(var(--arr-success-rgb, 52, 199, 89))', 'Direct Stream': 'rgb(var(--arr-accent-rgb, 0, 122, 255))', 'Transcode': 'rgb(var(--arr-error-rgb, 255, 59, 48))' };
 
     const svgDonut = (segs, size) => {
       const total = segs.reduce((s, sg) => s + (sg.value || 0), 0);
@@ -523,15 +523,15 @@ class _TracearrHistoryMethods {
       const ip  = (Number(ri) / Number(ro) * 100).toFixed(0);
       const defs = '<defs>' + segs.map((sg, i) =>
         `<radialGradient id="dg-${uid}-${i}" cx="${cx}" cy="${cy}" r="${ro}" fx="${cx}" fy="${cy}" gradientUnits="userSpaceOnUse">` +
-        `<stop offset="${ip}%" stop-color="${sg.color}" stop-opacity="0.5"/>` +
-        `<stop offset="100%" stop-color="${sg.color}" stop-opacity="1"/>` +
+        `<stop offset="${ip}%" stop-opacity="0.5" style="stop-color:${sg.color}"/>` +
+        `<stop offset="100%" stop-opacity="1" style="stop-color:${sg.color}"/>` +
         `</radialGradient>`
       ).join('') + '</defs>';
       const rings = segs.map(sg => {
         const full = sg.value / total * C;
         const dash = Math.max(0, full - gap);
         const off  = -cum; cum += full;
-        return `<circle class="donut-ring" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${sg.color}" stroke-width="${sw * 1.9}" stroke-linecap="butt" stroke-dasharray="${dash.toFixed(2)} ${(C-dash).toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}" transform="rotate(-90 ${cx} ${cy})" stroke-opacity="0" style="transition:stroke-opacity 0.15s"/>`;
+        return `<circle class="donut-ring" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke-width="${sw * 1.9}" stroke-linecap="butt" stroke-dasharray="${dash.toFixed(2)} ${(C-dash).toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}" transform="rotate(-90 ${cx} ${cy})" stroke-opacity="0" style="stroke:${sg.color};transition:stroke-opacity 0.15s"/>`;
       }).join('');
       cum = 0;
       const arcs = segs.map((sg, i) => {
@@ -544,11 +544,11 @@ class _TracearrHistoryMethods {
       const fs = Math.min(size * 0.14, 12);
       const svg = `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;overflow:visible">
         ${defs}
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="${sw}"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(var(--_fill, 255, 255, 255), 0.05)" stroke-width="${sw}"/>
         <g><animateTransform attributeName="transform" type="rotate" from="-360 ${cx} ${cy}" to="0 ${cx} ${cy}" dur="0.8s" begin="0s" fill="freeze" calcMode="spline" keySplines="0.25 0.46 0.45 0.94" keyTimes="0;1"/>${rings}${arcs}</g>
-        <text x="${cx}" y="${cy + fs * 0.4}" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="${fs}" font-weight="700">${total}</text>
+        <text x="${cx}" y="${cy + fs * 0.4}" text-anchor="middle" fill="rgba(var(--_fg, 255, 255, 255), 0.9)" font-size="${fs}" font-weight="700">${total}</text>
       </svg>`;
-      return `<div class="donut-wrap" style="position:relative;display:inline-block;flex-shrink:0">${svg}<div class="donut-tt" style="display:none;position:absolute;pointer-events:none;background:rgba(15,15,20,0.92);border:1px solid rgba(255,255,255,0.13);border-radius:6px;padding:5px 9px;white-space:nowrap;z-index:10;color:rgba(255,255,255,0.9)"></div></div>`;
+      return `<div class="donut-wrap" style="position:relative;display:inline-block;flex-shrink:0">${svg}<div class="donut-tt" style="display:none;position:absolute;pointer-events:none;background:rgba(15,15,20,0.92);border:1px solid rgba(var(--_line, 255, 255, 255), 0.13);border-radius:6px;padding:5px 9px;white-space:nowrap;z-index:10;color:rgba(var(--_fg, 255, 255, 255), 0.9)"></div></div>`;
     };
 
     const donutCard = (title, segs) => {

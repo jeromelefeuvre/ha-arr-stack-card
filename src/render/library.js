@@ -290,7 +290,7 @@ class _LibraryMethods {
     const dirArrow   = m.sortDir === 'desc' ? ' ↓' : ' ↑';
     const sortOpen   = !!m._sortOpen;
     // Menu radius and fill follow the capsule language; the rows stay rows.
-    const sortDropList = sortOpen ? `<div id="lib-sort-list" style="position:absolute;top:34px;left:0;z-index:200;background:var(--is-menu-bg,#1c1c1e);border:1px solid var(--is-divider,rgba(255,255,255,0.15));border-radius:14px;min-width:190px;overflow:hidden;padding:4px;box-shadow:0 6px 24px rgba(0,0,0,0.4)">
+    const sortDropList = sortOpen ? `<div id="lib-sort-list" style="position:absolute;top:34px;left:0;z-index:200;background:var(--is-menu-bg,#1c1c1e);border:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.15));border-radius:14px;min-width:190px;overflow:hidden;padding:4px;box-shadow:0 6px 24px rgba(var(--_shadow, 0, 0, 0), 0.4)">
       ${sortDefs.map(s => {
         const act = s.v === m.sort;
         return `<div data-lib-sort-opt="${s.v}" style="padding:7px 12px;border-radius:999px;font-size:12px;cursor:pointer;color:${act ? '#4da3ff' : 'var(--is-text)'};display:flex;align-items:center;justify-content:space-between;gap:8px;${act?'font-weight:700':''}">
@@ -419,9 +419,9 @@ class _LibraryMethods {
       // Same day-mode treatment as the Maintainerr slider: the all-white build
       // vanished against a light modal.
       const _d = this._isDay;
-      const _track = _d ? 'rgba(0,0,0,0.16)' : 'rgba(255,255,255,0.18)';
-      const _fill  = _d ? 'rgba(0,0,0,0.42)' : 'rgba(255,255,255,0.45)';
-      const _knob  = _d ? '#ffffff' : 'rgba(255,255,255,0.85)';
+      const _track = _d ? 'rgba(var(--_shade, 0, 0, 0), 0.16)' : 'rgba(var(--_fg3, 255, 255, 255), 0.18)';
+      const _fill  = _d ? 'rgba(var(--_shade, 0, 0, 0), 0.42)' : 'rgba(var(--_fg3, 255, 255, 255), 0.45)';
+      const _knob  = _d ? 'rgb(var(--_fg, 255, 255, 255))' : 'rgba(var(--_fg, 255, 255, 255), 0.85)';
       const _knobBdr = _d ? 'border:1px solid rgba(0,0,0,0.30);' : '';
       const _shadow = _d ? '0 1px 3px rgba(0,0,0,0.30)' : '0 1px 4px rgba(0,0,0,0.4)';
         return `<div id="lib-drag-handle" style="position:absolute;right:0;top:calc(50% + 6px);transform:translateY(-50%);display:flex;align-items:center;gap:6px;padding:6px 0 6px 8px;touch-action:none;user-select:none;cursor:ew-resize">
@@ -439,7 +439,7 @@ class _LibraryMethods {
       ? `<div style="flex-shrink:0;position:relative;${(dragHandle || viewWrap) && !pagHtml ? 'height:36px' : ''}">${pagHtml}${viewWrap}${dragHandle}</div>`
       : '';
 
-    const dialogHtml = m._bulkDialog ? `<div style="position:absolute;inset:0;z-index:20;background:rgba(0,0,0,0.65);display:flex;align-items:center;justify-content:center;border-radius:8px">${this._libBulkDialogHtml()}</div>` : '';
+    const dialogHtml = m._bulkDialog ? `<div style="position:absolute;inset:0;z-index:20;background:rgba(var(--_shade, 0, 0, 0), 0.65);display:flex;align-items:center;justify-content:center;border-radius:8px">${this._libBulkDialogHtml()}</div>` : '';
     // .lib-results-wrap (display:contents — invisible to flex layout) lets the search debounce
     // handler patch just this subtree, leaving the toolbar's #lib-search input node untouched.
     return `<div style="flex-shrink:0">${toolbar}</div>` +
@@ -457,8 +457,8 @@ class _LibraryMethods {
     const desc = dir !== 'asc';
     const F = 'fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
     return `<svg viewBox="0 0 24 24" width="13" height="13" ${F} stroke="currentColor" style="flex-shrink:0">
-      <g stroke="${desc ? on : off}" opacity="${desc ? 1 : 0.4}"><line x1="7" y1="4" x2="7" y2="20"/><polyline points="4 17 7 20 10 17"/></g>
-      <g stroke="${desc ? off : on}" opacity="${desc ? 0.4 : 1}"><line x1="17" y1="20" x2="17" y2="4"/><polyline points="14 7 17 4 20 7"/></g>
+      <g opacity="${desc ? 1 : 0.4}" style="stroke:${desc ? on : off}"><line x1="7" y1="4" x2="7" y2="20"/><polyline points="4 17 7 20 10 17"/></g>
+      <g opacity="${desc ? 0.4 : 1}" style="stroke:${desc ? off : on}"><line x1="17" y1="20" x2="17" y2="4"/><polyline points="14 7 17 4 20 7"/></g>
     </svg>`;
   }
 
@@ -471,12 +471,12 @@ class _LibraryMethods {
     const hasShows   = selItems.some(i => i._libType === 'tv');
     // Same shell as the Maintainerr dialogs: 20px corners, hairline rim, and
     // controls that bring their own capsule rather than a boxed form.
-    const _dStyle = `background:var(--is-menu-bg,#1c1c2e);border:1px solid var(--is-card-bdr,rgba(255,255,255,0.09));border-radius:20px;padding:20px 22px;min-width:380px;max-width:min(540px,90vw);box-sizing:border-box`;
-    const _hStyle = `font-size:14px;font-weight:700;color:var(--is-text,#fff);margin:0 0 16px`;
+    const _dStyle = `background:var(--is-menu-bg,#1c1c2e);border:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09));border-radius:20px;padding:20px 22px;min-width:380px;max-width:min(540px,90vw);box-sizing:border-box`;
+    const _hStyle = `font-size:14px;font-weight:700;color:var(--is-text,rgb(var(--_fg, 255, 255, 255)));margin:0 0 16px`;
     const _rowStyle = `display:flex;align-items:center;gap:12px;margin-bottom:10px`;
-    const _labelStyle = `font-size:12px;color:var(--is-text,#fff);opacity:0.8;min-width:110px;text-align:right`;
+    const _labelStyle = `font-size:12px;color:var(--is-text,rgb(var(--_fg, 255, 255, 255)));opacity:0.8;min-width:110px;text-align:right`;
     const _fld = 'flex:1;min-width:0';
-    const _footStyle = `display:flex;justify-content:flex-end;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--is-card-bdr,rgba(255,255,255,0.09))`;
+    const _footStyle = `display:flex;justify-content:flex-end;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09))`;
     const _cancelBtn = `<button data-lib-action="bulk-cancel" style="${MT_BTN}">${this._t('cancel')}</button>`;
     const _chk = (id, checked, label, hint) => `<label class="mt-chk" style="min-width:0">
       <input type="checkbox" id="${id}"${checked ? ' checked' : ''}>
@@ -495,7 +495,7 @@ class _LibraryMethods {
           ${_chk('bd-excl', m._bulkDelete.addImportExclusion, this._t('libAddListExcl'), this._t('libExclHint'))}</div>
         <div style="${_rowStyle}"><label style="${_labelStyle}">${this._t('libDeleteFiles')}</label>
           ${_chk('bd-files', m._bulkDelete.deleteFiles, this._t('libDeleteFiles'), this._t('libDeleteFilesHint'))}</div>
-        <p style="font-size:12px;color:var(--is-text,#fff);opacity:0.8;margin:12px 0 4px">${this._t(confKey).replace('{n}', n)}</p>
+        <p style="font-size:12px;color:var(--is-text,rgb(var(--_fg, 255, 255, 255)));opacity:0.8;margin:12px 0 4px">${this._t(confKey).replace('{n}', n)}</p>
         <ul style="font-size:12px;opacity:0.7;margin:0;padding-left:18px;line-height:1.8">${titles}${more}</ul>
         <div style="${_footStyle}">${_cancelBtn}<button data-lib-action="bulk-delete-confirm" style="${this._mtBtnA('red')}">${this._t('tlDelete')}</button></div>
       </div>`;

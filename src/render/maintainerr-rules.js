@@ -86,13 +86,13 @@ class _MaintainerrRulesRenderMethods {
 
     // Card grid layout
     const _dayR = this._isDay;
-    const _metaLbl = `font-size:9px;text-transform:uppercase;letter-spacing:0.05em;color:${_dayR ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.55)'};margin-bottom:2px`;
+    const _metaLbl = `font-size:9px;text-transform:uppercase;letter-spacing:0.05em;color:${_dayR ? 'rgba(var(--_shade, 0, 0, 0), 0.55)' : 'rgba(var(--_fg2, 255, 255, 255), 0.55)'};margin-bottom:2px`;
     const cards = view === 'table' ? '' : slice.map(r => {
       const statusLabel = r.isActive ? this._t('mtActive') : this._t('mtInactive');
       // Light green on a white card is unreadable — day mode needs the darker one
       const statusColor = r.isActive
-        ? (_dayR ? 'rgba(5,150,105,0.95)' : 'rgba(52,211,153,0.85)')
-        : (_dayR ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.4)');
+        ? (_dayR ? 'rgba(5,150,105,0.95)' : 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.85)')
+        : (_dayR ? 'rgba(var(--_shade, 0, 0, 0), 0.45)' : 'rgba(var(--_fg3, 255, 255, 255), 0.4)');
       const libName = this._mtLibName(r.libraryId);
       const ruleCount = (r.rules || []).length;
       const busy = m.runningId === r.id;
@@ -107,7 +107,7 @@ class _MaintainerrRulesRenderMethods {
       // as excluding an item in the media tab.
       const confirming = m.confirmDelete === r.id;
       const confirmOverlay = confirming
-        ? `<div style="position:absolute;inset:0;z-index:5;background:${this._isDay ? 'rgba(255,255,255,0.90)' : 'rgba(0,0,0,0.78)'};border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">
+        ? `<div style="position:absolute;inset:0;z-index:5;background:${this._isDay ? 'rgba(var(--_fg, 255, 255, 255), 0.90)' : 'rgba(var(--_shade, 0, 0, 0), 0.78)'};border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">
             <span style="font-size:12px;font-weight:600;color:var(--is-text);text-align:center;padding:0 12px">${this._t('mtConfirmDelete')}</span>
             <div style="display:flex;gap:10px">
               ${this._mtRoundBtn(`data-mt-del-confirm="${this._escHtml(r.id)}"`, CHECK, this._t('mtYes'), { tone: 'red' })}
@@ -175,7 +175,7 @@ class _MaintainerrRulesRenderMethods {
 
     const rows = rules.map(r => {
       const statusLabel = r.isActive ? this._t('mtActive') : this._t('mtInactive');
-      const statusColor = r.isActive ? 'rgba(52,211,153,0.85)' : 'rgba(255,255,255,0.4)';
+      const statusColor = r.isActive ? 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.85)' : 'rgba(var(--_fg3, 255, 255, 255), 0.4)';
       const libName = this._mtLibName(r.libraryId);
       const ruleCount = (r.rules || []).length;
       const busy = m.runningId === r.id;
@@ -188,7 +188,7 @@ class _MaintainerrRulesRenderMethods {
       </div>`;
 
       if (isMob) {
-        return `<div data-mt-edit="${this._escHtml(r.id)}" style="display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid var(--is-divider,rgba(255,255,255,0.07));cursor:pointer">
+        return `<div data-mt-edit="${this._escHtml(r.id)}" style="display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.07));cursor:pointer">
           <div style="flex:1;min-width:0">
             <div style="font-size:12px;font-weight:600;color:var(--is-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(r.name || '—')}</div>
             <div style="font-size:10px;color:var(--is-text-muted);margin-top:2px">${this._escHtml(libName)} · ${ruleCount} · <span style="color:${statusColor}">${statusLabel}</span></div>
@@ -389,8 +389,8 @@ class _MaintainerrRulesRenderMethods {
     const _day = this._isDay;
     const chipSty = open
       ? (_day
-        ? 'background:rgba(0,0,0,0.10);border:1px solid rgba(0,0,0,0.22);color:#000'
-        : 'background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.30);color:#fff')
+        ? 'background:rgba(var(--_shade, 0, 0, 0), 0.10);border:1px solid rgba(0,0,0,0.22);color:#000'
+        : 'background:rgba(var(--_fill, 255, 255, 255), 0.16);border:1px solid rgba(var(--_line, 255, 255, 255), 0.30);color:rgb(var(--_fg, 255, 255, 255))')
       : 'background:var(--is-btn-bg);border:1px solid var(--is-divider);color:var(--is-text-muted)';
     return `<div>
       <div data-mt-ed-sec="${key}" style="display:flex;align-items:center;gap:10px;padding:4px 2px;cursor:pointer;user-select:none">
@@ -526,14 +526,14 @@ class _MaintainerrRulesRenderMethods {
       const opHtml = ri > 0
         ? `<div style="display:flex;align-items:center;gap:8px;padding:6px 0">
             <span style="font-size:10px;color:var(--is-text-muted)">Operator</span>
-            <span style="font-size:11px;font-weight:700;color:var(--is-text);background:rgba(255,255,255,0.07);border:1px solid var(--is-card-bdr);border-radius:999px;padding:3px 12px;cursor:pointer" data-mt-toggle-op="${si}-${ri}">${ruleOp === 1 ? 'OR' : 'AND'}</span>
+            <span style="font-size:11px;font-weight:700;color:var(--is-text);background:rgba(var(--_fill, 255, 255, 255), 0.07);border:1px solid var(--is-card-bdr);border-radius:999px;padding:3px 12px;cursor:pointer" data-mt-toggle-op="${si}-${ri}">${ruleOp === 1 ? 'OR' : 'AND'}</span>
           </div>`
         : '';
 
       return `${opHtml}
-      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--is-card-bdr);border-radius:12px;padding:12px 14px;margin-bottom:6px" data-mt-rule-idx="${si}-${ri}">
+      <div style="background:rgba(var(--_fill, 255, 255, 255), 0.03);border:1px solid var(--is-card-bdr);border-radius:12px;padding:12px 14px;margin-bottom:6px" data-mt-rule-idx="${si}-${ri}">
         <div style="display:flex;align-items:center;margin-bottom:10px">
-          <span style="font-size:12px;font-weight:700;color:rgba(245,158,11,0.95)">Rule #${ri + 1}</span>
+          <span style="font-size:12px;font-weight:700;color:rgba(var(--arr-warning-rgb, 245, 158, 11), 0.95)">Rule #${ri + 1}</span>
           <div style="flex:1"></div>
           <button data-mt-del-rule="${si}-${ri}" style="${this._mtBtnA('red')};height:24px;font-size:11px">${this._t('mtDelete')}</button>
         </div>
@@ -561,7 +561,7 @@ class _MaintainerrRulesRenderMethods {
     return `<div style="background:var(--is-btn-bg);border:1px solid var(--is-card-bdr);border-radius:16px;padding:14px 16px;margin-bottom:10px" data-mt-section="${si}">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
         <span style="font-size:13px;font-weight:700;color:var(--is-text)">${this._t('mtSection')} #${si + 1}</span>
-        ${si > 0 ? `<span style="font-size:10px;font-weight:700;color:rgba(0,122,255,0.9);background:rgba(0,122,255,0.12);border:1px solid rgba(0,122,255,0.3);border-radius:999px;padding:2px 10px;cursor:pointer" data-mt-toggle-sec-op="${si}">${opLabel}</span>` : ''}
+        ${si > 0 ? `<span style="font-size:10px;font-weight:700;color:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.9);background:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.12);border:1px solid rgba(var(--arr-accent-rgb, 0, 122, 255), 0.3);border-radius:999px;padding:2px 10px;cursor:pointer" data-mt-toggle-sec-op="${si}">${opLabel}</span>` : ''}
         <div style="flex:1"></div>
         <button data-mt-del-section="${si}" style="${this._mtBtnA('red')};width:24px;height:24px;padding:0;font-size:13px">×</button>
       </div>

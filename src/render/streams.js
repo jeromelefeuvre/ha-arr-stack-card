@@ -78,7 +78,7 @@ _renderStreams() {
     if (streams.length <= 2) {
       const mask = `linear-gradient(to bottom,transparent 0.07%,black 6%,black 80%,transparent 100%)`;
       const g = `radial-gradient(circle at 25% 15%,${this._brandColor(overlayApp, o)} 0%,transparent 48%)`;
-      return `<div style="position:absolute;inset:0;background:${g};mask-image:${mask};-webkit-mask-image:${mask};filter:blur(25px);pointer-events:none;z-index:0;"></div>`;
+      return `<div style="position:absolute;inset:0;background:${g};mask-image:${mask};-webkit-mask-image:${mask};filter:blur(25px);opacity:var(--_a-tint, 1);pointer-events:none;z-index:0;"></div>`;
     }
     return this._sectionOverlayHtml(overlayApp, 25, 75, o);
   })();
@@ -295,7 +295,7 @@ _renderStreamCard({ id, state, attr }) {
     const ch = channel || (attr.media_title || '').slice(0, 6).toUpperCase();
     img = `<div style="position:absolute;inset:0;background:linear-gradient(135deg,#0d1b2a 0%,#1b2838 60%,#0a1628 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px">
       <ha-icon icon="mdi:broadcast" style="--mdc-icon-size:30px;color:rgba(220,60,60,0.85)"></ha-icon>
-      ${ch ? `<span style="font-size:8px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.45);max-width:70px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._escHtml(ch)}</span>` : ''}
+      ${ch ? `<span style="font-size:8px;font-weight:700;letter-spacing:2px;color:rgba(var(--_ptx, 255, 255, 255), 0.45);max-width:70px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._escHtml(ch)}</span>` : ''}
       <span style="font-size:7px;font-weight:800;letter-spacing:3px;color:rgba(220,60,60,0.7)">LIVE</span>
     </div>`;
   } else if (isMusic) {
@@ -381,7 +381,7 @@ _renderStreamCard({ id, state, attr }) {
     ? [...userName].reduce((a, c) => a + c.charCodeAt(0), 0) % 360
     : 200;
   const avatarEl = userThumb
-    ? `<img src="${this._escHtml(userThumb)}" style="width:12px;height:12px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(255,255,255,0.2)" loading="lazy" onerror="this.style.display='none'">`
+    ? `<img src="${this._escHtml(userThumb)}" style="width:12px;height:12px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(var(--_line, 255, 255, 255), 0.2)" loading="lazy" onerror="this.style.display='none'">`
     : '';
   const userBadge = userName
     ? `<div class="stream-user-tag">
@@ -405,9 +405,9 @@ _renderStreamCard({ id, state, attr }) {
     : null;
 
   const grad = 'rgba(0,0,0,0.88)';
-  const tc   = 'rgba(var(--arr-pt-rgb,255,255,255),1)';
+  const tc   = 'rgba(var(--_ptx,255,255,255),1)';
   const sub  = subtitle
-    ? `<div style="font-size:${isMusic ? 9 : 10}px;color:rgba(var(--arr-pt-rgb,255,255,255),${isMusic ? '0.66' : '0.6'});margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(subtitle)}</div>`
+    ? `<div style="font-size:${isMusic ? 9 : 10}px;color:rgba(var(--_ptx,255,255,255),${isMusic ? '0.66' : '0.6'});margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(subtitle)}</div>`
     : '';
 
   return `

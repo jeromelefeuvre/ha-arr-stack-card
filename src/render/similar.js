@@ -37,7 +37,7 @@ class _SimilarRenderMethods {
   // Similar titles' own mark where the app icons stand — the Actions menu — a
   // rounded square as theirs are, the ≈ in it
   _simQaIcon() {
-    return `<svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink:0"><rect width="24" height="24" rx="5" fill="#0A84FF"/><g fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 9.5c2.3-2.8 4.7-2.8 7 0s4.7 2.8 7 0"/><path d="M5 15.5c2.3-2.8 4.7-2.8 7 0s4.7 2.8 7 0"/></g></svg>`;
+    return `<svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink:0"><rect width="24" height="24" rx="5" fill="rgb(var(--arr-accent-rgb, 10, 132, 255))"/><g fill="none" stroke="rgb(var(--_fg, 255, 255, 255))" stroke-width="2.6" stroke-linecap="round"><path d="M5 9.5c2.3-2.8 4.7-2.8 7 0s4.7 2.8 7 0"/><path d="M5 15.5c2.3-2.8 4.7-2.8 7 0s4.7 2.8 7 0"/></g></svg>`;
   }
 
   // Find similar beside a request button: above it, or in its place where
@@ -111,7 +111,7 @@ class _SimilarRenderMethods {
   _simTrig(id, label, active, open, ico, ex = false) {
     if (this._isMob) {
       // A glyph has no room for "−1": a red dot says something is left out
-      const dot = ex ? '<span style="position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:#e5484d;pointer-events:none"></span>' : '';
+      const dot = ex ? '<span style="position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:rgb(var(--arr-error-rgb, 229, 72, 77));pointer-events:none"></span>' : '';
       return `<span id="${id}" class="mt-tb-sel mt-tb-sel--ico${active ? ' is-active' : ''}${open ? ' is-open' : ''}" title="${this._escHtml(label)}" style="cursor:pointer;position:relative">${SIM_FILTER_ICO[ico]}${SIM_CHEV}${dot}</span>`;
     }
     return `<span id="${id}" class="mt-tb-sel${active ? '' : ' is-off'}${open ? ' is-open' : ''}" style="cursor:pointer;max-width:180px"><span class="mt-tb-lbl">${this._escHtml(label)}</span>${SIM_CHEV}</span>`;
@@ -191,7 +191,7 @@ class _SimilarRenderMethods {
     const clear = (view === 'ex' ? exl : sel).length
       ? `<div><button data-sim-actor-clear style="border:1px solid var(--is-divider);background:var(--is-btn-bg);color:var(--is-text);padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer">${this._t('simCastClear')}</button></div>`
       : '';
-    return `${trig}<div id="sim-cast-pop" style="position:absolute;top:34px;left:0;z-index:200;background:var(--is-menu-bg,#1c1c1e);border:1px solid var(--is-divider,rgba(255,255,255,0.15));border-radius:14px;padding:10px;width:${this._isMob ? 'min(460px,86vw)' : 'min(760px,86vw)'};max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,0.4)">
+    return `${trig}<div id="sim-cast-pop" style="position:absolute;top:34px;left:0;z-index:200;background:var(--is-menu-bg,#1c1c1e);border:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.15));border-radius:14px;padding:10px;width:${this._isMob ? 'min(460px,86vw)' : 'min(760px,86vw)'};max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgba(var(--_shadow, 0, 0, 0), 0.4)">
       ${this._simViewSeg('cast', view, s._castViewPrev)}
       <!-- A name is what the tile is for: 140px cut most of them off after a
            dozen characters, and on anything wider than a phone the panel had
@@ -223,14 +223,14 @@ class _SimilarRenderMethods {
     const chip = (a, b, text) => {
       const on = (a || null) === (since || null) && (b || null) === (until || null);
       const sty = on
-        ? 'border:1px solid rgba(0,122,255,0.65);background:rgba(0,122,255,0.32);color:#fff'
+        ? 'border:1px solid rgba(var(--arr-accent-rgb, 0, 122, 255), 0.65);background:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.32);color:rgb(var(--_fg, 255, 255, 255))'
         : 'border:1px solid var(--is-divider);background:var(--is-btn-bg);color:var(--is-text)';
       return `<button data-sim-year="${a || ''}:${b || ''}" style="${sty};padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">${text}</button>`;
     };
     const decades = [];
     for (let d = Math.floor(cy / 10) * 10; d >= 1960; d -= 10) decades.push(chip(d, d + 9, `${d}–${String(d + 9).slice(2)}`));
     const inp = (id, v, ph) => `<input id="${id}" type="number" min="1900" max="${cy}" value="${v || ''}" placeholder="${this._escHtml(ph)}" style="width:76px;padding:5px 8px;border-radius:10px;border:1px solid var(--is-divider);background:var(--is-btn-bg);color:var(--is-text);font-size:12px">`;
-    return `${trig}<div id="sim-year-pop" style="position:absolute;top:34px;left:0;z-index:200;background:var(--is-menu-bg,#1c1c1e);border:1px solid var(--is-divider,rgba(255,255,255,0.15));border-radius:14px;padding:10px;width:250px;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,0.4)">
+    return `${trig}<div id="sim-year-pop" style="position:absolute;top:34px;left:0;z-index:200;background:var(--is-menu-bg,#1c1c1e);border:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.15));border-radius:14px;padding:10px;width:250px;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgba(var(--_shadow, 0, 0, 0), 0.4)">
       <div style="display:flex;flex-wrap:wrap;gap:5px">${chip(cy - 4, null, this._t('simLastN').replace('{n}', 5))}${chip(cy - 9, null, this._t('simLastN').replace('{n}', 10))}</div>
       <div style="display:flex;flex-wrap:wrap;gap:5px">${decades.join('')}</div>
       <div style="display:flex;align-items:center;gap:6px;color:var(--is-text-muted)">${inp('sim-year-from', since, this._t('simFrom'))}<span>–</span>${inp('sim-year-to', until, this._t('simTo'))}</div>
@@ -263,7 +263,7 @@ class _SimilarRenderMethods {
     if (!s._genreOpen) return trig;
     const chips = opts.map(([g, n]) => this._simPill(`data-sim-genre="${g}"`, this._simStateOf(g, sel, exl), this._escHtml(n), view)).join('');
     const clear = (view === 'ex' ? exl : sel).length ? `<div>${this._simPill('data-sim-genre-clear', false, this._t('simCastClear'))}</div>` : '';
-    return `${trig}<div id="sim-genre-pop" style="position:absolute;top:34px;left:0;z-index:200;background:var(--is-menu-bg,#1c1c1e);border:1px solid var(--is-divider,rgba(255,255,255,0.15));border-radius:14px;padding:10px;width:min(360px,86vw);max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,0.4)">
+    return `${trig}<div id="sim-genre-pop" style="position:absolute;top:34px;left:0;z-index:200;background:var(--is-menu-bg,#1c1c1e);border:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.15));border-radius:14px;padding:10px;width:min(360px,86vw);max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgba(var(--_shadow, 0, 0, 0), 0.4)">
       ${this._simViewSeg('genre', view, s._genreViewPrev)}
       <div style="display:flex;flex-wrap:wrap;gap:5px">${chips}</div>
       ${clear}
@@ -304,7 +304,7 @@ class _SimilarRenderMethods {
     const chips = opts.map(([c, n]) =>
       this._simPill(`data-sim-country="${this._escHtml(c)}"`, this._simStateOf(c, sel, exl), this._escHtml(n), view)).join('');
     const clear = (view === 'ex' ? exl : sel).length ? `<div>${this._simPill('data-sim-country-clear', false, this._t('simCastClear'))}</div>` : '';
-    return `${trig}<div id="sim-country-pop" style="position:absolute;top:34px;left:0;z-index:200;background:var(--is-menu-bg,#1c1c1e);border:1px solid var(--is-divider,rgba(255,255,255,0.15));border-radius:14px;padding:10px;width:min(360px,86vw);max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgba(0,0,0,0.4)">
+    return `${trig}<div id="sim-country-pop" style="position:absolute;top:34px;left:0;z-index:200;background:var(--is-menu-bg,#1c1c1e);border:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.15));border-radius:14px;padding:10px;width:min(360px,86vw);max-height:300px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 24px rgba(var(--_shadow, 0, 0, 0), 0.4)">
       ${this._simViewSeg('country', view, s._countryViewPrev)}
       <div style="display:flex;flex-wrap:wrap;gap:5px">${chips}</div>
       ${clear}
@@ -315,7 +315,7 @@ class _SimilarRenderMethods {
     if (!state) return 'border:1px solid var(--is-divider);background:var(--is-btn-bg);color:var(--is-text)';
     const rgb = state === 'ex' ? '229,72,77' : '0,122,255';
     return state === view
-      ? `border:1px solid rgba(${rgb},0.65);background:rgba(${rgb},${fill});color:#fff`
+      ? `border:1px solid rgba(${rgb},0.65);background:rgba(${rgb},${fill});color:rgb(var(--_fg, 255, 255, 255))`
       : `border:1px dashed rgba(${rgb},0.6);background:var(--is-btn-bg);color:var(--is-text-muted)${state === 'ex' ? ';text-decoration:line-through' : ''}`;
   }
 
@@ -460,7 +460,7 @@ class _SimilarRenderMethods {
     const chips = kws.map(k => {
       const on = used.has(k.id);
       const sty = on
-        ? `border:1px solid rgba(0,122,255,0.65);background:rgba(0,122,255,${day ? 0.18 : 0.32});color:${day ? '#0060df' : '#fff'}`
+        ? `border:1px solid rgba(var(--arr-accent-rgb, 0, 122, 255), 0.65);background:rgba(var(--arr-accent-rgb, 0, 122, 255), ${day ? 0.18 : 0.32});color:${day ? '#0060df' : 'rgb(var(--_fg, 255, 255, 255))'}`
         : 'border:1px solid var(--is-divider);background:var(--is-btn-bg);color:var(--is-text-muted)';
       return `<button data-sim-kw="${Number(k.id) || 0}" style="${sty};flex-shrink:0;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">${this._escHtml(k.name)}</button>`;
     }).join('');
@@ -476,7 +476,7 @@ class _SimilarRenderMethods {
     const chips = tags.map(t => {
       const on = used.has(t);
       const sty = on
-        ? `border:1px solid rgba(213,16,7,0.65);background:rgba(213,16,7,${day ? 0.16 : 0.32});color:${day ? '#b00d06' : '#fff'}`
+        ? `border:1px solid rgba(213,16,7,0.65);background:rgba(213,16,7,${day ? 0.16 : 0.32});color:${day ? '#b00d06' : 'rgb(var(--_fg, 255, 255, 255))'}`
         : 'border:1px solid var(--is-divider);background:var(--is-btn-bg);color:var(--is-text-muted)';
       return `<button data-sim-mtag="${this._escHtml(t)}" style="${sty};flex-shrink:0;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">${this._escHtml(t)}</button>`;
     }).join('');

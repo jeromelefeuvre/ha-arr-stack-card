@@ -75,7 +75,7 @@ class _ActivityRenderMethods {
   // Lidarr's own green, beside Radarr's blue and Sonarr's amber.
   _actSrcColor(svc) {
     if (svc === 'lidarr') return 'rgba(21,158,90,0.9)';
-    return (svc === 'radarr' || svc === 'radarr2') ? 'rgba(99,140,255,0.85)' : 'rgba(250,160,40,0.85)';
+    return (svc === 'radarr' || svc === 'radarr2') ? 'rgba(99,140,255,0.85)' : 'rgba(var(--arr-warning-rgb, 250, 160, 40), 0.85)';
   }
 
 }

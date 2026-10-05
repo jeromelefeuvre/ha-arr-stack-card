@@ -97,7 +97,7 @@ class _ActivityQueueRenderMethods {
     const rows = paged.map(item => {
       const isBad    = item.trackedDownloadStatus === 'warning' || item.trackedDownloadStatus === 'error' || item.trackedDownloadState === 'importFailed' || item.status === 'failed';
       const pct      = item.size > 0 ? Math.round(((item.size - (item.sizeleft || 0)) / item.size) * 100) : 0;
-      const stCol    = isBad ? 'rgba(250,160,40,0.9)' : 'var(--is-text-muted)';
+      const stCol    = isBad ? 'rgba(var(--arr-warning-rgb, 250, 160, 40), 0.9)' : 'var(--is-text-muted)';
       const _sm      = item.statusMessages;
       const _smLines = isBad && item._miRejection ? [item._miRejection]
                      : (_sm?.length ? _sm.flatMap(s => s.messages?.length ? s.messages : (s.title ? [s.title] : [])).filter(Boolean) : []);
@@ -131,7 +131,7 @@ class _ActivityQueueRenderMethods {
 
       // ── Mobile row (fixed layout, no col settings) ──
       const isFullyDl = item.size > 0 && (item.sizeleft === 0 || item.sizeleft === null);
-      const dlIcon    = isFullyDl ? `<span style="color:rgba(250,160,40,0.85);display:flex;align-items:center;flex-shrink:0">${dlDoneSvg}</span>` : '';
+      const dlIcon    = isFullyDl ? `<span style="color:rgba(var(--arr-warning-rgb, 250, 160, 40), 0.85);display:flex;align-items:center;flex-shrink:0">${dlDoneSvg}</span>` : '';
       const addedLbl = item.added ? (() => { try { const dt = new Date(item.added); return dt.toLocaleDateString(this._locale, { month: 'short', day: 'numeric' }); } catch { return ''; } })() : '';
       const qExtraTags = isMobile ? visCols.filter(c => !['source','quality','size','status','formats'].includes(c.id)).map(col => {
         let v = '';
@@ -143,7 +143,7 @@ class _ActivityQueueRenderMethods {
       }).filter(Boolean).join('') : '';
       if (isMobile) {
         const subLine    = isBad ? (_smLines[0] || item.trackedDownloadState || 'Error') : (item._episodeTitle ? this._escHtml(item._episodeTitle) : null);
-        const subLineClr = isBad ? 'rgba(250,160,40,0.85)' : 'var(--is-text-muted)';
+        const subLineClr = isBad ? 'rgba(var(--arr-warning-rgb, 250, 160, 40), 0.85)' : 'var(--is-text-muted)';
         return `<div style="padding:9px 0;border-bottom:1px solid var(--is-divider)">
           <div style="display:flex;align-items:flex-start;gap:6px">
             <div style="flex-shrink:0;width:16px;display:flex;justify-content:center;padding-top:2px">${dlIcon}</div>
@@ -276,10 +276,10 @@ class _ActivityQueueRenderMethods {
       `padding:5px 24px 5px 8px;border-radius:6px;width:100%;box-sizing:border-box;` +
       `font-size:11px;font-weight:600;cursor:pointer;outline:none;` +
       `border:${missing ? '1px dashed rgba(248,113,113,0.8)' : '1px solid var(--is-divider)'};` +
-      `background-color:${missing ? 'rgba(248,113,113,0.1)' : 'var(--is-btn-bg)'};` +
+      `background-color:${missing ? 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.1)' : 'var(--is-btn-bg)'};` +
       `background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='rgba(128,128,128,0.7)' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");` +
       `background-repeat:no-repeat;background-position:right 6px center;` +
-      `color:${missing ? 'rgba(248,113,113,0.95)' : 'var(--is-text)'};`;
+      `color:${missing ? 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.95)' : 'var(--is-text)'};`;
 
     // Library options (movie/series) — use correct instance library
     const lib = svc === 'radarr'  ? (this._radarr  || [])
@@ -321,7 +321,7 @@ class _ActivityQueueRenderMethods {
       if (!c.languages?.length || !langName || langName === 'Unknown') return false;
       return true;
     });
-    const importBtn = `<button id="mi-import-all" data-ready="${allCanImport ? '1' : ''}" style="width:100%;margin-top:8px;padding:9px;border-radius:8px;border:none;background:${allCanImport ? 'rgba(60,200,120,0.18)' : 'var(--is-btn-bg)'};color:${allCanImport ? 'rgba(80,220,140,0.95)' : 'var(--is-text-muted)'};font-size:13px;font-weight:700;cursor:${allCanImport ? 'pointer' : 'not-allowed'};opacity:${allCanImport ? '1' : '0.5'}">${this._t('actImport')}</button>`;
+    const importBtn = `<button id="mi-import-all" data-ready="${allCanImport ? '1' : ''}" style="width:100%;margin-top:8px;padding:9px;border-radius:8px;border:none;background:${allCanImport ? 'rgba(var(--arr-success-rgb, 60, 200, 120), 0.18)' : 'var(--is-btn-bg)'};color:${allCanImport ? 'rgba(80,220,140,0.95)' : 'var(--is-text-muted)'};font-size:13px;font-weight:700;cursor:${allCanImport ? 'pointer' : 'not-allowed'};opacity:${allCanImport ? '1' : '0.5'}">${this._t('actImport')}</button>`;
 
     const mediaLabel = isRadarr ? this._t('typeMovie') : isLidarr ? this._t('typeMusic') : this._t('typeTv');
     const mediaField = isRadarr ? 'movie' : isLidarr ? 'artist' : 'series';
@@ -344,7 +344,7 @@ class _ActivityQueueRenderMethods {
         const size      = c.size ? fmtBytes(c.size) : '—';
         const rej       = (c.rejections || []).map(r => r.reason || r).filter(Boolean);
         const qualSel   = `<select class="mi-field-sel" data-field="quality" data-idx="${i}" style="${SEL_STYle(qualMiss)}"><option value="" disabled hidden${curQualId === '' || qualMiss ? ' selected' : ''}>${this._t('actSelectQuality')}</option>${buildQualOpts(curQualId)}</select>`;
-        const miss      = txt => `<span style="font-size:11px;color:rgba(248,113,113,0.95)">${txt}</span>`;
+        const miss      = txt => `<span style="font-size:11px;color:rgba(var(--arr-error-rgb, 248, 113, 113), 0.95)">${txt}</span>`;
         const cell      = txt => `<span style="font-size:11px;color:var(--is-text-sec)">${this._escHtml(txt)}</span>`;
 
         if (isMobile) {

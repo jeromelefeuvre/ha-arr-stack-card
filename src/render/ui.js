@@ -4,6 +4,7 @@
 // rather than in whichever feature happened to need them first.
 // ──────────────────────────────────────────────────────────────────────────
 import { ICONS } from '../shared/ui.js';
+import { STATUS_RGB } from '../styles/tokens.js';
 
 class _UiMethods {
 
@@ -119,10 +120,7 @@ class _UiMethods {
   // One switch for the whole card: the same blue as every other accent, a
   // hairline rim when off. Prowlarr had its own indigo variant.
   _uiSwitch(attr, on, title = '') {
-    return `<button ${attr} title="${this._escHtml(title)}"
-      style="flex-shrink:0;width:36px;height:20px;border-radius:999px;box-sizing:border-box;cursor:pointer;position:relative;padding:0;transition:background 0.15s,border-color 0.15s;border:1px solid ${on ? 'rgba(0,122,255,0.8)' : 'rgba(255,255,255,0.12)'};background:${on ? 'rgba(0,122,255,0.7)' : 'rgba(255,255,255,0.06)'}">
-      <span style="position:absolute;top:50%;transform:translateY(-50%);left:${on ? '18px' : '4px'};width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,${on ? '0.95' : '0.45'});transition:left 0.15s"></span>
-    </button>`;
+    return `<button ${attr} title="${this._escHtml(title)}" class="ui-sw${on ? ' is-on' : ''}"><span class="ui-sw-k"></span></button>`;
   }
 
   // Every badge in a table or modal goes through here, so the palette stays a
@@ -143,10 +141,18 @@ class _UiMethods {
 
   // Some badges carry a colour that comes from data (an app's brand hue), not
   // from the palette, so it arrives as hex and is turned into the triple.
+  // A status colour comes back as its token (#42) — var(--arr-success-rgb,
+  // 52,199,89) — so the badge follows the theme; a colour that is already
+  // a token passes through.
   _hexToRgbTriple(hex) {
-    const h = String(hex).replace('#', '');
+    const str = String(hex);
+    const tok = str.match(/var\(--[\w-]+,\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)/);
+    if (tok) return tok[0];
+    const h = str.replace('#', '');
     const n = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);
-    return Number.isFinite(n) ? `${(n >> 16) & 255},${(n >> 8) & 255},${n & 255}` : '150,150,165';
+    if (!Number.isFinite(n)) return '150,150,165';
+    const rgb = `${(n >> 16) & 255},${(n >> 8) & 255},${n & 255}`;
+    return STATUS_RGB[rgb] ? `var(--arr-${STATUS_RGB[rgb]}-rgb, ${rgb})` : rgb;
   }
 
   // Dates in the card's own language, not the browser's: day, short month and
@@ -170,7 +176,7 @@ class _UiMethods {
       ).join('');
       center = `<div class="u-row-5">${dots}</div>`;
     } else {
-      center = `<span style="font-size:13px;font-weight:600;color:var(--is-text,#fff);min-width:44px;text-align:center">${page + 1}/${totalPages}</span>`;
+      center = `<span style="font-size:13px;font-weight:600;color:var(--is-text,rgb(var(--_fg, 255, 255, 255)));min-width:44px;text-align:center">${page + 1}/${totalPages}</span>`;
     }
     const first = page === 0;
     const last  = page >= totalPages - 1;

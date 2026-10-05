@@ -13,14 +13,14 @@ class _WireActivityColumnsMethods {
     const { cols, all, storeKey, repaint } = c;
     const isDay   = this._isDay;
     const pkBg    = isDay ? 'rgba(245,246,255,0.99)' : 'rgba(18,18,28,0.97)';
-    const pkBdr   = isDay ? 'rgba(0,0,0,0.10)'       : 'rgba(255,255,255,0.14)';
-    const pkHdr   = isDay ? 'rgba(0,0,0,0.32)'        : 'rgba(255,255,255,0.35)';
-    const pkLbl   = isDay ? 'rgba(0,0,0,0.65)'        : 'rgba(255,255,255,0.82)';
+    const pkBdr   = isDay ? 'rgba(var(--_shade, 0, 0, 0), 0.10)'       : 'rgba(var(--_fill, 255, 255, 255), 0.14)';
+    const pkHdr   = isDay ? 'rgba(var(--_shade, 0, 0, 0), 0.32)'        : 'rgba(var(--_fg3, 255, 255, 255), 0.35)';
+    const pkLbl   = isDay ? 'rgba(var(--_shade, 0, 0, 0), 0.65)'        : 'rgba(var(--_fg2, 255, 255, 255), 0.82)';
     const rect  = gearBtn.getBoundingClientRect();
     const top   = Math.round(rect.bottom + 6);
     const right = Math.round(window.innerWidth - rect.right);
     const wrap  = document.createElement('div');
-    wrap.innerHTML = `<div ${attr} style="position:fixed;top:${top}px;right:${right}px;z-index:1200;min-width:175px;background:${pkBg};border:1px solid ${pkBdr};border-radius:9px;padding:10px 14px 12px;box-shadow:0 8px 28px rgba(0,0,0,0.25)">
+    wrap.innerHTML = `<div ${attr} style="position:fixed;top:${top}px;right:${right}px;z-index:1200;min-width:175px;background:${pkBg};border:1px solid ${pkBdr};border-radius:9px;padding:10px 14px 12px;box-shadow:0 8px 28px rgba(var(--_shadow, 0, 0, 0), 0.25)">
       <div style="font-size:9px;font-weight:700;color:${pkHdr};text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">${this._t('actColPickerHdr')}</div>
       ${all.map(([id, key]) => `<label style="display:flex;align-items:center;gap:8px;padding:4px 0;cursor:pointer;user-select:none"><input type="checkbox" class="act-col-cb" data-col-id="${id}" ${cols.has(id) ? 'checked' : ''} style="cursor:pointer;accent-color:rgba(99,140,255,1);width:14px;height:14px;flex-shrink:0"><span style="font-size:12px;color:${pkLbl}">${this._t(key)}</span></label>`).join('')}
     </div>`;

@@ -429,7 +429,7 @@ class _WireTracearrTabsMethods {
         _segTo(btn);
         // Show loading only in the rows area
         const target = body.querySelector('[data-tra-watch-top]');
-        if (target) target.innerHTML = `<div style="grid-column:1/-1;padding:24px;text-align:center;color:rgba(255,255,255,0.3);font-size:11px">${this._t('loading')}</div>`;
+        if (target) target.innerHTML = `<div style="grid-column:1/-1;padding:24px;text-align:center;color:rgba(var(--_fg3, 255, 255, 255), 0.3);font-size:11px">${this._t('loading')}</div>`;
         const _wSrvId = m.watchServerId || m.qualityServerId || m.selectedServerId || null;
         const _wSrvQ  = _wSrvId ? `&serverId=${_wSrvId}` : '';
         const [mov, sh] = await Promise.all([

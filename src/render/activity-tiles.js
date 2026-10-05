@@ -92,15 +92,15 @@ class _ActivityTilesMethods {
 
     const rowsHtml = rows.length > 0
       ? rows.map((r, i) => {
-          const sep    = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
-          const color  = r.failed ? 'rgba(248,113,113,0.85)' : 'rgba(52,211,153,0.85)';
+          const sep    = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
+          const color  = r.failed ? 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.85)' : 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.85)';
           const sub    = r.sub ?? (r.type === 'movie' ? this._t('typeMovie') : r.type === 'music' ? this._t('typeArtist') : this._t('typeTv'));
-          const pctBar = r.failed ? '' : `<div style="margin-top:3px;width:100%;height:2px;background:rgba(255,255,255,0.08);border-radius:1px"><div style="width:${r.pct}%;height:100%;background:${color};border-radius:1px"></div></div>`;
+          const pctBar = r.failed ? '' : `<div style="margin-top:3px;width:100%;height:2px;background:rgba(var(--_fill, 255, 255, 255), 0.08);border-radius:1px"><div style="width:${r.pct}%;height:100%;background:${color};border-radius:1px"></div></div>`;
           const pctTxt = r.failed ? ` ${this._uiBadge(this._t('actFailed'), 'amber')}` : ` · ${r.pct}%`;
           const hidden = i >= maxRows ? 'display:none;' : '';
           return `<div style="${hidden}${sep}padding:4px 0">
-            <div style="font-size:10px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.title}</div>
-            <div style="font-size:9px;color:rgba(255,255,255,0.45);margin-top:1px">${sub}${pctTxt}</div>
+            <div style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.title}</div>
+            <div style="font-size:9px;color:rgba(var(--_fg3, 255, 255, 255), 0.45);margin-top:1px">${sub}${pctTxt}</div>
             ${pctBar}
           </div>`;
         }).join('')
@@ -109,7 +109,7 @@ class _ActivityTilesMethods {
     return `<div class="tl-card u-sec-body" data-act-open="queue">
       <div class="u-bg-icon"><svg viewBox="0 0 24 24" width="130" height="130" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="3" x2="12" y2="21"/></svg></div>
       <div class="u-row-sb-w">
-        <span style="font-size:10px;font-weight:800;color:var(--is-text);background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);padding:2px 6px;border-radius:4px;line-height:1">${this._t('actQueue')}</span>
+        <span style="font-size:10px;font-weight:800;color:var(--is-text);background:rgba(var(--_shade, 0, 0, 0), 0.45);backdrop-filter:blur(4px);padding:2px 6px;border-radius:4px;line-height:1">${this._t('actQueue')}</span>
         ${badge}
       </div>
       <div data-act-content class="u-flex-ovh-rel">${rowsHtml}</div>
@@ -126,20 +126,20 @@ class _ActivityTilesMethods {
       : grabbed.length === 0
         ? `<div style="font-size:9px;color:var(--is-text-muted);padding:8px 0">${this._t('actNoHistory')}</div>`
         : grabbed.map((r, i) => {
-            const sep = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+            const sep = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
             const ago = r.date ? this._tlFmtDate(r.date) : '';
             const sub = [r.svc, r.ep || null, ago].filter(Boolean).join(' · ');
             const hidden = i >= histMax ? 'display:none;' : '';
             return `<div style="${hidden}${sep}padding:4px 0">
-              <div style="font-size:10px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.title}</div>
-              <div style="font-size:9px;color:rgba(255,255,255,0.45);margin-top:1px">${sub}</div>
+              <div style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.title}</div>
+              <div style="font-size:9px;color:rgba(var(--_fg3, 255, 255, 255), 0.45);margin-top:1px">${sub}</div>
             </div>`;
           }).join('');
 
     return `<div class="tl-card u-sec-body" data-act-open="history">
       <div class="u-bg-icon"><svg viewBox="0 0 24 24" width="130" height="130" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
       <div class="u-row-sb-w">
-        <span style="font-size:10px;font-weight:800;color:var(--is-text);background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);padding:2px 6px;border-radius:4px;line-height:1">${this._t('actHistory')}</span>
+        <span style="font-size:10px;font-weight:800;color:var(--is-text);background:rgba(var(--_shade, 0, 0, 0), 0.45);backdrop-filter:blur(4px);padding:2px 6px;border-radius:4px;line-height:1">${this._t('actHistory')}</span>
       </div>
       <div data-act-content class="u-flex-ovh-rel">${content}</div>
     </div>`;
@@ -155,20 +155,20 @@ class _ActivityTilesMethods {
       : items.length === 0
         ? `<div style="font-size:9px;color:var(--is-text-muted);padding:8px 0">${this._t('actNoBlocked')}</div>`
         : items.map((r, i) => {
-            const sep = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+            const sep = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
             const ago = r.date ? this._tlFmtDate(r.date) : '';
             const sub = [r.svc, r.quality, ago].filter(Boolean).join(' · ');
             const hidden = i >= blMax ? 'display:none;' : '';
             return `<div style="${hidden}${sep}padding:4px 0">
-              <div style="font-size:10px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.title}</div>
-              <div style="font-size:9px;color:rgba(255,255,255,0.45);margin-top:1px">${sub}</div>
+              <div style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.title}</div>
+              <div style="font-size:9px;color:rgba(var(--_fg3, 255, 255, 255), 0.45);margin-top:1px">${sub}</div>
             </div>`;
           }).join('');
 
     return `<div class="tl-card u-sec-body" data-act-open="blocklist">
       <div class="u-bg-icon"><svg viewBox="0 0 24 24" width="130" height="130" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
       <div class="u-row-sb-w">
-        <span style="font-size:10px;font-weight:800;color:var(--is-text);background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);padding:2px 6px;border-radius:4px;line-height:1">${this._t('actBlocklist')}</span>
+        <span style="font-size:10px;font-weight:800;color:var(--is-text);background:rgba(var(--_shade, 0, 0, 0), 0.45);backdrop-filter:blur(4px);padding:2px 6px;border-radius:4px;line-height:1">${this._t('actBlocklist')}</span>
       </div>
       <div data-act-content class="u-flex-ovh-rel">${content}</div>
     </div>`;
@@ -320,8 +320,8 @@ class _ActivityTilesMethods {
 
     const filmSvg = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="2" y1="17" x2="7" y2="17"/></svg>`;
     const tvSvg   = `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="15" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>`;
-    const mkRow    = (svg, label, count) => `<div class="u-row-6"><span style="opacity:0.6;flex-shrink:0;display:flex">${svg}</span><span style="font-size:10px;font-weight:600;color:var(--is-text-sec);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</span><span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.85);flex-shrink:0">${count}</span></div>`;
-    const mkSubRow = (label, count) => `<div style="display:flex;align-items:center;gap:6px;padding-left:16px"><span style="font-size:9px;color:var(--is-text-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</span><span style="font-size:9px;font-weight:600;color:rgba(255,255,255,0.75);flex-shrink:0">${count}</span></div>`;
+    const mkRow    = (svg, label, count) => `<div class="u-row-6"><span style="opacity:0.6;flex-shrink:0;display:flex">${svg}</span><span style="font-size:10px;font-weight:600;color:var(--is-text-sec);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</span><span style="font-size:10px;font-weight:700;color:rgba(var(--_fg, 255, 255, 255), 0.85);flex-shrink:0">${count}</span></div>`;
+    const mkSubRow = (label, count) => `<div style="display:flex;align-items:center;gap:6px;padding-left:16px"><span style="font-size:9px;color:var(--is-text-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${label}</span><span style="font-size:9px;font-weight:600;color:rgba(var(--_fg2, 255, 255, 255), 0.75);flex-shrink:0">${count}</span></div>`;
 
     let rows = '';
     if (cache && movieCount !== null) {
@@ -364,7 +364,7 @@ class _ActivityTilesMethods {
     return `<div class="tl-card u-sec-body" data-act-open="missing">
       <div class="u-bg-icon"><svg viewBox="0 0 24 24" width="130" height="130" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg></div>
       <div class="u-row-sb-w">
-        <span style="font-size:10px;font-weight:800;color:var(--is-text);background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);padding:2px 6px;border-radius:4px;line-height:1">${this._t('actMissing')}</span>
+        <span style="font-size:10px;font-weight:800;color:var(--is-text);background:rgba(var(--_shade, 0, 0, 0), 0.45);backdrop-filter:blur(4px);padding:2px 6px;border-radius:4px;line-height:1">${this._t('actMissing')}</span>
         ${badge}
       </div>
       <div class="u-flex-rel">${content}</div>

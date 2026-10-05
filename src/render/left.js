@@ -210,7 +210,7 @@ _renderDiskRow() {
       const pct    = (usedGB / sabTotalGB) * 100;
       pageContent = `
         <div class="dc-label">${this._t('storage')}</div>
-        <div class="dc-val"><span class="pill-orange dc-pill">${fmtGB(usedGB * 1073741824)}</span><span style="font-size:10px;color:rgba(var(--arr-st-rgb,255,255,255),0.6);font-weight:600"> / ${fmtGB(sabTotalBytes)}</span></div>
+        <div class="dc-val"><span class="pill-orange dc-pill">${fmtGB(usedGB * 1073741824)}</span><span style="font-size:10px;color:rgba(var(--_fg2,255,255,255),0.6);font-weight:600"> / ${fmtGB(sabTotalBytes)}</span></div>
         <div class="mbar"><div class="mbar-fill pf-orange" style="width:${pct.toFixed(0)}%"></div></div>
         <div class="dc-sub">${pct.toFixed(0)} % · ${fmtGB(sabFreeBytes)} ${this._t('free')}</div>`;
     } else if (activeIsQbit) {
@@ -223,7 +223,7 @@ _renderDiskRow() {
       const pct       = (usedBytes / activeDisk.totalSpace) * 100;
       pageContent = `
         <div class="dc-label">${this._t('storage')}</div>
-        <div class="dc-val"><span class="pill-orange dc-pill">${fmtGB(usedBytes)}</span><span style="font-size:10px;color:rgba(var(--arr-st-rgb,255,255,255),0.6);font-weight:600"> / ${fmtGB(activeDisk.totalSpace)}</span></div>
+        <div class="dc-val"><span class="pill-orange dc-pill">${fmtGB(usedBytes)}</span><span style="font-size:10px;color:rgba(var(--_fg2,255,255,255),0.6);font-weight:600"> / ${fmtGB(activeDisk.totalSpace)}</span></div>
         <div class="mbar"><div class="mbar-fill pf-orange" style="width:${pct.toFixed(0)}%"></div></div>
         <div class="dc-sub">${pct.toFixed(0)} % · ${fmtGB(activeDisk.freeSpace)} ${this._t('free')}${diskLabel ? ` · ${this._escHtml(diskLabel)}` : ''}</div>`;
     } else {
@@ -247,7 +247,7 @@ _renderDiskRow() {
       diskChip = `
         <div class="disk-chip">
           <div class="dc-label">${this._t('storage')}</div>
-          <div class="dc-val"><span class="pill-orange dc-pill">${fmtGB(usedBytes)}</span><span style="font-size:10px;color:rgba(var(--arr-st-rgb,255,255,255),0.6);font-weight:600"> / ${fmtGB(activeDisk.totalSpace)}</span></div>
+          <div class="dc-val"><span class="pill-orange dc-pill">${fmtGB(usedBytes)}</span><span style="font-size:10px;color:rgba(var(--_fg2,255,255,255),0.6);font-weight:600"> / ${fmtGB(activeDisk.totalSpace)}</span></div>
           <div class="mbar"><div class="mbar-fill pf-orange" style="width:${pct.toFixed(0)}%"></div></div>
           <div class="dc-sub">${pct.toFixed(0)} % · ${fmtGB(activeDisk.freeSpace)} ${this._t('free')}${lbl ? ` · ${this._escHtml(lbl)}` : ''}</div>
         </div>`;
@@ -265,7 +265,7 @@ _renderDiskRow() {
     diskChip = `
       <div class="disk-chip">
         <div class="dc-label">${this._t('storage')}</div>
-        <div class="dc-val"><span class="pill-orange dc-pill">${fmtGB(usedGB * 1073741824)}</span><span style="font-size:10px;color:rgba(var(--arr-st-rgb,255,255,255),0.6);font-weight:600"> / ${fmtGB(sabTotalGB * 1073741824)}</span></div>
+        <div class="dc-val"><span class="pill-orange dc-pill">${fmtGB(usedGB * 1073741824)}</span><span style="font-size:10px;color:rgba(var(--_fg2,255,255,255),0.6);font-weight:600"> / ${fmtGB(sabTotalGB * 1073741824)}</span></div>
         <div class="mbar"><div class="mbar-fill pf-orange" style="width:${pct.toFixed(0)}%"></div></div>
         <div class="dc-sub">${pct.toFixed(0)} % · ${fmtGB(sabFreeGB * 1073741824)} ${this._t('free')}</div>
       </div>`;
@@ -275,7 +275,7 @@ _renderDiskRow() {
     diskChip = `
       <div class="disk-chip">
         <div class="dc-label">${this._t('storage')}</div>
-        <div class="dc-val"><span class="pill-orange dc-pill">${fmtGB(usedGB * 1073741824)}</span><span style="font-size:10px;color:rgba(var(--arr-st-rgb,255,255,255),0.6);font-weight:600"> / ${fmtGB(nzbgetTotalGB * 1073741824)}</span></div>
+        <div class="dc-val"><span class="pill-orange dc-pill">${fmtGB(usedGB * 1073741824)}</span><span style="font-size:10px;color:rgba(var(--_fg2,255,255,255),0.6);font-weight:600"> / ${fmtGB(nzbgetTotalGB * 1073741824)}</span></div>
         <div class="mbar"><div class="mbar-fill pf-orange" style="width:${pct.toFixed(0)}%"></div></div>
         <div class="dc-sub">${pct.toFixed(0)} % · ${fmtGB(nzbgetFreeGB * 1073741824)} ${this._t('free')}</div>
       </div>`;
@@ -654,8 +654,8 @@ _renderSabFailed() {
     return `
       <div class="dl dl-failed">
         <div class="dl-r1">
-          <ha-icon icon="mdi:alert-circle-outline" style="--mdc-icon-size:13px;color:rgba(255,69,58,0.85);flex-shrink:0;margin-right:3px"></ha-icon>
-          <span class="dl-name" title="${name}" style="color:rgba(255,120,110,0.90)">${name}</span>
+          <ha-icon icon="mdi:alert-circle-outline" style="--mdc-icon-size:13px;color:rgba(var(--arr-error-rgb, 255, 69, 58), 0.85);flex-shrink:0;margin-right:3px"></ha-icon>
+          <span class="dl-name" title="${name}" style="color:rgba(var(--arr-error-rgb, 255, 120, 110), 0.90)">${name}</span>
           <div style="display:flex;gap:3px;flex-shrink:0">${btns}</div>
         </div>
       </div>`;
@@ -813,8 +813,8 @@ _renderNzbgetFailed() {
     return `
       <div class="dl dl-failed">
         <div class="dl-r1">
-          <ha-icon icon="mdi:alert-circle-outline" style="--mdc-icon-size:13px;color:rgba(255,69,58,0.85);flex-shrink:0;margin-right:3px"></ha-icon>
-          <span class="dl-name" title="${name}" style="color:rgba(255,120,110,0.90)">${name}</span>
+          <ha-icon icon="mdi:alert-circle-outline" style="--mdc-icon-size:13px;color:rgba(var(--arr-error-rgb, 255, 69, 58), 0.85);flex-shrink:0;margin-right:3px"></ha-icon>
+          <span class="dl-name" title="${name}" style="color:rgba(var(--arr-error-rgb, 255, 120, 110), 0.90)">${name}</span>
           <div style="display:flex;gap:3px;flex-shrink:0">${btns}</div>
         </div>
       </div>`;
@@ -977,7 +977,7 @@ _renderPendingCard(req) {
           <button class="pr-approve" data-reqid="${reqIds}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
           <button class="pr-decline" data-reqid="${reqIds}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
         </div>
-        <div style="font-size:10px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${title}">${title}</div>
+        <div style="font-size:10px;font-weight:700;color:rgb(var(--_fg, 255, 255, 255));white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${title}">${title}</div>
       </div>
     </div>`;
 }
@@ -1258,12 +1258,12 @@ _renderVpnBar() {
     ? `<img src="${this._gluetunProviderSvg}" width="18" height="18" style="flex-shrink:0;opacity:0.9" alt="">`
     : shieldFallback;
   const tag = online
-    ? `<span class="g" style="font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;color:#fff">VPN Active</span>`
-    : `<span class="pill-red" style="font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;color:#fff">VPN Offline</span>`;
+    ? `<span class="g" style="font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;color:rgb(var(--_fg, 255, 255, 255))">VPN Active</span>`
+    : `<span class="pill-red" style="font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;color:rgb(var(--_fg, 255, 255, 255))">VPN Offline</span>`;
   return `
     <div class="vpn-bar ${cls}">
-      ${tag}${details ? `<span style="margin-left:auto;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#fff">${_countryFlag(this._gluetunCountry) ? _countryFlag(this._gluetunCountry) + ' ' : ''}${details}</span>` : ''}
-      ${online && providerLogo ? `<span style="display:inline-flex;align-items:center;gap:5px;color:#fff;font-size:11px;font-weight:700;margin-left:-4px">•${providerLogo}</span>` : ''}
+      ${tag}${details ? `<span style="margin-left:auto;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgb(var(--_fg, 255, 255, 255))">${_countryFlag(this._gluetunCountry) ? _countryFlag(this._gluetunCountry) + ' ' : ''}${details}</span>` : ''}
+      ${online && providerLogo ? `<span style="display:inline-flex;align-items:center;gap:5px;color:rgb(var(--_fg, 255, 255, 255));font-size:11px;font-weight:700;margin-left:-4px">•${providerLogo}</span>` : ''}
     </div>`;
 }
 

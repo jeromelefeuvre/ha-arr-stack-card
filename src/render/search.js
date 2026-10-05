@@ -86,7 +86,7 @@ _renderSearchResultsGrid() {
     return `<div class="placeholder" style="font-size:12px;color:var(--secondary-text-color,#888)">No results</div>`;
   }
   const gradColor = 'rgba(0,0,0,0.88)';
-  const textColor = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const textColor = 'rgba(var(--_ptx, 255, 255, 255), 1)';
   const cols  = Math.max(2, Math.min(10, parseInt(this._cfgGet('discover', 'itemsPerCategory', 4)) || 4));
   const sPage = cols * 2;
   const sp    = this._searchPage || 0;

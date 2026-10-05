@@ -107,7 +107,7 @@ class _MaintainerrRenderMethods {
   _mtExclBadge(compact) {
     const ico = `<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><line x1="5.6" y1="5.6" x2="18.4" y2="18.4"/></svg>`;
     const txt = compact ? '' : `<span>${this._t('mtExcluded')}</span>`;
-    return `<span class="media-type-tag" title="${this._t('mtExcluded')}" style="position:static;display:inline-flex;align-items:center;gap:3px;background:rgba(52,211,153,0.30);color:#fff">${ico}${txt}</span>`;
+    return `<span class="media-type-tag" title="${this._t('mtExcluded')}" style="position:static;display:inline-flex;align-items:center;gap:3px;background:rgba(var(--arr-success-rgb, 52, 211, 153), 0.30);color:rgb(var(--_fg, 255, 255, 255))">${ico}${txt}</span>`;
   }
 
   // ── Toolbar ───────────────────────────────────────────────────────────────
@@ -236,12 +236,12 @@ class _MaintainerrRenderMethods {
       ? ` data-mt-popup="${isMovie ? 'movie' : 'tv'}"${tmdb ? ` data-tmdbid="${this._escHtml(tmdb)}"` : ''}${tvdb ? ` data-tvdbid="${this._escHtml(tvdb)}"` : ''} data-title="${title}"`
       : '';
     const titleHtml = pc.title
-      ? `<div style="font-size:10px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:22px">${title}</div>`
+      ? `<div style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:22px">${title}</div>`
       : '';
 
     return `<div class="mc"${popupAttr}>
       <div style="position:absolute;inset:0;overflow:hidden">${img}</div>
-      ${this._mcGrad('rgba(0,0,0,0.7)', `${ratingHtml}${titleHtml}`)}
+      ${this._mcGrad('rgba(var(--_shade, 0, 0, 0), 0.7)', `${ratingHtml}${titleHtml}`)}
       ${topLeft}
       ${topRight}
       ${goneHtml}
@@ -312,7 +312,7 @@ class _MaintainerrRenderMethods {
     // Without lifting it out of the header the pill stays in the flow, gets
     // squeezed by the nav, and the text beside it reads straight through.
     const extra = mob
-      ? ';box-shadow:0 4px 16px rgba(0,0,0,0.55);padding:5px 14px'
+      ? ';box-shadow:0 4px 16px rgba(var(--_shadow, 0, 0, 0), 0.55);padding:5px 14px'
         + ';position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1200'
       : '';
 

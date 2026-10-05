@@ -63,8 +63,8 @@ class _WireProwlarrHistoryMethods {
 
     const catColor = id => {
       if (id >= 5000 && id < 6000) return 'rgba(99,140,255,0.85)';
-      if (id >= 2000 && id < 3000) return 'rgba(52,211,153,0.85)';
-      if (id >= 3000 && id < 4000) return 'rgba(251,191,36,0.85)';
+      if (id >= 2000 && id < 3000) return 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.85)';
+      if (id >= 3000 && id < 4000) return 'rgba(var(--arr-warning-rgb, 251, 191, 36), 0.85)';
       if (id >= 1000 && id < 2000) return 'rgba(168,85,247,0.85)';
       if (id >= 4000 && id < 5000) return 'rgba(99,200,255,0.85)';
       if (id >= 6000 && id < 7000) return 'rgba(251,113,133,0.85)';
@@ -120,7 +120,7 @@ class _WireProwlarrHistoryMethods {
       const thBase  = 'padding:4px 8px 8px;font-size:10px;font-weight:600;color:var(--is-text-muted);text-align:left;white-space:nowrap';
       const dateArrow = `<span style="margin-left:2px">${sortDir==='asc'?'↑':'↓'}</span>`;
       const trs = paged.map((r, i) => {
-        const alt = i % 2 === 1 ? 'background:rgba(255,255,255,0.025)' : '';
+        const alt = i % 2 === 1 ? 'background:rgba(var(--_fill, 255, 255, 255), 0.025)' : '';
         return `<tr style="${alt}">
           <td style="padding:7px 8px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--is-text)">${this._escHtml(indexers.find(i=>i.id===r.indexerId)?.name||r.indexer||'—')}</td>
           <td style="padding:7px 8px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--is-text-muted)">${this._escHtml(fmtQuery(r))}</td>

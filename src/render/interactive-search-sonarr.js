@@ -49,7 +49,7 @@ class _SonarrIS {
         </div></div>`;
       }
       if (this._snIsState === 'error') {
-        return `<div class="sn-is-section"><div class="is-loading" style="color:rgba(255,69,58,0.80)">⚠ ${this._escHtml(this._snIsError || this._t('isLoadError'))}</div></div>`;
+        return `<div class="sn-is-section"><div class="is-loading" style="color:rgba(var(--arr-error-rgb, 255, 69, 58), 0.80)">⚠ ${this._escHtml(this._snIsError || this._t('isLoadError'))}</div></div>`;
       }
       return `<div class="sn-is-section"><div class="is-loading">${this._t('snNotInSonarr')}</div></div>`;
     }
@@ -168,7 +168,7 @@ class _SonarrIS {
       </div>`;
     }
     if (eps.length === 0) {
-      return `<div class="sn-episodes"><span style="color:rgba(255,255,255,0.4);font-size:11px">${this._t('snNoEpisodes')}</span></div>`;
+      return `<div class="sn-episodes"><span style="color:rgba(var(--_fg3, 255, 255, 255), 0.4);font-size:11px">${this._t('snNoEpisodes')}</span></div>`;
     }
 
     const rows = eps.map(ep => this._renderSnEpRow(ep)).join('');
@@ -251,7 +251,7 @@ class _SonarrIS {
     }
     if (this._snIsState === 'error') {
       return `<div class="sn-is-panel">
-        <div class="is-loading" style="color:rgba(255,69,58,0.80)">⚠ ${this._escHtml(this._snIsError || this._t('isLoadError'))}</div>
+        <div class="is-loading" style="color:rgba(var(--arr-error-rgb, 255, 69, 58), 0.80)">⚠ ${this._escHtml(this._snIsError || this._t('isLoadError'))}</div>
       </div>`;
     }
     if (this._snIsState !== 'results') return '';

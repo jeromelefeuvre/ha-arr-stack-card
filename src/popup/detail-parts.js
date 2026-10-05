@@ -59,7 +59,7 @@ _ppInstanceChips({ _instLabels, d, isMovieType, isSonarrType, radarr2Entry, rada
     const { cls } = map[status] || map.none;
     if (status === 'downloading') {
       const p = pct ?? 0;
-      const barHtml = `<div style="display:inline-flex;align-items:center;gap:3px;margin-left:4px;vertical-align:middle"><div style="width:36px;height:3px;background:rgba(59,130,246,0.20);border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle"><div style="width:${Math.max(p,4)}%;height:100%;background:#3b82f6;border-radius:2px"></div></div><span style="font-size:9px;color:#3b82f6;font-weight:700;white-space:nowrap">${p}%</span></div>`;
+      const barHtml = `<div style="display:inline-flex;align-items:center;gap:3px;margin-left:4px;vertical-align:middle"><div style="width:36px;height:3px;background:var(--_pg-track, rgba(59,130,246,0.20));border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle"><div style="width:${Math.max(p,4)}%;height:100%;background:var(--_pg-fill, #3b82f6);border-radius:2px"></div></div><span style="font-size:9px;color:var(--_pg-fill, #3b82f6);font-weight:700;white-space:nowrap">${p}%</span></div>`;
       return `<span class="inst-chip ${cls}">${label}${barHtml}</span>`;
     }
     const { icon } = map[status] || map.none;
@@ -106,15 +106,15 @@ _ppInstanceChips({ _instLabels, d, isMovieType, isSonarrType, radarr2Entry, rada
     if (pct === null && _grabWaiting('radarr')) {
       // No chip row in the single-instance layout, so the spinner stands alone
       // where the progress bar is about to appear.
-      singleDlTag = `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span class="is-spin" style="width:10px;height:10px;border-width:1.5px"></span><span style="font-size:10px;color:#3b82f6;font-weight:700">${this._t('loading')}</span></div>`;
+      singleDlTag = `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px"><span class="is-spin" style="width:10px;height:10px;border-width:1.5px"></span><span style="font-size:10px;color:var(--_pg-fill, #3b82f6);font-weight:700">${this._t('loading')}</span></div>`;
     } else if (pct !== null) {
-      singleDlTag = `<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px"><div style="width:80px;height:3px;background:rgba(59,130,246,0.20);border-radius:2px;overflow:hidden"><div style="width:${Math.max(pct,4)}%;height:100%;background:#3b82f6;border-radius:2px"></div></div><span style="font-size:10px;color:#3b82f6;font-weight:700">${pct}%</span></div>`;
+      singleDlTag = `<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px"><div style="width:80px;height:3px;background:var(--_pg-track, rgba(59,130,246,0.20));border-radius:2px;overflow:hidden"><div style="width:${Math.max(pct,4)}%;height:100%;background:var(--_pg-fill, #3b82f6);border-radius:2px"></div></div><span style="font-size:10px;color:var(--_pg-fill, #3b82f6);font-weight:700">${pct}%</span></div>`;
     }
   } else if (isSonarrType) {
     // Single Sonarr — episode count chip when added, download tag when downloading
     const pct = _chipSeriesPct('sonarr');
     if (pct !== null) {
-      singleDlTag = `<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px"><div style="width:80px;height:3px;background:rgba(59,130,246,0.20);border-radius:2px;overflow:hidden"><div style="width:${Math.max(pct,4)}%;height:100%;background:#3b82f6;border-radius:2px"></div></div><span style="font-size:10px;color:#3b82f6;font-weight:700">${pct}%</span></div>`;
+      singleDlTag = `<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px"><div style="width:80px;height:3px;background:var(--_pg-track, rgba(59,130,246,0.20));border-radius:2px;overflow:hidden"><div style="width:${Math.max(pct,4)}%;height:100%;background:var(--_pg-fill, #3b82f6);border-radius:2px"></div></div><span style="font-size:10px;color:var(--_pg-fill, #3b82f6);font-weight:700">${pct}%</span></div>`;
     } else if (sonarrEntry) {
       instanceStatusHtml = `<div class="instance-status-row">${this._snInstChip(_instChip, '', sonarrEntry, null, 'sonarr')}</div>`;
     }
@@ -126,7 +126,7 @@ _ppRatingsRow({ d, isMovieType, isSonarrType, radarr2Entry, radarrEntry, sonarr2
   // ── Ratings row — realistic source icons ────────────────────────────────
   let ratingsRow = '';
   {
-    const _icImdb = `<svg width="30" height="15" viewBox="0 0 64 32" style="flex-shrink:0"><rect width="64" height="32" rx="6" fill="#F5C518"/><text x="32" y="23" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="#000">IMDb</text></svg>`;
+    const _icImdb = `<svg width="30" height="15" viewBox="0 0 64 32" style="flex-shrink:0"><rect width="64" height="32" rx="6" fill="#F5C518"/><text x="32" y="23" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="900" fill="rgb(var(--_shade, 0, 0, 0))">IMDb</text></svg>`;
     const _icTmdb = `<svg width="30" height="15" viewBox="0 0 64 32" style="flex-shrink:0"><rect width="64" height="32" rx="6" fill="#0d253f"/><text x="32" y="22" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="800" fill="#01b4e4">TMDB</text></svg>`;
     const _icRt   = `<svg width="15" height="15" viewBox="0 0 24 24" style="flex-shrink:0"><path fill="#FA320A" d="M12 7.5c-5 0-8.5 3-8.5 7.8 0 4.4 3.8 6.7 8.5 6.7s8.5-2.3 8.5-6.7c0-4.8-3.5-7.8-8.5-7.8z"/><path fill="#00912D" d="M11.8 7.6c.2-2 1.5-3.6 3.6-4.1-1 1.2-1.2 2.1-1.2 2.1s2-1.6 4.1-1c-1.5 1-2 2.3-2 2.3s1.7-.7 3.2-.2c-2 1.5-4.2 1.4-5.7 1.1-.5-.1-1.4-.2-2-.2z"/></svg>`;
     const _icMc   = `<svg width="15" height="15" viewBox="0 0 32 32" style="flex-shrink:0"><circle cx="16" cy="16" r="16" fill="#001a35"/><text x="16" y="23" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="900" fill="#ffcc33">m</text></svg>`;
@@ -251,7 +251,7 @@ _ppStateHtml({ d }) {
       <div class="popup-overlay">
         <div class="popup-glass" style="align-items:center;justify-content:center;min-height:200px">
           <button class="popup-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-          <div style="color:rgba(255,255,255,0.7);font-size:13px">${this._t('loadingDetail')}</div>
+          <div style="color:rgba(var(--_fg2, 255, 255, 255), 0.7);font-size:13px">${this._t('loadingDetail')}</div>
         </div>
       </div>`;
   }
@@ -278,7 +278,7 @@ _ppStateHtml({ d }) {
         <div class="popup-glass" style="max-width:600px;width:calc(100vw - 32px);padding:0;gap:0;max-height:calc(100vh - 60px);overflow-y:auto;position:relative">
           <button class="popup-close" style="position:absolute;top:10px;right:10px;z-index:2">${ICONS.close}</button>
           <div style="height:160px;${_hdrStyle};position:relative;flex-shrink:0">
-            ${_posterUrl ? `<img src="${_posterUrl}" style="position:absolute;bottom:-32px;left:16px;width:72px;height:108px;object-fit:cover;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.5)" loading="lazy" onerror="this.style.display='none'"/>` : ''}
+            ${_posterUrl ? `<img src="${_posterUrl}" style="position:absolute;bottom:-32px;left:16px;width:72px;height:108px;object-fit:cover;border-radius:6px;box-shadow:0 4px 12px rgba(var(--_shadow, 0, 0, 0), 0.5)" loading="lazy" onerror="this.style.display='none'"/>` : ''}
           </div>
           <div style="padding:${_posterUrl ? '44px' : '16px'} 16px 16px ${_posterUrl ? '100px' : '16px'}">
             <div style="font-size:15px;font-weight:700;color:var(--is-text);line-height:1.3">${this._escHtml(d.title||d.name||'')}</div>
@@ -312,9 +312,9 @@ _ppStateHtml({ d }) {
       <div class="popup-overlay">
         <div class="popup-glass" style="align-items:center;justify-content:center;min-height:200px;padding:24px">
           <button class="popup-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-          <div style="color:rgba(255,255,255,0.7);font-size:13px;text-align:center">
+          <div style="color:rgba(var(--_fg2, 255, 255, 255), 0.7);font-size:13px;text-align:center">
             ⚠ ${this._escHtml(d._error)}<br>
-            <span style="font-size:11px;color:rgba(255,255,255,0.45)">${this._escHtml(d.title || '')}</span>
+            <span style="font-size:11px;color:rgba(var(--_fg3, 255, 255, 255), 0.45)">${this._escHtml(d.title || '')}</span>
           </div>
         </div>
       </div>`;
@@ -447,8 +447,8 @@ _ppSearchParts({ _asSpinner, _instLabels, d, hasDualRadarr, hasDualSonarr, isAdm
       const downloading = this._asDownloadingItems.has(key);
       const active = this._asOpen && this._asInstance === inst;
       const tail = notFound
-        ? `<span class="qa-air-date" style="color:rgba(255,149,0,1)">${this._t('asNotFound')}</span>`
-        : downloading ? `<span class="qa-air-date" style="color:rgba(48,209,88,1)">↓</span>` : '';
+        ? `<span class="qa-air-date" style="color:rgba(var(--arr-warning-rgb, 255, 149, 0), 1)">${this._t('asNotFound')}</span>`
+        : downloading ? `<span class="qa-air-date" style="color:rgba(var(--arr-success-rgb, 48, 209, 88), 1)">↓</span>` : '';
       return `<button class="qa-item${indent ? ' qa-sub-item' : ''}${active ? ' qa-item-on' : ''}" data-action="search-pick-as" data-instance="${inst}"><span class="qa-ico">${icon}</span><span>${label}</span>${tail}</button>`;
     };
     const _isRow = (inst, label, indent) => {
@@ -496,7 +496,7 @@ _ppTagParts({ d, isMovieType }) {
       : [];
   const _tagIconSvg = `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;opacity:0.7"><path d="M5.5,7A1.5,1.5 0 0,1 4,5.5A1.5,1.5 0 0,1 5.5,4A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 5.5,7M17.41,11.58C17.77,11.94 18,12.44 18,13C18,13.55 17.78,14.05 17.41,14.41L12.41,19.41C12.05,19.78 11.55,20 11,20C10.45,20 9.95,19.78 9.58,19.41L2.59,12.42C2.22,12.05 2,11.55 2,11V6C2,4.89 2.89,4 4,4H9C9.55,4 10.05,4.22 10.41,4.58L17.41,11.58Z"/></svg>`;
   const popupTagHtml = _popupTags.length > 0
-    ? `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:-6px;margin-bottom:10px">${_popupTags.map(l => `<span style="display:inline-flex;align-items:center;gap:2px;font-size:11px;color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:3px;padding:0 4px 0 3px;line-height:1.7">${_tagIconSvg}${this._escHtml(l)}</span>`).join('')}</div>`
+    ? `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:-6px;margin-bottom:10px">${_popupTags.map(l => `<span style="display:inline-flex;align-items:center;gap:2px;font-size:11px;color:rgba(var(--_fg2, 255, 255, 255), 0.5);background:rgba(var(--_fill, 255, 255, 255), 0.05);border:1px solid rgba(var(--_line, 255, 255, 255), 0.1);border-radius:3px;padding:0 4px 0 3px;line-height:1.7">${_tagIconSvg}${this._escHtml(l)}</span>`).join('')}</div>`
     : '';
 
   // Detail view of a title Maintainerr has queued. Inline rather than pinned to

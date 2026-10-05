@@ -675,13 +675,14 @@ _ppActStreamTerminateShow(t, e, { root, overlay } = {}) {
   const userThumb = d?._plexUserThumb || '';
   const title     = d?.title || '';
   const isDay     = this._isDaytime && this._config?.styles?.dayNightMode !== false;
-  const fg   = isDay ? 'rgba(0,0,0,0.85)'   : 'rgba(255,255,255,0.9)';
-  const fgSub= isDay ? 'rgba(0,0,0,0.55)'   : 'rgba(255,255,255,0.55)';
-  const bg   = isDay ? 'rgba(235,235,240,0.97)' : 'rgba(16,16,26,0.97)';
-  const inputBg = isDay ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.07)';
-  const inputBd = isDay ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.12)';
+  // Inside the modal's glass, so the modal palette of the hour applies (#42)
+  const fg   = isDay ? 'rgba(var(--_fg, 0, 0, 0), 0.85)' : 'rgba(var(--_fg, 255, 255, 255), 0.9)';
+  const fgSub= isDay ? 'rgba(var(--_fg2, 0, 0, 0), 0.55)' : 'rgba(var(--_fg2, 255, 255, 255), 0.55)';
+  const bg   = isDay ? 'var(--arr-modal-day-background, rgba(235,235,240,0.97))' : 'var(--arr-modal-background, rgba(16,16,26,0.97))';
+  const inputBg = isDay ? 'rgba(var(--_fill, 0, 0, 0), 0.05)' : 'rgba(var(--_fill, 255, 255, 255), 0.07)';
+  const inputBd = isDay ? 'rgba(var(--_line, 0, 0, 0), 0.15)' : 'rgba(var(--_line, 255, 255, 255), 0.12)';
   const avatarEl = userThumb
-    ? `<img src="${this._escHtml(userThumb)}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,255,255,0.15)">`
+    ? `<img src="${this._escHtml(userThumb)}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(var(--_line, 255, 255, 255), 0.15)">`
     : '';
   const modal = document.createElement('div');
   modal.className = 'plex-terminate-modal';

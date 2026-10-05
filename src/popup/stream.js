@@ -781,7 +781,7 @@ _renderStreamPopup(d) {
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <span class="stream-popup-time" style="font-size:10px;color:rgba(255,255,255,0.4)">${timeLabel}</span>
+      <span class="stream-popup-time" style="font-size:10px;color:rgba(var(--_fg3, 255, 255, 255), 0.4)">${timeLabel}</span>
       ${this._streamRangeBadge(this._streamRangeOf(d._streamEntity), { long: true, cls: 'pp-hdr-chip' })}
     </div>` : '';
   const controls = this._streamCtrlRowHtml(d._ctrlEntity || d._streamEntity, {
@@ -793,7 +793,7 @@ _renderStreamPopup(d) {
 
 
   return `
-    <div class="popup-overlay${dayClass(this)}">
+    <div class="popup-overlay${dayClass(this)}" data-modal="stream">
       <div class="popup-glass">
         <button class="popup-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         <div class="popup-backdrop" style="${backdropStyle}">
@@ -875,8 +875,8 @@ _renderPlexCastBtn(d, movieInLib, showInLib) {
   const castSvg = `<svg viewBox="0 0 24 24" width="14" height="14" style="display:block"><path fill="currentColor" d="M1 18v3h3a3 3 0 0 0-3-3m0-4v2a5 5 0 0 1 5 5h2a7 7 0 0 0-7-7m0-4v2a9 9 0 0 1 9 9h2A11 11 0 0 0 1 10m20-7H3C1.9 3 1 3.9 1 5v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>`;
   const spinner = `<span class="action-spinner" style="width:12px;height:12px;border-width:1.5px"></span>`;
   const _btnCommon = `flex-shrink:0;width:36px;height:36px;padding:0;border-radius:50%;display:grid;place-items:center;cursor:pointer;transition:background 0.15s,color 0.15s,border-color 0.15s`;
-  const btnBase   = `${_btnCommon};border:none;background:rgba(0,0,0,0.45);color:#fff`;
-  const btnActive = `${_btnCommon};border:1px solid rgba(0,122,255,0.5);background:rgba(0,122,255,0.25);color:#fff`;
+  const btnBase   = `${_btnCommon};border:none;background:rgba(var(--_shade, 0, 0, 0), 0.45);color:rgb(var(--_fg, 255, 255, 255))`;
+  const btnActive = `${_btnCommon};border:1px solid rgba(var(--arr-accent-rgb, 0, 122, 255), 0.5);background:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.25);color:rgb(var(--_fg, 255, 255, 255))`;
 
   if (this._plexCasting) {
     return `<button disabled style="${btnBase};opacity:0.6">${spinner}</button>`;
@@ -897,14 +897,14 @@ _renderPlexCastDropdown() {
 
   let dropContent;
   if (this._plexClients === null) {
-    dropContent = `<div style="padding:10px 14px;font-size:11px;color:rgba(255,255,255,0.5);display:flex;align-items:center;gap:8px">${spinner} Loading…</div>`;
+    dropContent = `<div style="padding:10px 14px;font-size:11px;color:rgba(var(--_fg2, 255, 255, 255), 0.5);display:flex;align-items:center;gap:8px">${spinner} Loading…</div>`;
   } else if (!this._plexClients.length) {
-    dropContent = `<div style="padding:10px 14px;font-size:11px;color:rgba(255,255,255,0.45)">No devices found</div>`;
+    dropContent = `<div style="padding:10px 14px;font-size:11px;color:rgba(var(--_fg3, 255, 255, 255), 0.45)">No devices found</div>`;
   } else {
     dropContent = this._plexClients.map(p =>
       `<button data-action="plex-cast-play" data-entity="${this._escHtml(p.entityId)}"
-        style="display:flex;align-items:center;gap:7px;width:100%;background:none;border:none;padding:7px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85);cursor:pointer;text-align:left;border-radius:6px;transition:background 0.12s"
-        onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='none'"
+        style="display:flex;align-items:center;gap:7px;width:100%;background:none;border:none;padding:7px 12px;font-size:12px;font-weight:600;color:rgba(var(--_fg, 255, 255, 255), 0.85);cursor:pointer;text-align:left;border-radius:6px;transition:background 0.12s"
+        onmouseover="this.style.background='rgba(var(--_fill, 255, 255, 255), 0.08)'" onmouseout="this.style.background='none'"
       >${castSvg}${this._escHtml(p.name)}</button>`
     ).join('');
   }
@@ -913,7 +913,7 @@ _renderPlexCastDropdown() {
   const leftPx = Math.max(8, Math.round(r.left - gap - dropW));
   const topPx  = Math.max(8, Math.min(Math.round(r.top), window.innerHeight - dropH - 8));
 
-  return `<div class="plex-cast-dropdown" style="position:absolute;left:${leftPx}px;top:${topPx}px;z-index:9999;background:rgba(18,18,28,0.97);border:1px solid rgba(255,255,255,0.12);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.5);min-width:${dropW}px;max-height:${dropH}px;overflow-y:auto;padding:4px;display:flex;flex-direction:column">
+  return `<div class="plex-cast-dropdown" style="position:absolute;left:${leftPx}px;top:${topPx}px;z-index:9999;background:rgba(18,18,28,0.97);border:1px solid rgba(var(--_line, 255, 255, 255), 0.12);border-radius:8px;box-shadow:0 4px 16px rgba(var(--_shadow, 0, 0, 0), 0.5);min-width:${dropW}px;max-height:${dropH}px;overflow-y:auto;padding:4px;display:flex;flex-direction:column">
     ${dropContent}
   </div>`;
 }

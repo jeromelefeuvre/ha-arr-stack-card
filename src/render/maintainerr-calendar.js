@@ -63,9 +63,9 @@ class _MaintainerrCalendarRenderMethods {
 
     const _countBadge = (n, block = true) => this._uiBadge(`${n} ${this._t('mtScheduled')}`, 'blue', { extra: `display:${block ? 'flex' : 'inline-flex'};justify-content:center;letter-spacing:0.03em;min-width:0;overflow:hidden;text-overflow:ellipsis` });
     // A 30%-alpha blue with a white glyph disappears on a light backdrop
-    const _dotsBg  = this._isDay ? 'rgba(0,122,255,0.85)' : 'rgba(0,122,255,0.30)';
-    const _dotsBdr = this._isDay ? 'rgba(0,122,255,0.95)' : 'rgba(0,122,255,0.50)';
-    const _dotsBtn = (dateStr, n, size = 34) => `<button data-mt-cal-day="${dateStr}" title="${n} ${this._t('mtItems')}" style="width:${size}px;height:${size}px;padding:0;border-radius:50%;border:1px solid ${_dotsBdr};background:${_dotsBg};color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:0;flex-shrink:0;backdrop-filter:blur(8px)">${DOTS}</button>`;
+    const _dotsBg  = this._isDay ? 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.85)' : 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.30)';
+    const _dotsBdr = this._isDay ? 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.95)' : 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.50)';
+    const _dotsBtn = (dateStr, n, size = 34) => `<button data-mt-cal-day="${dateStr}" title="${n} ${this._t('mtItems')}" style="width:${size}px;height:${size}px;padding:0;border-radius:50%;border:1px solid ${_dotsBdr};background:${_dotsBg};color:rgb(var(--_fg, 255, 255, 255));cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:0;flex-shrink:0;backdrop-filter:blur(8px)">${DOTS}</button>`;
 
     let gridHtml, rangeLabel;
 
@@ -184,7 +184,7 @@ class _MaintainerrCalendarRenderMethods {
     const rows = items.map(it => `<tr data-mt-cal-item="${this._mtDelItems.indexOf(it)}" style="cursor:pointer">
       <td><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${this._escHtml(it.title)}</div></td>
       <td style="white-space:nowrap;color:var(--is-text-muted)">${new Date(it.addDate).toLocaleDateString()}</td>
-      <td><span data-mt-cal-col="${this._escHtml(it.colId)}" style="color:rgba(245,158,11,0.95);cursor:pointer;text-decoration:underline">${this._escHtml(it.colTitle)}</span></td>
+      <td><span data-mt-cal-col="${this._escHtml(it.colId)}" style="color:rgba(var(--arr-warning-rgb, 245, 158, 11), 0.95);cursor:pointer;text-decoration:underline">${this._escHtml(it.colTitle)}</span></td>
       <td style="white-space:nowrap;color:var(--is-text-muted)">${this._escHtml(it.typeLabel)}</td>
     </tr>`).join('');
 

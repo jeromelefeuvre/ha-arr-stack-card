@@ -164,14 +164,14 @@ class _SectionMethods {
     const mask = `linear-gradient(to bottom,transparent 0.07%,black ${topFade}%,black ${bottomFade}%,transparent 100%)`;
     const gradL = `radial-gradient(circle at ${posL}% 15%,${this._brandColor(app, o)} 0%,transparent 48%)`;
     const gradR = `radial-gradient(circle at ${posR}% 15%,${this._brandColorSecondary(app, o)} 0%,transparent 48%)`;
-    return `<div style="position:absolute;inset:0;background:${gradL},${gradR};mask-image:${mask};-webkit-mask-image:${mask};filter:blur(25px);pointer-events:none;z-index:0;"></div>`;
+    return `<div style="position:absolute;inset:0;background:${gradL},${gradR};mask-image:${mask};-webkit-mask-image:${mask};filter:blur(25px);opacity:var(--_a-tint, 1);pointer-events:none;z-index:0;"></div>`;
   }
 
 _sectionOverlayHtmlSingle(app, o = 0.4) {
     if (!this._categoryOverlaysEnabled) return '';
     const mask = `linear-gradient(to bottom,transparent 0.07%,black 6%,black 80%,transparent 100%)`;
     const g = `radial-gradient(circle at 15% 0%,${this._brandColor(app, o)} 0%,transparent 65%)`;
-    return `<div style="position:absolute;left:-15px;right:-15px;top:0;bottom:0;background:${g};mask-image:${mask};-webkit-mask-image:${mask};filter:blur(25px);pointer-events:none;z-index:0;"></div>`;
+    return `<div style="position:absolute;left:-15px;right:-15px;top:0;bottom:0;background:${g};mask-image:${mask};-webkit-mask-image:${mask};filter:blur(25px);opacity:var(--_a-tint, 1);pointer-events:none;z-index:0;"></div>`;
   }
 
   _sectionOverlayHtmlTop(app, posL = 15, posR = 85, o = 0.4) {
@@ -179,7 +179,7 @@ _sectionOverlayHtmlSingle(app, o = 0.4) {
     const mask = 'linear-gradient(to bottom,transparent 0.07%,black 6%,transparent 100%)';
     const gradL = `radial-gradient(circle at ${posL}% 30%,${this._brandColor(app, o)} 0%,transparent 48%)`;
     const gradR = `radial-gradient(circle at ${posR}% 30%,${this._brandColorSecondary(app, o)} 0%,transparent 48%)`;
-    return `<div style="position:absolute;top:0;left:0;right:0;height:55%;background:${gradL},${gradR};mask-image:${mask};-webkit-mask-image:${mask};filter:blur(25px);pointer-events:none;z-index:0;"></div>`;
+    return `<div style="position:absolute;top:0;left:0;right:0;height:55%;background:${gradL},${gradR};mask-image:${mask};-webkit-mask-image:${mask};filter:blur(25px);opacity:var(--_a-tint, 1);pointer-events:none;z-index:0;"></div>`;
   }
 
 
@@ -309,7 +309,7 @@ _renderSeeMoreCardFor(section) {
         cells.push(`<div class="${this._grad(m.id)}" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:13px">${cfg.emoji(m)}</div>`);
       }
     } else {
-      cells.push(`<div style="width:100%;height:100%;background:rgba(255,255,255,0.06)"></div>`);
+      cells.push(`<div style="width:100%;height:100%;background:rgba(var(--_fill, 255, 255, 255), 0.06)"></div>`);
     }
   }
   const remainCount = Math.max(0, items.length - itemsBefore);

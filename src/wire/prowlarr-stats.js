@@ -107,7 +107,7 @@ class _WireProwlarrStatsMethods {
               <span style="font-size:9px;font-weight:500;color:var(--is-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:75%">${this._escHtml(nameFn(item))}</span>
               <span style="font-size:8px;color:var(--is-text-muted);flex-shrink:0">${lbl}</span>
             </div>
-            <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;display:flex">${segs}</div>
+            <div style="height:6px;background:rgba(var(--_fill, 255, 255, 255), 0.06);border-radius:3px;overflow:hidden;display:flex">${segs}</div>
           </div>`;
         }).join('');
       }
@@ -152,8 +152,8 @@ class _WireProwlarrStatsMethods {
     const sortedRT  = [...indexers].sort((a,b) => ((b.averageResponseTime||0)+(b.averageGrabResponseTime||0)) - ((a.averageResponseTime||0)+(a.averageGrabResponseTime||0)));
     const maxRTtot  = Math.max(1, ...sortedRT.map(i => (i.averageResponseTime||0)+(i.averageGrabResponseTime||0)));
     const rtSections = [
-      { fn: i => i.averageResponseTime     || 0, color: 'rgba(0,122,255,0.9)',  gradient: 'linear-gradient(to bottom, rgba(0,122,255,0.92) 0%, rgba(0,122,255,0.42) 100%)',  label: this._t('pwAvgQueries') },
-      { fn: i => i.averageGrabResponseTime || 0, color: 'rgba(255,149,0,0.9)', gradient: 'linear-gradient(to bottom, rgba(255,149,0,0.92) 0%, rgba(255,149,0,0.42) 100%)', label: this._t('pwAvgGrabs')   },
+      { fn: i => i.averageResponseTime     || 0, color: 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.9)',  gradient: 'linear-gradient(to bottom, rgba(0,122,255,0.92) 0%, rgba(0,122,255,0.42) 100%)',  label: this._t('pwAvgQueries') },
+      { fn: i => i.averageGrabResponseTime || 0, color: 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.9)', gradient: 'linear-gradient(to bottom, rgba(255,149,0,0.92) 0%, rgba(255,149,0,0.42) 100%)', label: this._t('pwAvgGrabs')   },
     ];
 
     // ── Total Indexer Queries (stacked: Search + RSS + Auth) ──
@@ -161,8 +161,8 @@ class _WireProwlarrStatsMethods {
     const sortedQ   = [...indexers].sort((a,b) => qTotal(b) - qTotal(a));
     const maxQ      = Math.max(1, ...sortedQ.map(i => qTotal(i)));
     const qSections = [
-      { fn: i => i.numberOfQueries     || 0, color: 'rgba(0,122,255,0.9)',  gradient: 'linear-gradient(to bottom, rgba(0,122,255,0.92) 0%, rgba(0,122,255,0.42) 100%)',  label: this._t('musSearch') },
-      { fn: i => i.numberOfRssQueries  || 0, color: 'rgba(52,199,89,0.9)', gradient: 'linear-gradient(to bottom, rgba(52,199,89,0.92) 0%, rgba(52,199,89,0.42) 100%)', label: 'RSS'    },
+      { fn: i => i.numberOfQueries     || 0, color: 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.9)',  gradient: 'linear-gradient(to bottom, rgba(0,122,255,0.92) 0%, rgba(0,122,255,0.42) 100%)',  label: this._t('musSearch') },
+      { fn: i => i.numberOfRssQueries  || 0, color: 'rgba(var(--arr-success-rgb, 52, 199, 89), 0.9)', gradient: 'linear-gradient(to bottom, rgba(52,199,89,0.92) 0%, rgba(52,199,89,0.42) 100%)', label: 'RSS'    },
       { fn: i => i.numberOfAuthQueries || 0, color: 'rgba(255,45,85,0.9)', gradient: 'linear-gradient(to bottom, rgba(255,45,85,0.92) 0%, rgba(255,45,85,0.42) 100%)', label: this._t('pwAuth')   },
     ];
 
@@ -170,7 +170,7 @@ class _WireProwlarrStatsMethods {
     const sortedG   = [...indexers].sort((a,b) => (b.numberOfGrabs||0) - (a.numberOfGrabs||0));
     const maxG      = Math.max(1, ...sortedG.map(i => i.numberOfGrabs||0));
     const gSections = [
-      { fn: i => i.numberOfGrabs || 0, color: 'rgba(255,149,0,0.9)', gradient: 'linear-gradient(to bottom, rgba(255,149,0,0.92) 0%, rgba(255,149,0,0.42) 100%)', label: this._t('pwGrabs') },
+      { fn: i => i.numberOfGrabs || 0, color: 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.9)', gradient: 'linear-gradient(to bottom, rgba(255,149,0,0.92) 0%, rgba(255,149,0,0.42) 100%)', label: this._t('pwGrabs') },
     ];
 
     const lim    = isMob ? sortedRT.length : hLimit;
@@ -207,7 +207,7 @@ class _WireProwlarrStatsMethods {
             <span style="font-size:10px;font-weight:500;color:var(--is-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70%">${this._escHtml(nameFn(item))}</span>
             <span style="font-size:9px;color:var(--is-text-muted);flex-shrink:0">${lbl}</span>
           </div>
-          <div style="height:7px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden">
+          <div style="height:7px;background:rgba(var(--_fill, 255, 255, 255), 0.05);border-radius:4px;overflow:hidden">
             <div style="width:${w}%;height:100%;background:${bg};border-radius:4px"></div>
           </div>
         </div>`;
@@ -217,8 +217,8 @@ class _WireProwlarrStatsMethods {
     const maxQ  = Math.max(1, ...sortedQ.map(u => u.numberOfQueries||0));
     const maxG  = Math.max(1, ...sortedG.map(u => u.numberOfGrabs||0));
     const lim1  = isMob ? sortedQ.length : hLimit;
-    const qBars = hBar(sortedQ.slice(0, lim1), maxQ, u => u.numberOfQueries||0, u => u.userAgent||'—', 'rgba(0,122,255,0.9)',  'linear-gradient(to right, rgba(0,122,255,0.42) 0%, rgba(0,122,255,0.92) 100%)');
-    const gBars = hBar(sortedG.slice(0, lim1), maxG, u => u.numberOfGrabs||0,   u => u.userAgent||'—', 'rgba(255,149,0,0.9)', 'linear-gradient(to right, rgba(255,149,0,0.42) 0%, rgba(255,149,0,0.92) 100%)');
+    const qBars = hBar(sortedQ.slice(0, lim1), maxQ, u => u.numberOfQueries||0, u => u.userAgent||'—', 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.9)',  'linear-gradient(to right, rgba(0,122,255,0.42) 0%, rgba(0,122,255,0.92) 100%)');
+    const gBars = hBar(sortedG.slice(0, lim1), maxG, u => u.numberOfGrabs||0,   u => u.userAgent||'—', 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.9)', 'linear-gradient(to right, rgba(255,149,0,0.42) 0%, rgba(255,149,0,0.92) 100%)');
     const cardQ = this._pwChartCard(this._t('pwChartUAQ'), qBars, '', isMob);
     const cardG = this._pwChartCard(this._t('pwChartUAG'),   gBars, '', isMob);
 
@@ -277,7 +277,7 @@ class _WireProwlarrStatsMethods {
       ).join('');
       const tip = document.createElement('div');
       tip.className = 'pw-stats-tooltip' + dayClass(this);
-      tip.style.cssText = `position:fixed;background:var(--is-popup-bg,rgba(28,32,46,0.98));border:1px solid var(--is-divider);border-radius:8px;padding:10px 14px;z-index:2000;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,0.5);pointer-events:auto`;
+      tip.style.cssText = `position:fixed;background:var(--is-popup-bg,rgba(28,32,46,0.98));border:1px solid var(--is-divider);border-radius:8px;padding:10px 14px;z-index:2000;min-width:160px;box-shadow:0 8px 24px rgba(var(--_shadow, 0, 0, 0), 0.5);pointer-events:auto`;
       tip.innerHTML = `<div style="font-size:12px;font-weight:700;color:var(--is-text);margin-bottom:6px">${this._escHtml(name)}</div>
         ${rows}
         ${filtered.length > 1 ? `<div style="border-top:1px solid var(--is-divider);margin-top:6px;padding-top:6px;display:flex;justify-content:space-between;align-items:center">

@@ -1,4 +1,6 @@
 // Arr Stack Card — Visual Editor
+import { stylesTabHtml, wireStylesTab, STYLES_TAB_CSS } from './editor-styles.js';
+
 class ArrStackCardEditor extends HTMLElement {
   constructor() {
     super();
@@ -47,6 +49,10 @@ class ArrStackCardEditor extends HTMLElement {
           .filter(c => seen.has(c.id) ? false : seen.add(c.id)),
       };
     }
+    // Home Assistant hands back every config this editor sends. Redrawing on
+    // our own change would take the focus out of the field being typed in and
+    // fold the open style groups, so that one is only stored.
+    if (this._sent && JSON.stringify(config) === this._sent) { this._config = config; return; }
     this._config = config;
     this._render();
   }
@@ -85,6 +91,8 @@ class ArrStackCardEditor extends HTMLElement {
 
   _render() {
     const perfMode = !!this._styleVal('performanceMode', false);
+    // Styles had a tab of its own for a while
+    if (this._activeTab === 'styles') this._activeTab = 'appearance';
     const tab = this._activeTab;
 
     this.shadowRoot.innerHTML = `
@@ -107,10 +115,17 @@ class ArrStackCardEditor extends HTMLElement {
         .bmc-text { flex: 1; }
         .bmc-title { font-weight: 600; font-size: 13px; }
         .bmc-sub { font-size: 11px; color: var(--secondary-text-color, #757575); }
+        /* The tabs are wider than the dialog on most screens. They scroll on
+           their own, so dragging them no longer shifts the whole editor. */
+        :host { overflow-x: hidden; }
         .tabs {
           display: flex; gap: 0; margin-bottom: 16px;
           border-bottom: 2px solid var(--divider-color, #e0e0e0);
+          overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain;
+          scrollbar-width: none; -webkit-overflow-scrolling: touch;
         }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab { flex-shrink: 0; }
         .tab {
           padding: 8px 14px; font-size: 12px; font-weight: 600;
           text-transform: uppercase; letter-spacing: 0.04em;
@@ -140,8 +155,11 @@ class ArrStackCardEditor extends HTMLElement {
           margin-bottom: 10px;
         }
         .row-label { flex: 1; font-size: 13px; }
+        /* Same width as the fields in the Styles tab: its control column less
+           the suffix and reset slots. They end at the edge, with the toggles. */
         .row select, .row input[type="number"] {
-          width: 160px; padding: 6px 8px; border-radius: 6px; font-size: 13px;
+          width: calc(var(--st-ctl-w) - 62px); flex-shrink: 0;
+          height: 30px; box-sizing: border-box; padding: 0 8px; border-radius: 6px; font: inherit; font-size: 12px;
           border: 1px solid var(--divider-color, #e0e0e0);
           background: var(--card-background-color, #fff);
           color: var(--primary-text-color, #212121);
@@ -179,6 +197,7 @@ class ArrStackCardEditor extends HTMLElement {
         .cat-item.dragging { opacity: 0.4; }
         .cat-label { flex: 1; font-size: 13px; }
         .cat-disabled .cat-label { opacity: 0.45; }
+        ${STYLES_TAB_CSS}
       </style>
 
       <a class="bmc" href="https://buymeacoffee.com/argii" target="_blank" rel="noopener">
@@ -554,10 +573,9 @@ class ArrStackCardEditor extends HTMLElement {
         </div>
       </div>` : ''}
 
-      <!-- ═══ TAB: Appearance ═══ -->
+      <!-- ═══ TAB: Appearance — general settings, then the design tokens (#42) ═══ -->
       <div class="tab-content${tab === 'appearance' ? ' active' : ''}" data-tab-content="appearance">
-        <div class="section">
-          <div class="row">
+        ${stylesTabHtml(this, `          <div class="row">
             <span class="row-label">Performance mode</span>
             <label class="toggle">
               <input type="checkbox" data-style-key="performanceMode" ${perfMode?'checked':''}>
@@ -579,15 +597,6 @@ class ArrStackCardEditor extends HTMLElement {
           <div class="hint">Automatically switches modal (popup) colours based on time of day. Disable if you use custom modal colours.</div>
 
           <div class="row">
-            <span class="row-label">ARR application icons</span>
-            <select data-style-key="applicationIcons">
-              <option value="real" ${this._styleVal('applicationIcons','real') === 'real' ? 'selected' : ''}>Real (app logos)</option>
-              <option value="mdi" ${this._styleVal('applicationIcons','real') === 'mdi' ? 'selected' : ''}>MDI icons</option>
-            </select>
-          </div>
-          <div class="hint">Show actual application logos in section headers instead of generic MDI icons.</div>
-
-          <div class="row">
             <span class="row-label">Category colour overlays</span>
             <label class="toggle">
               <input type="checkbox" data-style-key="categoryOverlays" ${this._styleVal('categoryOverlays', true) !== false ? 'checked' : ''}>
@@ -601,11 +610,19 @@ class ArrStackCardEditor extends HTMLElement {
 
           ${this._numberRow('Left panel width', 'leftPanelWidth', 40, 10, 90, 1, '10–90 %')}
           <div class="hint">Width of the downloads panel as a percentage of the card. Default is 40 %. Has no effect when the downloads panel is hidden or on mobile.</div>
-        </div>
+`)}
       </div>
     `;
 
     this._wireEvents();
+    wireStylesTab(this, this.shadowRoot.querySelector('[data-tab-content="appearance"]'));
+    // A redraw would start the tab strip from the left again; only ever
+    // scroll it sideways — scrollIntoView would move the dialog too.
+    const tabs = this.shadowRoot.querySelector('.tabs');
+    if (tabs) {
+      tabs.scrollLeft = this._tabsScroll || 0;
+      tabs.addEventListener('scroll', () => { this._tabsScroll = tabs.scrollLeft; }, { passive: true });
+    }
     this._wireUserMap();
     if (this._activeTab === 'users' && !this._haUsers) this._loadUserMapData();
   }
@@ -714,7 +731,7 @@ class ArrStackCardEditor extends HTMLElement {
       <div class="row">
         <span class="row-label">${label}</span>
         ${hint ? `<span class="color-alpha">${hint}</span>` : ''}
-        <input type="number" data-style-key="${key}" value="${val}" min="${min}" max="${max}" step="${step}" style="width:56px;text-align:right"/>
+        <input type="number" data-style-key="${key}" value="${val}" min="${min}" max="${max}" step="${step}" style="text-align:right"/>
       </div>`;
   }
 
@@ -747,6 +764,9 @@ class ArrStackCardEditor extends HTMLElement {
     this.shadowRoot.querySelectorAll('.tab').forEach(btn => {
       btn.addEventListener('click', () => {
         this._activeTab = btn.dataset.tab;
+        const strip = btn.parentElement;
+        const left = btn.offsetLeft - (strip.clientWidth - btn.offsetWidth) / 2;
+        strip.scrollTo?.({ left: Math.max(0, left), behavior: 'smooth' });
         this.shadowRoot.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === this._activeTab));
         this.shadowRoot.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.dataset.tabContent === this._activeTab));
         if (this._activeTab === 'users') this._loadUserMapData();
@@ -1031,6 +1051,7 @@ class ArrStackCardEditor extends HTMLElement {
 
   _update(patch) {
     this._config = { ...this._config, ...patch };
+    this._sent = JSON.stringify(this._config);
     this.dispatchEvent(new CustomEvent('config-changed', { detail: { config: this._config }, bubbles: true, composed: true }));
   }
 }

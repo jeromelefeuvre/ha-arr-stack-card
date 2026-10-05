@@ -12,7 +12,15 @@ class _BrandMethods {
     }</div>`;
   }
 
+  // Every app icon comes wrapped in .app-ico, which carries the icon tokens
+  // (#42): colour, a capsule behind it, and — with styles.iconStyle: mono —
+  // the real logo drawn in that one colour.
   _appIcon(app, size = 26) {
+    const inner = this._appIconInner(app, size);
+    return inner ? `<span class="app-ico">${inner}</span>` : '';
+  }
+
+  _appIconInner(app, size) {
     const useReal = this._cfgGet('styles', 'applicationIcons', 'real') !== 'mdi';
     const sz = `width="${size}" height="${size}"`;
     const CDN = 'https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg';
@@ -81,6 +89,9 @@ class _BrandMethods {
       const url  = pngOnly.has(slug)
         ? `https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/${slug}.png`
         : `${CDN}/${slug}.svg`;
+      if (this._cfgGet('styles', 'iconStyle', 'brand') === 'mono') {
+        return `<span class="app-ico-mask" style="width:${size}px;height:${size}px;--ico-url:url('${url}')"></span>`;
+      }
       return `<img src="${url}" ${sz} style="flex-shrink:0;display:block;object-fit:contain" onerror="this.style.display='none'">`;
     }
     if (customSvgs[app]) {

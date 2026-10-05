@@ -78,7 +78,7 @@ class _WireProwlarrAppsMethods {
       const label = lvl === 'fullsync' ? this._t('pwFullSync') : lvl === 'addonly' ? this._t('pwAddOnly') : lvl === 'disabled' ? this._t('mtSortDisabled') : lv || '—';
       return this._uiBadge(this._escHtml(label), tone);
     };
-    const IMPL_COLORS = { radarr:'#34d399', sonarr:'#638cff', lidarr:'#fbbf24', readarr:'#a855f7', whisparr:'#f87171', mylar3:'#60a5fa', lazylibrarian:'#fb923c' };
+    const IMPL_COLORS = { radarr:'rgb(var(--arr-success-rgb, 52, 211, 153))', sonarr:'#638cff', lidarr:'rgb(var(--arr-warning-rgb, 251, 191, 36))', readarr:'#a855f7', whisparr:'rgb(var(--arr-error-rgb, 248, 113, 113))', mylar3:'rgb(var(--arr-info-rgb, 96, 165, 250))', lazylibrarian:'#fb923c' };
     const implBadge = app => {
       const name = app.implementationName || app.implementation || 'App';
       const c    = IMPL_COLORS[name.toLowerCase()] || '#9ca3af';
@@ -88,8 +88,8 @@ class _WireProwlarrAppsMethods {
       const r = testResults[id];
       if (!r) return `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(200,200,200,0.25)" title="${this._t('pwNotTested')}"></span>`;
       return r.ok
-        ? `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(52,211,153,0.85)" title="OK"></span>`
-        : `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(255,100,100,0.85)" title="${this._escHtml((r.errors||[]).map(e=>e.errorMessage).join(', ').substring(0,80))}"></span>`;
+        ? `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(var(--arr-success-rgb, 52, 211, 153), 0.85)" title="OK"></span>`
+        : `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(var(--arr-error-rgb, 255, 100, 100), 0.85)" title="${this._escHtml((r.errors||[]).map(e=>e.errorMessage).join(', ').substring(0,80))}"></span>`;
     };
 
     // Apps have nothing to search or filter, so the bar holds the actions alone
@@ -246,12 +246,12 @@ class _WireProwlarrAppsMethods {
 
 
 
-    const IMPL_COLORS = { radarr:'#34d399', sonarr:'#638cff', lidarr:'#fbbf24', readarr:'#a855f7', whisparr:'#f87171', mylar3:'#60a5fa', lazylibrarian:'#fb923c' };
+    const IMPL_COLORS = { radarr:'rgb(var(--arr-success-rgb, 52, 211, 153))', sonarr:'#638cff', lidarr:'rgb(var(--arr-warning-rgb, 251, 191, 36))', readarr:'#a855f7', whisparr:'rgb(var(--arr-error-rgb, 248, 113, 113))', mylar3:'rgb(var(--arr-info-rgb, 96, 165, 250))', lazylibrarian:'#fb923c' };
     const items = schemas.map(s => {
       const c = IMPL_COLORS[(s.implementationName||'').toLowerCase()] || '#9ca3af';
       return `<div data-pw-app-impl="${this._escHtml(s.implementation||'')}" class="pw-app-impl-item"
         style="padding:11px 16px;border:1px solid var(--is-divider);border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:10px"
-        onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background=''">
+        onmouseover="this.style.background='rgba(var(--_fill, 255, 255, 255), 0.06)'" onmouseout="this.style.background=''">
         <div style="width:8px;height:8px;border-radius:50%;background:${c};flex-shrink:0"></div>
         <span style="font-size:13px;font-weight:600;color:var(--is-text)">${this._escHtml(s.implementationName||s.implementation||'—')}</span>
       </div>`;
@@ -354,14 +354,14 @@ class _WireProwlarrAppsMethods {
 
     // Sync categories — collapsible tree
     const selectedCats = data.syncCategories || [];
-    const CAT_COLORS = { 2000:'#34d399', 5000:'#638cff', 3000:'#fbbf24', 1000:'#a855f7', 4000:'#60a5fa', 6000:'#f87171', 7000:'#b48c64', 8000:'#9ca3af' };
+    const CAT_COLORS = { 2000:'rgb(var(--arr-success-rgb, 52, 211, 153))', 5000:'#638cff', 3000:'rgb(var(--arr-warning-rgb, 251, 191, 36))', 1000:'#a855f7', 4000:'rgb(var(--arr-info-rgb, 96, 165, 250))', 6000:'rgb(var(--arr-error-rgb, 248, 113, 113))', 7000:'#b48c64', 8000:'#9ca3af' };
     const catTree = categories.map(cat => {
       const subs      = cat.subCategories || [];
       const isChecked = selectedCats.includes(cat.id);
       const color     = CAT_COLORS[cat.id] || '#9ca3af';
       const subHtml   = subs.map(sub =>
         `<div style="padding-left:20px">${_chk(`class="pw-cat-cb" data-cat-id="${this._escHtml(sub.id)}"`, selectedCats.includes(sub.id), this._escHtml(sub.name||String(sub.id)))}</div>`).join('');
-      return `<div style="border-bottom:1px solid rgba(255,255,255,0.06);padding:4px 0">
+      return `<div style="border-bottom:1px solid rgba(var(--_line, 255, 255, 255), 0.06);padding:4px 0">
         <div style="display:flex;align-items:center;gap:8px;padding:2px 0${subs.length?';cursor:pointer':''}" class="${subs.length?'pw-cat-toggle':''}">
           ${_chk(`class="pw-cat-cb" data-cat-id="${this._escHtml(cat.id)}" onclick="event.stopPropagation()"`, isChecked, '')}
           <div style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0"></div>
@@ -373,7 +373,7 @@ class _WireProwlarrAppsMethods {
     }).join('');
 
     const catPanel = categories.length > 0
-      ? row(this._t('pwSyncCats'), `<div style="border:1px solid var(--is-card-bdr,rgba(255,255,255,0.09));border-radius:16px;max-height:180px;overflow-y:auto;padding:6px 12px;background:rgba(255,255,255,0.04)">${catTree}</div>`)
+      ? row(this._t('pwSyncCats'), `<div style="border:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09));border-radius:16px;max-height:180px;overflow-y:auto;padding:6px 12px;background:rgba(var(--_fill, 255, 255, 255), 0.04)">${catTree}</div>`)
       : '';
 
     // Dynamic schema fields
@@ -461,22 +461,22 @@ class _WireProwlarrAppsMethods {
         if (result?.ok === false) {
           testPassed = false;
           const msgs = (result.errors || []).map(e => e.errorMessage).filter(Boolean).join('\n');
-          if (btn) { btn.textContent = '✗ Failed'; btn.style.color = 'rgba(255,100,100,0.9)'; }
+          if (btn) { btn.textContent = '✗ Failed'; btn.style.color = 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)'; }
           if (msgs) {
             const errDiv = document.createElement('div');
             errDiv.id = 'pw-af-err';
-            errDiv.style.cssText = 'margin-bottom:14px;padding:10px 12px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:8px;font-size:11px;color:rgba(248,113,113,0.9);line-height:1.6;white-space:pre-wrap;word-break:break-word';
+            errDiv.style.cssText = 'margin-bottom:14px;padding:10px 12px;background:rgba(var(--arr-error-rgb, 248, 113, 113), 0.1);border:1px solid rgba(var(--arr-error-rgb, 248, 113, 113), 0.3);border-radius:8px;font-size:11px;color:rgba(var(--arr-error-rgb, 248, 113, 113), 0.9);line-height:1.6;white-space:pre-wrap;word-break:break-word';
             errDiv.textContent = msgs;
             body.prepend(errDiv);
           }
         } else {
           testPassed = true;
           body.querySelector('#pw-af-err')?.remove();
-          if (btn) { btn.textContent = '✓ OK'; btn.style.color = 'rgba(52,211,153,0.9)'; }
+          if (btn) { btn.textContent = '✓ OK'; btn.style.color = 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.9)'; }
         }
       } catch (_) {
         testPassed = false;
-        if (btn) { btn.textContent = '✗ Failed'; btn.style.color = 'rgba(255,100,100,0.9)'; }
+        if (btn) { btn.textContent = '✗ Failed'; btn.style.color = 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)'; }
       }
       if (btn) { btn.disabled = false; setTimeout(() => { if (btn) { btn.textContent = this._t('pwTest'); btn.style.color = ''; } }, 3000); }
     });
@@ -509,13 +509,13 @@ class _WireProwlarrAppsMethods {
       if (!testPassed) {
         const btn = body.querySelector('#pw-af-save');
         if (btn) {
-          btn.style.background = 'rgba(248,113,113,0.25)'; btn.style.color = 'rgba(248,113,113,0.95)';
+          btn.style.background = 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.25)'; btn.style.color = 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.95)';
           setTimeout(() => { btn.style.background = 'rgba(99,140,255,0.2)'; btn.style.color = 'rgba(99,140,255,0.95)'; }, 800);
         }
         if (!body.querySelector('#pw-af-err')) {
           const errDiv = document.createElement('div');
           errDiv.id = 'pw-af-err';
-          errDiv.style.cssText = 'margin-bottom:14px;padding:10px 12px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:8px;font-size:11px;color:rgba(248,113,113,0.9);line-height:1.6';
+          errDiv.style.cssText = 'margin-bottom:14px;padding:10px 12px;background:rgba(var(--arr-error-rgb, 248, 113, 113), 0.1);border:1px solid rgba(var(--arr-error-rgb, 248, 113, 113), 0.3);border-radius:8px;font-size:11px;color:rgba(var(--arr-error-rgb, 248, 113, 113), 0.9);line-height:1.6';
           errDiv.textContent = this._t('pwRunTestApp');
           body.prepend(errDiv);
         }
@@ -549,7 +549,7 @@ class _WireProwlarrAppsMethods {
       } catch (err) {
         if (btn) { btn.disabled = false; btn.textContent = isNew ? this._t('libTagAdd') : this._t('mtSave'); }
         const errDiv = document.createElement('div');
-        errDiv.style.cssText = 'color:rgba(255,100,100,0.8);font-size:11px;margin-top:8px';
+        errDiv.style.cssText = 'color:rgba(var(--arr-error-rgb, 255, 100, 100), 0.8);font-size:11px;margin-top:8px';
         errDiv.textContent = err?.body?.message || String(err);
         body.querySelector('#pw-af-save')?.after(errDiv);
       }

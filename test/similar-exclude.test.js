@@ -52,7 +52,7 @@ test('the triggers name what is included and count what is left out', () => {
   Object.defineProperty(card, '_isMob', { value: true, configurable: true });
   const glyph = parse(card._simCountryHtml()).querySelector('#sim-country-btn');
   assert.ok(glyph.classList.contains('is-active'), 'a filter that only excludes is still lit');
-  assert.ok(glyph.querySelector('span[style*="#e5484d"]'), 'with the red dot a glyph has room for');
+  assert.ok(glyph.querySelector('span[style*="--arr-error-rgb, 229, 72, 77"]'), 'with the red dot a glyph has room for');
 });
 
 test('each panel opens on Include; what is set on the other side shows faintly', () => {

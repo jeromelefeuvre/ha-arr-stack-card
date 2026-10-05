@@ -85,9 +85,9 @@ class _WireProwlarrIndexersMethods {
       const mobRows = rows.map((idx, i) => {
         const hasErr = idx.enable && !!idx._status;
         const isOff  = !idx.enable;
-        const dot    = isOff ? 'rgba(255,255,255,0.25)' : hasErr ? 'rgba(255,100,100,0.9)' : 'rgba(52,211,153,0.9)';
+        const dot    = isOff ? 'rgba(var(--_fg3, 255, 255, 255), 0.25)' : hasErr ? 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)' : 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.9)';
         const statusLbl = isOff ? this._t('mtSortDisabled') : hasErr ? this._t('errorState') : 'OK';
-        const statusClr = isOff ? 'var(--is-text-muted)' : hasErr ? 'rgba(255,100,100,0.9)' : 'rgba(52,211,153,0.9)';
+        const statusClr = isOff ? 'var(--is-text-muted)' : hasErr ? 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)' : 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.9)';
         const errMsg = '';
         return `<div data-pw-idx-id="${this._escHtml(idx.id)}" style="padding:10px 0;border-bottom:1px solid var(--is-divider);cursor:pointer">
           <div class="u-row-8">
@@ -160,7 +160,7 @@ class _WireProwlarrIndexersMethods {
       const hasErr    = idx.enable && !!idx._status;
       const isOff     = !idx.enable;
       const statusLbl = isOff ? this._t('mtSortDisabled') : hasErr ? this._t('errorState') : 'OK';
-      const statusClr = isOff ? 'var(--is-text-muted)' : hasErr ? 'rgba(255,100,100,0.9)' : 'rgba(52,211,153,0.9)';
+      const statusClr = isOff ? 'var(--is-text-muted)' : hasErr ? 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)' : 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.9)';
       const errMsg    = '';
       const catChipsHtml = mkCatChips(idx);
       const minS    = fv(idx, 'minimumSeeders');
@@ -339,14 +339,14 @@ class _WireProwlarrIndexersMethods {
       const items = cols.map(col => {
         const checked = !hidden.has(col.key);
         return `<label style="display:flex;align-items:center;gap:8px;padding:6px 14px;cursor:pointer;font-size:12px;color:var(--is-text);white-space:nowrap">
-          <input type="checkbox" data-col="${col.key}" ${checked?'checked':''} style="cursor:pointer;accent-color:var(--is-accent,#0a84ff)"> ${col.label}
+          <input type="checkbox" data-col="${col.key}" ${checked?'checked':''} style="cursor:pointer;accent-color:var(--is-accent,rgb(var(--arr-accent-rgb, 10, 132, 255)))"> ${col.label}
         </label>`;
       }).join('');
       const dd = document.createElement('div');
       dd.id = 'pw-cols-dropdown';
       // Use position:absolute relative to el (overlay covers full viewport at 0,0)
       dd.setAttribute('class', dayClass(this).trim());
-      dd.style.cssText = `position:absolute;background:var(--is-menu-bg);border:1px solid var(--is-btn-bdr);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.5);z-index:1200;padding:6px 0;min-width:150px;color:var(--is-text)`;
+      dd.style.cssText = `position:absolute;background:var(--is-menu-bg);border:1px solid var(--is-btn-bdr);border-radius:8px;box-shadow:0 8px 24px rgba(var(--_shadow, 0, 0, 0), 0.5);z-index:1200;padding:6px 0;min-width:150px;color:var(--is-text)`;
       if (rect) { dd.style.top = (rect.bottom + 4) + 'px'; dd.style.left = rect.left + 'px'; }
       dd.innerHTML = items;
       dd.querySelectorAll('input[data-col]').forEach(inp => {
@@ -410,9 +410,9 @@ class _WireProwlarrIndexersMethods {
         testBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:btn-spin 0.65s linear infinite"><path d="M12 2a10 10 0 0 1 10 10"/></svg>`;
         try {
           await this._callApi('POST', `arr_stack/prowlarr/idxtest?id=${idx.id||0}`, {});
-          testBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(52,211,153,0.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+          testBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(var(--arr-success-rgb, 52, 211, 153), 0.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
         } catch (_) {
-          testBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,100,100,0.9)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+          testBtn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
         }
         testBtn.disabled = false;
         return;

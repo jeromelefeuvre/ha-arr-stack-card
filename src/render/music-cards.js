@@ -19,11 +19,11 @@ _musRatingBadge(artist, inline = false, solid = false) {
   const votes = artist?.ratings?.votes;
   const tip = votes ? ` title="MusicBrainz · ${votes} ${votes === 1 ? 'vote' : 'votes'}"` : ' title="MusicBrainz"';
   if (solid) {
-    const sty = 'border-color:transparent;background:rgba(186,71,143,0.85);color:#fff;text-shadow:none';
+    const sty = 'border-color:transparent;background:rgba(186,71,143,0.85);color:rgb(var(--_ptx, 255, 255, 255));text-shadow:none';
     const num = 'line-height:1;display:block;margin-top:-1px;font-variant-numeric:tabular-nums';
     return `<span class="imdb"${tip} style="${sty};padding:2px 5px;gap:3px"><span style="${num}">${display}</span></span>`;
   }
-  const icon = `<svg width="22" height="11" viewBox="0 0 64 28" style="flex-shrink:0"><rect width="64" height="28" rx="4" fill="#BA478F"/><text x="32" y="21" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="900" fill="#fff">MB</text></svg>`;
+  const icon = `<svg width="22" height="11" viewBox="0 0 64 28" style="flex-shrink:0"><rect width="64" height="28" rx="4" fill="#BA478F"/><text x="32" y="21" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="900" fill="rgb(var(--_fg, 255, 255, 255))">MB</text></svg>`;
   const sty = 'border-color:rgba(186,71,143,0.45);background:rgba(186,71,143,0.22)';
   const badge = `<span class="imdb"${tip} style="${sty};padding:2px 3px;gap:3px">${icon}<span style="line-height:1;display:block;margin-top:-1px">${display}</span></span>`;
   return inline ? badge : `<div style="margin-bottom:3px">${badge}</div>`;
@@ -99,11 +99,11 @@ _renderMusicCard(entry, { noSub = false, noStatus = false, requested = false } =
     ? `<img src="${front}" class="mus-cover" loading="lazy" onerror="this.style.display='none'">`
     : `<div class="mus-cover mus-cover-ph">${this._escHtml(this._musInitials(artist.artistName))}</div>`;
 
-  const grad = 'rgba(0,0,0,0.88)';
-  const tc   = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const grad = 'rgba(var(--_shade, 0, 0, 0), 0.88)';
+  const tc   = 'rgba(var(--_ptx, 255, 255, 255), 1)';
   return `
     <div class="mc mc-music${backLayer ? '' : ' mus-flat'}${this._libFlashArtist && this._libFlashArtist === artist.id ? ' lib-flash' : ''}"${this._isDay
-      ? ` style="${backLayer ? '' : 'background:rgba(0,0,0,0.05);'}border-color:rgba(0,0,0,0.14);box-shadow:inset 0 1px 0 rgba(255,255,255,0.35)"`
+      ? ` style="${backLayer ? '' : 'background:rgba(var(--_shade, 0, 0, 0), 0.05);'}border-color:rgba(0,0,0,0.14);box-shadow:inset 0 1px 0 rgba(255,255,255,0.35)"`
       : ''} data-artist-id="${artist.id}" data-title="${name}">
       ${backLayer}
       <div class="mus-scrim"></div>
@@ -115,7 +115,7 @@ _renderMusicCard(entry, { noSub = false, noStatus = false, requested = false } =
         pc.rating ? this._musRatingBadge(artist, true, true) : '',
         { endIcon: false }
       )}${pc.title ? `<div style="font-size:10px;font-weight:600;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>` : ''}
-        ${sub ? `<div style="font-size:9px;color:rgba(var(--arr-pt-rgb,255,255,255),0.66);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${sub}</div>` : ''}`)}
+        ${sub ? `<div style="font-size:9px;color:rgba(var(--_ptx,255,255,255),0.66);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${sub}</div>` : ''}`)}
       ${stripe}
     </div>`;
 }

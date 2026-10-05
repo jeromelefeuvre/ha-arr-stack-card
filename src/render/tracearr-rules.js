@@ -14,7 +14,7 @@ class _TracearrRulesMethods {
     const rules = m.rulesData || [];
     const isMob = this._isMob;
     const _day = this._isDay;
-    const _btnClr = _day ? '#000' : '#fff';
+    const _btnClr = _day ? 'rgb(var(--_shade, 0, 0, 0))' : 'rgb(var(--_fg, 255, 255, 255))';
 
     const CLASSIC_LABELS = {
       concurrent_streams:     this._t('traRtConcurrent'),
@@ -25,8 +25,8 @@ class _TracearrRulesMethods {
       account_inactivity:     this._t('traRtInactivity'),
     };
 
-    const _sc = s => ({ high: '#FF3B30', warning: '#FF9500', low: '#34C759' }[s] || '#FF9500');
-    const _sb = s => ({ high: 'rgba(255,59,48,0.16)', warning: 'rgba(255,149,0,0.14)', low: 'rgba(52,199,89,0.14)' }[s] || 'rgba(255,149,0,0.14)');
+    const _sc = s => ({ high: 'rgb(var(--arr-error-rgb, 255, 59, 48))', warning: 'rgb(var(--arr-warning-rgb, 255, 149, 0))', low: 'rgb(var(--arr-success-rgb, 52, 199, 89))' }[s] || 'rgb(var(--arr-warning-rgb, 255, 149, 0))');
+    const _sb = s => ({ high: 'rgba(var(--arr-error-rgb, 255, 59, 48), 0.16)', warning: 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.14)', low: 'rgba(var(--arr-success-rgb, 52, 199, 89), 0.14)' }[s] || 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.14)');
 
     const rows = rules.map(r => {
       const rid = this._escHtml(r.id ?? '');
@@ -59,8 +59,8 @@ class _TracearrRulesMethods {
       </div>`;
     }).join('') || `<div style="font-size:12px;color:var(--is-text-muted);padding:28px 0;text-align:center">${this._t('traNoRules')}</div>`;
 
-    const menuSt = `position:absolute;top:32px;right:0;background:#1c1c2e;border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:4px;min-width:140px;z-index:200`;
-    const menuItemSt = `display:block;width:100%;text-align:left;padding:6px 10px;font-size:12px;font-weight:500;color:#fff;background:transparent;border:none;cursor:pointer;border-radius:5px`;
+    const menuSt = `position:absolute;top:32px;right:0;background:#1c1c2e;border:1px solid rgba(var(--_line, 255, 255, 255), 0.14);border-radius:8px;padding:4px;min-width:140px;z-index:200`;
+    const menuItemSt = `display:block;width:100%;text-align:left;padding:6px 10px;font-size:12px;font-weight:500;color:rgb(var(--_fg, 255, 255, 255));background:transparent;border:none;cursor:pointer;border-radius:5px`;
     // The + itself lives in the modal header now, as it does in Maintainerr;
     // what stays here is the little menu it drops, anchored to the row.
     const addMenu = `<div style="position:relative;display:inline-block" id="tra-rules-add-wrap">
@@ -95,10 +95,10 @@ class _TracearrRulesMethods {
       { id: 'account_inactivity',    name: this._t('traRtInactivity'),      desc: this._t('traRdInactivity'),
         icon: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>' },
     ];
-    const btnSt = `display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;margin-bottom:6px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;cursor:pointer;color:var(--is-text,#fff);transition:background .12s`;
+    const btnSt = `display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;margin-bottom:6px;background:rgba(var(--_fill, 255, 255, 255), 0.04);border:1px solid rgba(var(--_line, 255, 255, 255), 0.1);border-radius:8px;cursor:pointer;color:var(--is-text,rgb(var(--_fg, 255, 255, 255)));transition:background .12s`;
     const rows = TEMPLATES.map(t =>
       `<button data-tra-rule-template="${t.id}" style="${btnSt}">
-        <span style="width:32px;height:32px;border-radius:8px;background:rgba(0,122,255,0.1);border:1px solid rgba(0,122,255,0.2);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(0,122,255,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${t.icon}</svg></span>
+        <span style="width:32px;height:32px;border-radius:8px;background:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.1);border:1px solid rgba(var(--arr-accent-rgb, 0, 122, 255), 0.2);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(var(--arr-accent-rgb, 0, 122, 255), 0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${t.icon}</svg></span>
         <div style="min-width:0">
           <div style="font-size:13px;font-weight:600;margin-bottom:2px">${t.name}</div>
           <div style="font-size:11px;color:var(--is-text-muted)">${t.desc}</div>
@@ -241,12 +241,12 @@ class _TracearrRulesMethods {
       const conds = grp?.conditions?.length ? grp.conditions : [null];
       const rows  = conds.map((c, ci) => {
         const html = condRow(gi, ci, c);
-        return ci === 0 ? html : `<div class="tra-or-label" style="font-size:10px;font-weight:700;color:rgba(0,122,255,0.8);margin:2px 0 6px">OR</div>${html}`;
+        return ci === 0 ? html : `<div class="tra-or-label" style="font-size:10px;font-weight:700;color:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.8);margin:2px 0 6px">OR</div>${html}`;
       }).join('');
-      return `<div class="tra-cg" data-grp="${gi}" style="background:rgba(255,255,255,0.03);border:1px solid var(--is-card-bdr,rgba(255,255,255,0.09));border-radius:16px;padding:12px 14px;margin-bottom:8px">
+      return `<div class="tra-cg" data-grp="${gi}" style="background:rgba(var(--_fill, 255, 255, 255), 0.03);border:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09));border-radius:16px;padding:12px 14px;margin-bottom:8px">
         <div style="font-size:11px;font-weight:600;color:var(--is-text-label);margin-bottom:10px">${this._t('traGroup').replace('{n}', gi+1)} <span style="font-weight:400;font-size:10px;opacity:0.6">${this._t('traGroupOr')}</span></div>
         <div class="tra-cg-rows">${rows}</div>
-        <button class="tra-add-or" data-grp="${gi}" style="font-size:11px;color:rgba(0,122,255,0.8);background:transparent;border:none;cursor:pointer;padding:2px 0;margin-top:2px">+ Add <strong>OR</strong> condition</button>
+        <button class="tra-add-or" data-grp="${gi}" style="font-size:11px;color:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.8);background:transparent;border:none;cursor:pointer;padding:2px 0;margin-top:2px">+ Add <strong>OR</strong> condition</button>
       </div>`;
     };
 
@@ -268,7 +268,7 @@ class _TracearrRulesMethods {
                style="flex:1;min-width:0">
            </label>` : '';
       const trashSvg = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>`;
-      return `<div class="tra-act-row" data-idx="${idx}" style="background:rgba(255,255,255,0.03);border:1px solid var(--is-card-bdr,rgba(255,255,255,0.09));border-radius:14px;padding:10px 12px;margin-bottom:6px">
+      return `<div class="tra-act-row" data-idx="${idx}" style="background:rgba(var(--_fill, 255, 255, 255), 0.03);border:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09));border-radius:14px;padding:10px 12px;margin-bottom:6px">
         <div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center">
           ${this._mtFieldSelectRaw('class="tra-act-type"', _opt(ACTIONS, aType), ACTIONS.find(([v]) => v === aType)?.[1] || '', 'flex:1;min-width:0')}
           ${this._mtRoundBtn('class="tra-act-del"', trashSvg, this._t('tlDelete'), { size: 26, tone: 'red' })}
@@ -282,25 +282,25 @@ class _TracearrRulesMethods {
     const actionsHtml   = (existActions.length ? existActions : [null]).map((a,i) => actionRow(i, a)).join('');
 
     const condCard = showConditions ? `
-      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--is-card-bdr,rgba(255,255,255,0.09));border-radius:20px;padding:16px;margin-bottom:12px">
+      <div style="background:rgba(var(--_fill, 255, 255, 255), 0.03);border:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09));border-radius:20px;padding:16px;margin-bottom:12px">
         <div style="font-size:13px;font-weight:700;color:var(--is-text);margin-bottom:2px">${this._t('traConditions')}</div>
         ${isMob ? '' : `<div style="font-size:11px;color:var(--is-text-muted);margin-bottom:12px">${this._t('traCondHelp')}</div>`}
         <div id="tra-rf-conds">${condGroupsHtml}</div>
-        <button id="tra-add-and-group" style="font-size:11px;color:rgba(0,122,255,0.8);background:transparent;border:none;cursor:pointer;padding:2px 0">${this._t('traAddAndGroup')}</button>
+        <button id="tra-add-and-group" style="font-size:11px;color:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.8);background:transparent;border:none;cursor:pointer;padding:2px 0">${this._t('traAddAndGroup')}</button>
       </div>` : '';
 
     const actCard = showConditions ? `
-      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--is-card-bdr,rgba(255,255,255,0.09));border-radius:20px;padding:16px;margin-bottom:12px">
+      <div style="background:rgba(var(--_fill, 255, 255, 255), 0.03);border:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09));border-radius:20px;padding:16px;margin-bottom:12px">
         <div style="font-size:13px;font-weight:700;color:var(--is-text);margin-bottom:2px">${this._t('traAddActions')}</div>
         ${isMob ? '' : `<div style="font-size:11px;color:var(--is-text-muted);margin-bottom:12px">Optional side-effects when conditions are met. A violation is always created automatically.</div>`}
         <div id="tra-rf-actions">${actionsHtml}</div>
-        <button id="tra-add-action" style="font-size:11px;color:rgba(0,122,255,0.8);background:transparent;border:none;cursor:pointer;padding:2px 0">+ Add action</button>
+        <button id="tra-add-action" style="font-size:11px;color:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.8);background:transparent;border:none;cursor:pointer;padding:2px 0">+ Add action</button>
       </div>` : '';
 
     const title     = isEdit ? this._t('mtEditRule') : this._t(isCustom ? 'traNewCustomRule' : 'traNewClassicRule');
     const saveLabel = isEdit ? this._t('traUpdate') : this._t('traCreate');
     const _day = this._isDay;
-    const _btnClr = _day ? '#000' : '#fff';
+    const _btnClr = _day ? 'rgb(var(--_shade, 0, 0, 0))' : 'rgb(var(--_fg, 255, 255, 255))';
 
     return `<div ${ruleId ? `data-rule-id="${this._escHtml(ruleId)}"` : ''}>
       <!-- Flipped to 1 by the first edit; the header's save reads it to decide

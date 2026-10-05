@@ -536,7 +536,7 @@ _renderUpcoming() {
   const smpCount = this._smpPageCount(items, 'upcoming');
   let grid = '';
   if (this._upcomingError) {
-    grid = `<div class="placeholder" style="color:rgba(255,80,80,0.9);font-size:11px">⚠ ${this._escHtml(this._upcomingError)}</div>`;
+    grid = `<div class="placeholder" style="color:rgba(var(--arr-error-rgb, 255, 80, 80), 0.9);font-size:11px">⚠ ${this._escHtml(this._upcomingError)}</div>`;
   } else if (items.length === 0) {
     grid = `<div class="placeholder">${this._t('loading')}</div>`;
   } else {
@@ -685,7 +685,7 @@ _renderCalendar() {
       const teasers = items.slice(-4);
       const cells = Array.from({ length: 4 }, (_, i) => {
         const ep = teasers[i];
-        if (!ep) return `<div style="width:100%;height:100%;background:rgba(255,255,255,0.06)"></div>`;
+        if (!ep) return `<div style="width:100%;height:100%;background:rgba(var(--_fill, 255, 255, 255), 0.06)"></div>`;
         const isMovie = ep._mediaType === 'movie';
         const seriesRaw = ep.series || {};
         const _sid = seriesRaw.id || ep.seriesId;
@@ -695,7 +695,7 @@ _renderCalendar() {
         const url     = isMovie ? this._getRadarrPoster(series) : this._getSonarrPoster(series);
         return url
           ? `<img src="${url}" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy">`
-          : `<div style="width:100%;height:100%;background:rgba(255,255,255,0.06)"></div>`;
+          : `<div style="width:100%;height:100%;background:rgba(var(--_fill, 255, 255, 255), 0.06)"></div>`;
       }).join('');
       const smpCard = `<div class="mc smp-card" data-action="open-cal-modal">
         <div class="smp-full">
@@ -725,7 +725,7 @@ _renderCalendar() {
 
   const mask = `linear-gradient(to bottom,transparent 0.07%,black 6%,black 80%,transparent 100%)`;
   const dualOverlay = this._categoryOverlaysEnabled
-    ? `<div style="position:absolute;inset:0;background:radial-gradient(circle at 25% 15%,${this._brandColor('radarr',0.23)} 0%,transparent 48%),radial-gradient(circle at 75% 15%,${this._brandColor('sonarr',0.23)} 0%,transparent 48%);mask-image:${mask};-webkit-mask-image:${mask};filter:blur(25px);pointer-events:none;z-index:0;"></div>`
+    ? `<div style="position:absolute;inset:0;background:radial-gradient(circle at 25% 15%,${this._brandColor('radarr',0.23)} 0%,transparent 48%),radial-gradient(circle at 75% 15%,${this._brandColor('sonarr',0.23)} 0%,transparent 48%);mask-image:${mask};-webkit-mask-image:${mask};filter:blur(25px);opacity:var(--_a-tint, 1);pointer-events:none;z-index:0;"></div>`
     : '';
   return `
     <div class="sec-card has-gradient" style="${this._sectionStyle()}">

@@ -557,7 +557,7 @@ _renderPopup() {
   // beside the poster instead of dropping under it.
   const overviewHtml = overview
     ? `<p class="popup-overview">${overview}</p>`
-    : `<p class="popup-overview" style="color:rgba(255,255,255,0.35);font-style:italic">${this._t('noDescription')}</p>`;
+    : `<p class="popup-overview" style="color:rgba(var(--_fg3, 255, 255, 255), 0.35);font-style:italic">${this._t('noDescription')}</p>`;
 
   const backdropEl = searchActive ? '' : (this._popupCastOpen && castPanelHtml
     ? `
@@ -581,7 +581,7 @@ _renderPopup() {
     : '';
 
   return `
-    <div class="popup-overlay${dayClass(this)}">
+    <div class="popup-overlay${dayClass(this)}" data-modal="detail">
       <div class="popup-glass${wideClass}"${glassStyle}>
         <button class="popup-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 

@@ -34,7 +34,7 @@ _renderIsPanel() {
     if (this._isState === 'error') {
       return `
         <div class="is-panel">
-          <div class="is-loading" style="color:rgba(255,69,58,0.80)">
+          <div class="is-loading" style="color:rgba(var(--arr-error-rgb, 255, 69, 58), 0.80)">
             ⚠ ${this._escHtml(this._isError || this._t('isLoadError'))}
           </div>
         </div>`;

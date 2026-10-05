@@ -28,7 +28,7 @@ class _MusicRenderMethods {
     ].filter(Boolean).join(' · ');
 
     const rv = artist.ratings?.value;
-    const mbIcon = `<svg width="22" height="11" viewBox="0 0 64 28" style="flex-shrink:0"><rect width="64" height="28" rx="4" fill="#BA478F"/><text x="32" y="21" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="900" fill="#fff">MB</text></svg>`;
+    const mbIcon = `<svg width="22" height="11" viewBox="0 0 64 28" style="flex-shrink:0"><rect width="64" height="28" rx="4" fill="#BA478F"/><text x="32" y="21" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="900" fill="rgb(var(--_fg, 255, 255, 255))">MB</text></svg>`;
     const votes = artist.ratings?.votes;
     const ratingsRow = rv
       ? `<div class="popup-ratings" title="MusicBrainz${votes ? ` · ${votes} ${votes === 1 ? 'vote' : 'votes'}` : ''}"><span style="display:inline-flex;align-items:center;gap:4px">${mbIcon}<b style="font-size:12px;color:var(--is-text);line-height:1;display:block;margin-top:-1px">${(Math.round(rv * 10) / 10).toFixed(1)}</b></span></div>`
@@ -134,7 +134,7 @@ class _MusicRenderMethods {
           <div class="stream-prog-fill" data-entity="${_e}" data-pos="${pos}" data-dur="${dur}" data-updated="${updatedAt}" data-state="${st.state}" style="width:${pct}%;transition:none;border-radius:2px"></div>
         </div>
       </div>
-      <div class="stream-popup-time" style="font-size:10px;color:var(--is-dim,rgba(255,255,255,0.4))">${fmt(cur)} / ${fmt(dur)}</div>` : '';
+      <div class="stream-popup-time" style="font-size:10px;color:var(--is-dim,rgba(var(--_fg3, 255, 255, 255), 0.4))">${fmt(cur)} / ${fmt(dur)}</div>` : '';
 
     // The same row the stream popup and a title's detail draw (_streamCtrlRowHtml)
     const controls = this._streamCtrlRowHtml(eid, { playing, feats, style: 'margin-top:6px' });
@@ -428,7 +428,7 @@ class _MusicRenderMethods {
       </div>`;
     }
     if (!tracks.length) {
-      return `<div class="sn-episodes"><span style="color:rgba(255,255,255,0.4);font-size:11px">${this._t('musNoTracks')}</span></div>`;
+      return `<div class="sn-episodes"><span style="color:rgba(var(--_fg3, 255, 255, 255), 0.4);font-size:11px">${this._t('musNoTracks')}</span></div>`;
     }
     const rows = tracks.map(t => {
       const num = String(t.absoluteTrackNumber ?? t.trackNumber ?? '').padStart(2, '0');
@@ -451,7 +451,7 @@ class _MusicRenderMethods {
         <span>${this._t('isQueryingIndexers')}</span></div></div>`;
     }
     if (sp.state === 'error') {
-      return `<div class="sn-is-panel"><div class="is-loading" style="color:rgba(255,69,58,0.80)">⚠ ${this._escHtml(sp.error || '')}</div></div>`;
+      return `<div class="sn-is-panel"><div class="is-loading" style="color:rgba(var(--arr-error-rgb, 255, 69, 58), 0.80)">⚠ ${this._escHtml(sp.error || '')}</div></div>`;
     }
     if (sp.state !== 'results') return '';
 
@@ -571,10 +571,10 @@ class _MusicRenderMethods {
       const pct = p >= 0 ? p : 0;
       return `<button class="is-grab-btn" disabled style="width:100%;min-width:0;gap:3px;padding:0 6px;border-radius:9px" title="${this._t('isGrabbed')}">
         <div style="display:flex;align-items:center;gap:3px;width:100%">
-          <div style="flex:1;height:3px;background:rgba(59,130,246,0.20);border-radius:2px;overflow:hidden">
-            <div style="width:${Math.max(pct, 4)}%;height:100%;background:#3b82f6;border-radius:2px"></div>
+          <div style="flex:1;height:3px;background:var(--_pg-track, rgba(59,130,246,0.20));border-radius:2px;overflow:hidden">
+            <div style="width:${Math.max(pct, 4)}%;height:100%;background:var(--_pg-fill, #3b82f6);border-radius:2px"></div>
           </div>
-          <span style="font-size:9px;color:#3b82f6;font-weight:700;white-space:nowrap">${pct}%</span>
+          <span style="font-size:9px;color:var(--_pg-fill, #3b82f6);font-weight:700;white-space:nowrap">${pct}%</span>
         </div>
       </button>`;
     }
@@ -694,7 +694,7 @@ class _MusicRenderMethods {
 
     const rv = album.ratings?.value;
     const votes = album.ratings?.votes;
-    const mbIcon = `<svg width="22" height="11" viewBox="0 0 64 28" style="flex-shrink:0"><rect width="64" height="28" rx="4" fill="#BA478F"/><text x="32" y="21" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="900" fill="#fff">MB</text></svg>`;
+    const mbIcon = `<svg width="22" height="11" viewBox="0 0 64 28" style="flex-shrink:0"><rect width="64" height="28" rx="4" fill="#BA478F"/><text x="32" y="21" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="900" fill="rgb(var(--_fg, 255, 255, 255))">MB</text></svg>`;
     const ratingsRow = rv
       ? `<div class="popup-ratings" title="MusicBrainz${votes ? ` · ${votes} ${votes === 1 ? 'vote' : 'votes'}` : ''}"><span style="display:inline-flex;align-items:center;gap:4px">${mbIcon}<b style="font-size:12px;color:var(--is-text);line-height:1;display:block;margin-top:-1px">${(Math.round(rv * 10) / 10).toFixed(1)}</b></span></div>`
       : '';
@@ -743,7 +743,7 @@ class _MusicRenderMethods {
       return `<div class="sn-episodes sn-episodes-loading"><span class="action-spinner" style="width:14px;height:14px;border-width:1.5px"></span></div>`;
     }
     if (!tracks.length) {
-      return `<div class="sn-episodes"><span style="color:rgba(255,255,255,0.4);font-size:11px">${this._t('musNoTracks')}</span></div>`;
+      return `<div class="sn-episodes"><span style="color:rgba(var(--_fg3, 255, 255, 255), 0.4);font-size:11px">${this._t('musNoTracks')}</span></div>`;
     }
     const rows = tracks.map(t => {
       const num = String(t.absoluteTrackNumber ?? t.trackNumber ?? '').padStart(2, '0');

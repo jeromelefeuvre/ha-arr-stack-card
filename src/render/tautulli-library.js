@@ -210,7 +210,7 @@ class _TautulliLibraryRenderMethods {
         const title = esc(h.full_title||h.title||'—');
         const dur   = this._tlFmtDuration(h.duration||0);
         const ws    = h.watched_status??-1;
-        const watchSvg = (s) => s===1?`<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="rgba(48,209,88,0.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`:s===0?`<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="rgba(250,180,50,0.9)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`:'';
+        const watchSvg = (s) => s===1?`<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="rgba(var(--arr-success-rgb, 48, 209, 88), 0.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`:s===0?`<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="rgba(250,180,50,0.9)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`:'';
         const meta  = [];
         if (!mobHidden.has('platform') && h.platform) meta.push(`<span>${esc(h.platform)}</span>`);
         if (!mobHidden.has('player')   && h.player)   meta.push(`<span>${esc(h.player)}</span>`);
@@ -244,7 +244,7 @@ class _TautulliLibraryRenderMethods {
       const icon   = this._tlMediaIcon(h.media_type||'',15);
       const esc2   = s => this._escHtml(String(s??''));
       const ws     = h.watched_status??-1;
-      const watchSvg = (s) => s===1?`<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="rgba(48,209,88,0.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`:s===0?`<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="rgba(250,180,50,0.9)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`:'';
+      const watchSvg = (s) => s===1?`<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="rgba(var(--arr-success-rgb, 48, 209, 88), 0.9)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`:s===0?`<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="rgba(250,180,50,0.9)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`:'';
       const cm = {
         date:     `<td class="u-nowrap-sm">${esc2(h.date||'—')}</td>`,
         user:     `<td style="white-space:nowrap">${esc2(h.friendly_name||h.user||'—')}</td>`,

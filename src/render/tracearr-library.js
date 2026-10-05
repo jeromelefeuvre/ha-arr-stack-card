@@ -13,7 +13,7 @@ class _TracearrLibraryMethods {
     const qd = m.qualityData || {};
     const _allData = qd.data || [];
     const isMob = this._isMob;
-    const Q_COLORS = { '4K': '#34C759', '1080p': '#007AFF', '720p': '#FF9500', 'SD': '#FF3B30' };
+    const Q_COLORS = { '4K': 'rgb(var(--arr-success-rgb, 52, 199, 89))', '1080p': 'rgb(var(--arr-accent-rgb, 0, 122, 255))', '720p': 'rgb(var(--arr-warning-rgb, 255, 149, 0))', 'SD': 'rgb(var(--arr-error-rgb, 255, 59, 48))' };
     const _period = m.qualityPeriod || 'month';
     const _periodDays = { week: 7, month: 30, year: 365 };
     const _sliced = _period === 'all' ? _allData : _allData.slice(-(_periodDays[_period] || 30));
@@ -85,19 +85,19 @@ class _TracearrLibraryMethods {
     }).join('');
     const yTicks = [0, 0.25, 0.5, 0.75, 1].map(v => Math.round(v * maxV));
     const gridlines = yTicks.map(v =>
-      `<line x1="${PL}" y1="${yAbs(v).toFixed(1)}" x2="${VBW - PR}" y2="${yAbs(v).toFixed(1)}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`
+      `<line x1="${PL}" y1="${yAbs(v).toFixed(1)}" x2="${VBW - PR}" y2="${yAbs(v).toFixed(1)}" stroke="rgba(var(--_fill, 255, 255, 255), 0.06)" stroke-width="1"/>`
     ).join('');
     const defs = '<defs>' + seriesAbs.map((s, si) =>
       `<linearGradient id="traq-g${si}" x1="0" y1="0" x2="0" y2="1">` +
-      `<stop offset="0%" stop-color="${s.color}" stop-opacity="0.18"/>` +
-      `<stop offset="100%" stop-color="${s.color}" stop-opacity="0"/>` +
+      `<stop offset="0%" stop-opacity="0.18" style="stop-color:${s.color}"/>` +
+      `<stop offset="100%" stop-opacity="0" style="stop-color:${s.color}"/>` +
       `</linearGradient>`
     ).join('') + '</defs>';
     const areaFills = seriesAbs.map((s, si) =>
       `<path d="${this._tlGSmoothArea(pts[si], baseY)}" fill="url(#traq-g${si})" style="animation:fade-in 0.8s ease-out both"/>`
     ).join('');
     const lines = seriesAbs.map((s, si) =>
-      `<path d="${this._tlGSmoothLine(pts[si])}" fill="none" stroke="${s.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" class="tl-g-anim-line"/>`
+      `<path d="${this._tlGSmoothLine(pts[si])}" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" class="tl-g-anim-line" style="stroke:${s.color}"/>`
     ).join('');
     const colW = (VBW - PL - PR) / n;
     const hitCols = data.map((d, i) => {
@@ -111,7 +111,7 @@ class _TracearrLibraryMethods {
       const td = JSON.stringify({ lbl: d.day, tot, vals }).replace(/&/g,'&amp;').replace(/"/g,'&quot;');
       const rx = (PL + i * colW).toFixed(1);
       return `<g class="tl-g-lcol" data-tl-g-col="${td}" style="cursor:pointer">` +
-             `<rect class="tl-g-lhlt" x="${rx}" y="${PT}" width="${colW.toFixed(1)}" height="${SVH - PT - PB}" style="fill:var(--tl-col-hlt,rgba(255,255,255,0.04));opacity:0"/>` +
+             `<rect class="tl-g-lhlt" x="${rx}" y="${PT}" width="${colW.toFixed(1)}" height="${SVH - PT - PB}" style="fill:var(--tl-col-hlt,rgba(var(--_fg3, 255, 255, 255), 0.04));opacity:0"/>` +
              `<rect x="${rx}" y="${PT}" width="${colW.toFixed(1)}" height="${SVH - PT - PB}" fill="transparent"/></g>`;
     }).join('');
     const yLblTxt = maxV >= 1000 ? (maxV / 1000).toFixed(1) + 'K' : String(maxV);
@@ -125,14 +125,14 @@ class _TracearrLibraryMethods {
       return `<span style="position:absolute;${pos};font-size:10px;color:var(--is-text-muted);white-space:nowrap;line-height:1">${this._escHtml(String(d.day ?? '').slice(5))}</span>`;
     }).join('') + '</div>';
     const chartHtml = this._tlGWrap(this._tlGSvgEl(defs + wkndRects + gridlines + areaFills + lines + hitCols, chartH), xLabelsHtml, yLblTxt);
-    return `<div class="tl-g-card" style="position:relative">${header}<div style="position:relative">${chartHtml}</div><div class="tl-g-tip" style="display:none;position:absolute;top:0;left:0;background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:7px;padding:7px 10px;font-size:11px;pointer-events:none;z-index:50;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div></div>`;
+    return `<div class="tl-g-card" style="position:relative">${header}<div style="position:relative">${chartHtml}</div><div class="tl-g-tip" style="display:none;position:absolute;top:0;left:0;background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:7px;padding:7px 10px;font-size:11px;pointer-events:none;z-index:50;white-space:nowrap;box-shadow:0 4px 12px rgba(var(--_shadow, 0, 0, 0), 0.3)"></div></div>`;
   }
 
   _traQualCodecsCard() {
     const m = this._tracearrModal;
     const isMob = this._isMob;
     const codecs = m.qualityCodecs || {};
-    const CODEC_COLORS = ['#34C759','#007AFF','#FF9500','#FF3B30','#BF5AF2','#FF2D55','#5AC8FA','#FFCC00'];
+    const CODEC_COLORS = ['rgb(var(--arr-success-rgb, 52, 199, 89))','rgb(var(--arr-accent-rgb, 0, 122, 255))','rgb(var(--arr-warning-rgb, 255, 149, 0))','rgb(var(--arr-error-rgb, 255, 59, 48))','#BF5AF2','#FF2D55','rgb(var(--arr-info-rgb, 90, 200, 250))','#FFCC00'];
     const codecBars = items => {
       if (!items?.length) return '';
       // Codec lists are long, so their rows tighten on a short window too.
@@ -144,7 +144,7 @@ class _TracearrLibraryMethods {
         const delay = (i * 0.05).toFixed(2);
         return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:${rowGap}px">
           <span style="font-size:10px;font-weight:600;color:var(--is-text);width:44px;text-align:right;flex-shrink:0;white-space:nowrap">${this._escHtml(it.codec ?? '')}</span>
-          <div style="flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden">
+          <div style="flex:1;height:6px;border-radius:3px;background:rgba(var(--_fill, 255, 255, 255), 0.08);overflow:hidden">
             <div class="tl-g-anim-bar-h" style="height:100%;border-radius:3px;background:linear-gradient(to right,${color},${color}70);width:${pct}%;animation-delay:${delay}s"></div>
           </div>
           <span style="font-size:10px;color:var(--is-text-muted);width:32px;flex-shrink:0">${Number(it.count) || 0}</span>
@@ -183,7 +183,7 @@ class _TracearrLibraryMethods {
       </div>`;
     }
     const isMob  = this._isMob;
-    const Q_COLORS = { '4K': '#34C759', '1080p': '#007AFF', '720p': '#FF9500', 'SD': '#FF3B30' };
+    const Q_COLORS = { '4K': 'rgb(var(--arr-success-rgb, 52, 199, 89))', '1080p': 'rgb(var(--arr-accent-rgb, 0, 122, 255))', '720p': 'rgb(var(--arr-warning-rgb, 255, 149, 0))', 'SD': 'rgb(var(--arr-error-rgb, 255, 59, 48))' };
     const qualCard = this._traQualEvolCard();
     const codecsRow = this._traQualCodecsCard();
 
@@ -221,15 +221,15 @@ class _TracearrLibraryMethods {
       const ip  = (Number(ri) / Number(ro) * 100).toFixed(0);
       const defs = '<defs>' + segs.map((sg, i) =>
         `<radialGradient id="dg-${uid}-${i}" cx="${cx}" cy="${cy}" r="${ro}" fx="${cx}" fy="${cy}" gradientUnits="userSpaceOnUse">` +
-        `<stop offset="${ip}%" stop-color="${sg.color}" stop-opacity="0.5"/>` +
-        `<stop offset="100%" stop-color="${sg.color}" stop-opacity="1"/>` +
+        `<stop offset="${ip}%" stop-opacity="0.5" style="stop-color:${sg.color}"/>` +
+        `<stop offset="100%" stop-opacity="1" style="stop-color:${sg.color}"/>` +
         `</radialGradient>`
       ).join('') + '</defs>';
       const rings = segs.map(sg => {
         const full = sg.value / total * C;
         const dash = Math.max(0, full - gap);
         const off  = -cum; cum += full;
-        return `<circle class="donut-ring" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${sg.color}" stroke-width="${sw * 1.9}" stroke-linecap="butt" stroke-dasharray="${dash.toFixed(2)} ${(C - dash).toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}" transform="rotate(-90 ${cx} ${cy})" stroke-opacity="0" style="transition:stroke-opacity 0.15s"/>`;
+        return `<circle class="donut-ring" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke-width="${sw * 1.9}" stroke-linecap="butt" stroke-dasharray="${dash.toFixed(2)} ${(C - dash).toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}" transform="rotate(-90 ${cx} ${cy})" stroke-opacity="0" style="stroke:${sg.color};transition:stroke-opacity 0.15s"/>`;
       }).join('');
       cum = 0;
       const arcs = segs.map((sg, i) => {
@@ -242,11 +242,11 @@ class _TracearrLibraryMethods {
       const fs = Math.min(size * 0.13, 11);
       const svg = `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;overflow:visible">
         ${defs}
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="${sw}"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(var(--_fill, 255, 255, 255), 0.05)" stroke-width="${sw}"/>
         <g><animateTransform attributeName="transform" type="rotate" from="-360 ${cx} ${cy}" to="0 ${cx} ${cy}" dur="0.8s" begin="0s" fill="freeze" calcMode="spline" keySplines="0.25 0.46 0.45 0.94" keyTimes="0;1"/>${rings}${arcs}</g>
-        <text x="${cx}" y="${cy + fs * 0.4}" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-size="${fs}" font-weight="700">${total}</text>
+        <text x="${cx}" y="${cy + fs * 0.4}" text-anchor="middle" fill="rgba(var(--_fg, 255, 255, 255), 0.85)" font-size="${fs}" font-weight="700">${total}</text>
       </svg>`;
-      return `<div class="donut-wrap" style="position:relative;display:inline-block;flex-shrink:0">${svg}<div class="donut-tt" style="display:none;position:absolute;pointer-events:none;background:rgba(15,15,20,0.92);border:1px solid rgba(255,255,255,0.13);border-radius:6px;padding:5px 9px;white-space:nowrap;z-index:10;color:rgba(255,255,255,0.9)"></div></div>`;
+      return `<div class="donut-wrap" style="position:relative;display:inline-block;flex-shrink:0">${svg}<div class="donut-tt" style="display:none;position:absolute;pointer-events:none;background:rgba(15,15,20,0.92);border:1px solid rgba(var(--_line, 255, 255, 255), 0.13);border-radius:6px;padding:5px 9px;white-space:nowrap;z-index:10;color:rgba(var(--_fg, 255, 255, 255), 0.9)"></div></div>`;
     };
 
     // Same reasoning as the evolution chart: a short window gets smaller rings.
@@ -331,10 +331,10 @@ class _TracearrLibraryMethods {
     const stSz   = Number(stSum.sizeBytes || 0);
 
     const tiles = `<div style="display:grid;grid-template-columns:repeat(${isMob ? 2 : 4},1fr);gap:${isMob ? '6px' : '8px'};margin-bottom:${isMob ? '6px' : '6px'}">
-      ${tile(this._t('traTotalSize'),    fmtBytes(cur.totalSizeBytes || st.totalSizeBytes || 0), '#007AFF')}
-      ${tile(growthLabel,                 growthSign + fmtBytes(Math.abs(growthVal), { empty: '0 B' }), growthVal >= 0 ? '#34C759' : '#FF3B30')}
-      ${tile(this._t('traDuplicates'),               dupG ? this._t('traNGroups').replace('{n}', dupG.toLocaleString()) : '—', '#FF3B30', dupG ? this._t('traRecoverable').replace('{n}', fmtBytes(dupSav)) : '')}
-      ${tile(this._t('traStaleContent'), stCnt ? this._t('traNItems').replace('{n}', stCnt.toLocaleString()) : '—', '#FF9500', stCnt ? this._t('traUnused').replace('{n}', fmtBytes(stSz)) : '')}
+      ${tile(this._t('traTotalSize'),    fmtBytes(cur.totalSizeBytes || st.totalSizeBytes || 0), 'rgb(var(--arr-accent-rgb, 0, 122, 255))')}
+      ${tile(growthLabel,                 growthSign + fmtBytes(Math.abs(growthVal), { empty: '0 B' }), growthVal >= 0 ? 'rgb(var(--arr-success-rgb, 52, 199, 89))' : 'rgb(var(--arr-error-rgb, 255, 59, 48))')}
+      ${tile(this._t('traDuplicates'),               dupG ? this._t('traNGroups').replace('{n}', dupG.toLocaleString()) : '—', 'rgb(var(--arr-error-rgb, 255, 59, 48))', dupG ? this._t('traRecoverable').replace('{n}', fmtBytes(dupSav)) : '')}
+      ${tile(this._t('traStaleContent'), stCnt ? this._t('traNItems').replace('{n}', stCnt.toLocaleString()) : '—', 'rgb(var(--arr-warning-rgb, 255, 149, 0))', stCnt ? this._t('traUnused').replace('{n}', fmtBytes(stSz)) : '')}
     </div>`;
 
     const periodDays = { week: 7, month: 30, year: 365 };
@@ -387,7 +387,7 @@ class _TracearrLibraryMethods {
 
     const _nonZeroLen = histSlice.filter(d => Number(d.totalSizeBytes) > 0).length;
     const confidence  = _nonZeroLen >= 30 ? this._t('traSevHigh') : _nonZeroLen >= 7 ? this._t('traSevMedium') : this._t('traSevLow');
-    const confColor   = { High: '#34C759', Medium: '#FF9500', Low: '#FF3B30' }[confidence];
+    const confColor   = { High: 'rgb(var(--arr-success-rgb, 52, 199, 89))', Medium: 'rgb(var(--arr-warning-rgb, 255, 149, 0))', Low: 'rgb(var(--arr-error-rgb, 255, 59, 48))' }[confidence];
 
     // ── SVG coordinate system ────────────────────────────────────────────────
     const VBW = 1000, SVH = 200, PL = 8, PR = 8, PT = 14, PB = 4;
@@ -458,9 +458,9 @@ class _TracearrLibraryMethods {
     const rangeLoTB  = lastPred ? (toGiB(lastPred.spreadLo) / 1024).toFixed(2) : null;
     const rangeHiTB  = lastPred ? (toGiB(lastPred.spreadHi) / 1024).toFixed(2) : null;
 
-    const HEX      = '#007AFF';
+    const HEX      = 'rgb(var(--arr-accent-rgb, 0, 122, 255))';
     const PRED_HEX = '#e0f2fe'; // very light (near-white) — distinct from teal gradient
-    const SPRD_HEX = '#5AC8FA';
+    const SPRD_HEX = 'rgb(var(--arr-info-rgb, 90, 200, 250))';
     const chartH   = isMob ? (showPred ? 88 : 108) : (showPred ? 90 : 110);
 
     // ── Y-axis ticks ─────────────────────────────────────────────────────────
@@ -470,7 +470,7 @@ class _TracearrLibraryMethods {
     for (let v = 0; v <= maxTB * 1.01; v = Math.round((v + tickStep) * 1000) / 1000) yTicks.push(v);
     const yAxisHtml = yTicks.map(v => {
       const pct = (ptY(v * 1024) / SVH * 100).toFixed(1);
-      return `<span style="position:absolute;right:4px;top:${pct}%;transform:translateY(-50%);font-size:9px;color:rgba(255,255,255,0.32);white-space:nowrap;line-height:1">${v} TB</span>`;
+      return `<span style="position:absolute;right:4px;top:${pct}%;transform:translateY(-50%);font-size:9px;color:rgba(var(--_fg3, 255, 255, 255), 0.32);white-space:nowrap;line-height:1">${v} TB</span>`;
     }).join('');
 
     // ── X-labels ─────────────────────────────────────────────────────────────
@@ -514,7 +514,7 @@ class _TracearrLibraryMethods {
       const rx     = (PL + i * slotW).toFixed(1);
       const rw     = slotW.toFixed(1);
       return `<g class="tl-g-lcol" data-tl-g-col="${td}" style="cursor:pointer">` +
-             `<rect class="tl-g-lhlt" x="${rx}" y="${PT}" width="${rw}" height="${cH}" style="fill:rgba(255,255,255,0.12);opacity:0"/>` +
+             `<rect class="tl-g-lhlt" x="${rx}" y="${PT}" width="${rw}" height="${cH}" style="fill:rgba(var(--_fg3, 255, 255, 255), 0.12);opacity:0"/>` +
              `<rect x="${rx}" y="${PT}" width="${rw}" height="${cH}" fill="transparent"/></g>`;
     }).join('');
 
@@ -525,23 +525,23 @@ class _TracearrLibraryMethods {
     const svgInner = `
       <defs>
         <linearGradient id="tras-gh" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${HEX}" stop-opacity="0.22"/>
-          <stop offset="100%" stop-color="${HEX}" stop-opacity="0"/>
+          <stop offset="0%" stop-opacity="0.22" style="stop-color:${HEX}"/>
+          <stop offset="100%" stop-opacity="0" style="stop-color:${HEX}"/>
         </linearGradient>
         <mask id="tras-dot-mask">
           <rect x="0" y="0" width="${VBW}" height="${SVH}" fill="white"/>
           ${maskCircles}
         </mask>
       </defs>
-      ${yTicks.map(v => `<line x1="${PL}" y1="${ptY(v * 1024).toFixed(1)}" x2="${VBW - PR}" y2="${ptY(v * 1024).toFixed(1)}" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`).join('')}
-      ${spreadBandPath ? `<path d="${spreadBandPath}" fill="${SPRD_HEX}" fill-opacity="0.12" style="animation:fade-in 0.8s ease-out both"/>` : ''}
-      ${spreadHiPts.length >= 2 ? `<line x1="${spreadHiPts[0].x.toFixed(1)}" y1="${spreadHiPts[0].y.toFixed(1)}" x2="${spreadHiPts[spreadHiPts.length-1].x.toFixed(1)}" y2="${spreadHiPts[spreadHiPts.length-1].y.toFixed(1)}" stroke="${SPRD_HEX}" stroke-width="1" stroke-opacity="0.5" vector-effect="non-scaling-stroke" style="animation:fade-in 0.8s ease-out both"/>` : ''}
-      ${spreadLoPts.length >= 2 ? `<line x1="${spreadLoPts[0].x.toFixed(1)}" y1="${spreadLoPts[0].y.toFixed(1)}" x2="${spreadLoPts[spreadLoPts.length-1].x.toFixed(1)}" y2="${spreadLoPts[spreadLoPts.length-1].y.toFixed(1)}" stroke="${SPRD_HEX}" stroke-width="1" stroke-opacity="0.5" vector-effect="non-scaling-stroke" style="animation:fade-in 0.8s ease-out both"/>` : ''}
+      ${yTicks.map(v => `<line x1="${PL}" y1="${ptY(v * 1024).toFixed(1)}" x2="${VBW - PR}" y2="${ptY(v * 1024).toFixed(1)}" stroke="rgba(var(--_fill, 255, 255, 255), 0.06)" stroke-width="1"/>`).join('')}
+      ${spreadBandPath ? `<path d="${spreadBandPath}" fill-opacity="0.12" style="fill:${SPRD_HEX};animation:fade-in 0.8s ease-out both"/>` : ''}
+      ${spreadHiPts.length >= 2 ? `<line x1="${spreadHiPts[0].x.toFixed(1)}" y1="${spreadHiPts[0].y.toFixed(1)}" x2="${spreadHiPts[spreadHiPts.length-1].x.toFixed(1)}" y2="${spreadHiPts[spreadHiPts.length-1].y.toFixed(1)}" stroke-width="1" stroke-opacity="0.5" vector-effect="non-scaling-stroke" style="stroke:${SPRD_HEX};animation:fade-in 0.8s ease-out both"/>` : ''}
+      ${spreadLoPts.length >= 2 ? `<line x1="${spreadLoPts[0].x.toFixed(1)}" y1="${spreadLoPts[0].y.toFixed(1)}" x2="${spreadLoPts[spreadLoPts.length-1].x.toFixed(1)}" y2="${spreadLoPts[spreadLoPts.length-1].y.toFixed(1)}" stroke-width="1" stroke-opacity="0.5" vector-effect="non-scaling-stroke" style="stroke:${SPRD_HEX};animation:fade-in 0.8s ease-out both"/>` : ''}
       <path d="${areaPath(histCoords, baseY)}" fill="url(#tras-gh)" style="animation:fade-in 0.8s ease-out both"/>
-      ${nowX ? `<line x1="${nowX}" y1="${PT}" x2="${nowX}" y2="${baseY}" stroke="rgba(255,255,255,0.22)" stroke-width="1" stroke-dasharray="4 3"/>` : ''}
-      <path d="${linePath(histCoords, period === 'week' ? 0 : period === 'month' ? 0.1 : 0.3)}" fill="none" stroke="${HEX}" stroke-width="2" vector-effect="non-scaling-stroke" class="tl-g-anim-line"/>
+      ${nowX ? `<line x1="${nowX}" y1="${PT}" x2="${nowX}" y2="${baseY}" stroke="rgba(var(--_fg3, 255, 255, 255), 0.22)" stroke-width="1" stroke-dasharray="4 3"/>` : ''}
+      <path d="${linePath(histCoords, period === 'week' ? 0 : period === 'month' ? 0.1 : 0.3)}" fill="none" stroke-width="2" vector-effect="non-scaling-stroke" class="tl-g-anim-line" style="stroke:${HEX}"/>
       ${showPred && predWithJoint.length > 1
-        ? `<path d="${linePath(predWithJoint, period === 'week' ? 0 : period === 'month' ? 0.1 : 0.3)}" fill="none" stroke="${HEX}" stroke-width="1.5" stroke-dasharray="8 5" vector-effect="non-scaling-stroke" mask="url(#tras-dot-mask)" style="animation:fade-in 0.8s ease-out both"/>`
+        ? `<path d="${linePath(predWithJoint, period === 'week' ? 0 : period === 'month' ? 0.1 : 0.3)}" fill="none" stroke-width="1.5" stroke-dasharray="8 5" vector-effect="non-scaling-stroke" mask="url(#tras-dot-mask)" style="stroke:${HEX};animation:fade-in 0.8s ease-out both"/>`
         : ''}
       ${histDots}${predDots ? `<g class="u-fade-in">${predDots}</g>` : ''}
       ${hitCols}
@@ -556,7 +556,7 @@ class _TracearrLibraryMethods {
     // ── Legend ───────────────────────────────────────────────────────────────
     const legend = showPred ? `<div style="display:flex;gap:10px;align-items:center;font-size:10px;color:var(--is-text-muted)">
       <span class="u-row-4"><span style="display:inline-block;width:18px;height:2px;background:${HEX}"></span>${this._t('traHistorical')}</span>
-      <span class="u-row-4"><svg width="20" height="4" style="flex-shrink:0"><line x1="0" y1="2" x2="20" y2="2" stroke="${HEX}" stroke-width="2" stroke-dasharray="6 4"/></svg>${this._t('traPrediction')}</span>
+      <span class="u-row-4"><svg width="20" height="4" style="flex-shrink:0"><line x1="0" y1="2" x2="20" y2="2" stroke-width="2" stroke-dasharray="6 4" style="stroke:${HEX}"/></svg>${this._t('traPrediction')}</span>
       <span class="u-row-4"><span style="display:inline-block;width:18px;height:6px;border-radius:2px;background:${SPRD_HEX};opacity:0.35"></span>${this._t('traRange')}</span>
     </div>` : '';
 
@@ -564,8 +564,8 @@ class _TracearrLibraryMethods {
     const periodBtns = _traSegHtml(['week','month','year','all'].map(p => [p, _STOR_P_LBLS[p]]), period, 'data-tra-stor-period');
 
     const predToggle = `<button data-tra-stor-pred style="display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;padding:0;font-size:10px;color:var(--is-text-muted)">
-      <span style="position:relative;display:inline-block;width:28px;height:15px;border-radius:8px;background:${showPred ? HEX : 'rgba(255,255,255,0.15)'};transition:background 0.2s;flex-shrink:0">
-        <span style="position:absolute;top:2px;left:${showPred ? '15px' : '2px'};width:11px;height:11px;border-radius:50%;background:#fff;transition:left 0.2s"></span>
+      <span style="position:relative;display:inline-block;width:28px;height:15px;border-radius:8px;background:${showPred ? HEX : 'rgba(var(--_fill, 255, 255, 255), 0.15)'};transition:background 0.2s;flex-shrink:0">
+        <span style="position:absolute;top:2px;left:${showPred ? '15px' : '2px'};width:11px;height:11px;border-radius:50%;background:rgb(var(--_fill, 255, 255, 255));transition:left 0.2s"></span>
       </span>
       ${this._t('traPredictions')}
     </button>`;
@@ -591,7 +591,7 @@ class _TracearrLibraryMethods {
       ${legend ? `<div style="margin-bottom:4px">${legend}</div>` : ''}
       <div style="position:relative">
         ${storSvg}
-        <div class="tl-g-tip" style="display:none;position:absolute;top:0;left:0;background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:7px;padding:7px 10px;font-size:11px;pointer-events:none;z-index:50;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div>
+        <div class="tl-g-tip" style="display:none;position:absolute;top:0;left:0;background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:7px;padding:7px 10px;font-size:11px;pointer-events:none;z-index:50;white-space:nowrap;box-shadow:0 4px 12px rgba(var(--_shadow, 0, 0, 0), 0.3)"></div>
       </div>
       ${(isMob && confBadge) ? `<div style="display:flex;justify-content:flex-end;margin-top:6px">${confBadge}</div>` : ''}
     </div>`;
@@ -629,7 +629,7 @@ class _TracearrLibraryMethods {
       return this._t('traDaysAgo').replace('%d', diff);
     };
 
-    const RES_COLOR = { '4k': '#BF5AF2', '1080p': '#007AFF', '720p': '#34C759', '480p': '#FF9500', 'sd': '#FF9500' };
+    const RES_COLOR = { '4k': '#BF5AF2', '1080p': 'rgb(var(--arr-accent-rgb, 0, 122, 255))', '720p': 'rgb(var(--arr-success-rgb, 52, 199, 89))', '480p': 'rgb(var(--arr-warning-rgb, 255, 149, 0))', 'sd': 'rgb(var(--arr-warning-rgb, 255, 149, 0))' };
 
     const mt = m.staleMediaType || '';
 
@@ -659,7 +659,7 @@ class _TracearrLibraryMethods {
     } else if (isMob) {
       const rows = items.map(it => {
         const res    = (it.resolution || '').toLowerCase();
-        const rColor = RES_COLOR[res] || 'rgba(255,255,255,0.4)';
+        const rColor = RES_COLOR[res] || 'rgba(var(--_fg3, 255, 255, 255), 0.4)';
         return `<div class="tl-mob-card">
           <div class="u-row-8">
             ${this._tlMediaIcon(it.mediaType === 'movie' ? 'movie' : 'episode', 15)}
@@ -667,7 +667,7 @@ class _TracearrLibraryMethods {
               <div class="tl-mob-name u-truncate">${this._escHtml(it.title ?? '')}${it.year ? ` <span style="opacity:0.5;font-size:10px">(${this._escHtml(it.year)})</span>` : ''}</div>
               <div class="tl-mob-meta"><span>${this._escHtml(it.serverName || '')}</span><span style="color:var(--is-text);font-weight:600">${this._escHtml(it.resolution || '—')}</span><span>${fmtDate(it.addedAt)}</span></div>
             </div>
-            <span style="font-size:11px;font-weight:700;color:#007AFF;flex-shrink:0;white-space:nowrap">${fmtBytes(it.fileSize)}</span>
+            <span style="font-size:11px;font-weight:700;color:rgb(var(--arr-accent-rgb, 0, 122, 255));flex-shrink:0;white-space:nowrap">${fmtBytes(it.fileSize)}</span>
           </div>
         </div>`;
       }).join('');
@@ -683,7 +683,7 @@ class _TracearrLibraryMethods {
       const hasStreaming = false;
       const rows = items.map(it => {
         const res    = (it.resolution || '').toLowerCase();
-        const rColor = RES_COLOR[res] || 'rgba(255,255,255,0.4)';
+        const rColor = RES_COLOR[res] || 'rgba(var(--_fg3, 255, 255, 255), 0.4)';
         const plays  = it.playCount ?? it.watchCount ?? null;
         const lastP  = it.lastPlayedAt ? fmtDate(it.lastPlayedAt) : null;
         const streamCell = hasStreaming

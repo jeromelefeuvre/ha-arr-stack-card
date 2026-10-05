@@ -67,7 +67,7 @@ class _TraceaRrMethods {
     // map itself — which is what they describe anyway.
     const statsBar = isMob ? '' : `<span style="display:inline-flex;align-items:center;gap:14px;font-size:11px;color:var(--is-text-muted);flex-shrink:0;padding:0 6px">${statsInner}</span>`;
     const statsOverlay = isMob
-      ? `<div style="position:absolute;top:8px;right:8px;z-index:500;display:flex;gap:10px;align-items:center;font-size:11px;color:var(--is-text-muted);background:rgba(12,12,20,0.72);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.10);border-radius:999px;padding:5px 12px;pointer-events:none">${statsInner}</div>`
+      ? `<div style="position:absolute;top:8px;right:8px;z-index:500;display:flex;gap:10px;align-items:center;font-size:11px;color:var(--is-text-muted);background:rgba(12,12,20,0.72);backdrop-filter:blur(8px);border:1px solid rgba(var(--_line, 255, 255, 255), 0.10);border-radius:999px;padding:5px 12px;pointer-events:none">${statsInner}</div>`
       : '';
 
     // The counts leave the bar on a phone, so the gap that used to separate them
@@ -85,9 +85,9 @@ class _TraceaRrMethods {
 
     return `<div class="u-col-fill">
       ${controls}
-      <div id="tra-map-container" style="flex:1;border-radius:16px;overflow:hidden;position:relative;min-height:180px;background:rgba(0,0,0,0.4)">
+      <div id="tra-map-container" style="flex:1;border-radius:16px;overflow:hidden;position:relative;min-height:180px;background:rgba(var(--_shade, 0, 0, 0), 0.4)">
         ${statsOverlay}
-        <div id="tra-map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(255,255,255,0.35);z-index:1000">${this._t('traLoadingMap')}</div>
+        <div id="tra-map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(var(--_fg3, 255, 255, 255), 0.35);z-index:1000">${this._t('traLoadingMap')}</div>
       </div>
     </div>`;
   }
@@ -182,7 +182,7 @@ class _TraceaRrMethods {
         if (loc.lat == null || loc.lon == null) return;
         const r = Math.max(5, Math.min(22, 5 + Math.log2((loc.count || 1) + 1) * 3));
         window.L.circleMarker([loc.lat, loc.lon], {
-          radius: r, color: '#007AFF', fillColor: '#007AFF',
+          radius: r, color: 'rgb(var(--arr-accent-rgb, 0, 122, 255))', fillColor: 'rgb(var(--arr-accent-rgb, 0, 122, 255))',
           fillOpacity: 0.55, weight: 1.5,
         }).bindPopup(`<b>${this._escHtml(loc.city || loc.country || this._t('tlUnknown'))}</b><br>${this._t((loc.count||1)>1 ? 'traNStreams' : 'traNStream').replace('{n}', Number(loc.count) || 1)}`).addTo(map);
       });
@@ -589,23 +589,23 @@ class _TraceaRrMethods {
   // ──────────────────────────────────────────────────────────────────────────
 
   _traTrustColor(score) {
-    if (score >= 80) return '#34C759';
-    if (score >= 50) return '#FF9500';
-    return '#FF3B30';
+    if (score >= 80) return 'rgb(var(--arr-success-rgb, 52, 199, 89))';
+    if (score >= 50) return 'rgb(var(--arr-warning-rgb, 255, 149, 0))';
+    return 'rgb(var(--arr-error-rgb, 255, 59, 48))';
   }
 
   _traTrustBg(score) {
-    if (score >= 80) return 'rgba(52,199,89,0.16)';
-    if (score >= 50) return 'rgba(255,149,0,0.16)';
-    return 'rgba(255,59,48,0.18)';
+    if (score >= 80) return 'rgba(var(--arr-success-rgb, 52, 199, 89), 0.16)';
+    if (score >= 50) return 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.16)';
+    return 'rgba(var(--arr-error-rgb, 255, 59, 48), 0.18)';
   }
 
   _traSevColor(sev) {
-    return { high: '#FF3B30', medium: '#FF9500', low: '#34C759' }[sev] || '#FF3B30';
+    return { high: 'rgb(var(--arr-error-rgb, 255, 59, 48))', medium: 'rgb(var(--arr-warning-rgb, 255, 149, 0))', low: 'rgb(var(--arr-success-rgb, 52, 199, 89))' }[sev] || 'rgb(var(--arr-error-rgb, 255, 59, 48))';
   }
 
   _traSevBg(sev) {
-    return { high: 'rgba(248,113,113,0.18)', medium: 'rgba(250,180,50,0.16)', low: 'rgba(52,211,153,0.14)' }[sev] || 'rgba(248,113,113,0.18)';
+    return { high: 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.18)', medium: 'rgba(250,180,50,0.16)', low: 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.14)' }[sev] || 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.18)';
   }
 
   _traViolTypeLabel(type) {
@@ -648,12 +648,12 @@ class _TraceaRrMethods {
   }
 
   _traUserAvatar(u, size = 20) {
-    if (!u) return `<span style="width:${size}px;height:${size}px;border-radius:50%;background:rgba(255,255,255,0.1);display:inline-flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.4)}px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0">?</span>`;
+    if (!u) return `<span style="width:${size}px;height:${size}px;border-radius:50%;background:rgba(var(--_fill, 255, 255, 255), 0.1);display:inline-flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.4)}px;font-weight:700;color:rgba(var(--_fg2, 255, 255, 255), 0.5);flex-shrink:0">?</span>`;
     const initials = this._escHtml(String(u.displayName || u.username || '?').slice(0, 2).toUpperCase());
     const src  = this._imgSrc(u.thumbUrl || u.avatarUrl);
     // The fallback waits beside the picture rather than inside its onerror: a
     // name written into that handler would be decoded back into script.
-    if (src) return `<img src="${src}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(255,255,255,0.15)" loading="lazy" onerror="this.nextElementSibling.style.display='inline-flex';this.remove()"><span style="width:${size}px;height:${size}px;border-radius:50%;background:rgba(255,255,255,0.12);display:none;align-items:center;justify-content:center;font-size:${Math.round(size*0.4)}px;font-weight:700;color:rgba(255,255,255,0.6);flex-shrink:0">${initials}</span>`;
+    if (src) return `<img src="${src}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(var(--_line, 255, 255, 255), 0.15)" loading="lazy" onerror="this.nextElementSibling.style.display='inline-flex';this.remove()"><span style="width:${size}px;height:${size}px;border-radius:50%;background:rgba(var(--_fill, 255, 255, 255), 0.12);display:none;align-items:center;justify-content:center;font-size:${Math.round(size*0.4)}px;font-weight:700;color:rgba(var(--_fg2, 255, 255, 255), 0.6);flex-shrink:0">${initials}</span>`;
     return `<span style="width:${size}px;height:${size}px;border-radius:50%;background:rgba(130,80,255,0.25);display:inline-flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.4)}px;font-weight:700;color:rgba(200,160,255,0.9);flex-shrink:0">${initials}</span>`;
   }
 }

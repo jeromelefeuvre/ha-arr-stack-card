@@ -41,7 +41,7 @@ _renderCalendarModalCard(ep) {
   const poster  = isMovie ? this._getRadarrPoster(series) : this._getSonarrPoster(series);
   const popup   = isMovie ? POPUP_TYPE.RADARR : POPUP_TYPE.SONARR;
   const grad    = 'rgba(0,0,0,0.88)';
-  const tc      = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const tc      = 'rgba(var(--_ptx, 255, 255, 255), 1)';
   const img     = this._mcImg(poster, isMovie ? '🎬' : '📺', series.id || ep.seriesId || ep.id);
   // Several episodes of one series on one day collapse to a single card, so the
   // badge has to carry the range rather than just the first episode.
@@ -128,7 +128,7 @@ _renderCalendarMusicCard(ep, { modal = false } = {}) {
     ? `<img src="${cover}" class="mus-cover" loading="lazy" onerror="this.style.display='none'">`
     : `<div class="mus-cover mus-cover-ph">${this._escHtml(this._musInitials(artist.artistName))}</div>`;
   const grad = 'rgba(0,0,0,0.88)';
-  const tc   = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const tc   = 'rgba(var(--_ptx, 255, 255, 255), 1)';
 
   return `
     <div class="mc mc-music${backLayer ? '' : ' mus-flat'}" data-album-cal="${ep.id}" data-title="${name}">
@@ -147,7 +147,7 @@ _renderCalendarMusicCard(ep, { modal = false } = {}) {
         pc.rating ? this._musRatingBadge(artist, true, true) : '',
         { endIcon: false }
       )}${pc.title ? `<div style="font-size:10px;font-weight:600;color:${tc};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>` : ''}
-        ${album ? `<div style="font-size:9px;color:rgba(var(--arr-pt-rgb,255,255,255),0.66);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${album}</div>` : ''}`)}
+        ${album ? `<div style="font-size:9px;color:rgba(var(--_ptx,255,255,255),0.66);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${album}</div>` : ''}`)}
       ${stripe}
     </div>`;
 }
@@ -206,7 +206,7 @@ _renderCalendarCard(ep) {
   const _spS = badgeCls === 'b-dl' ? this._dlPct(series.id, isMovie ? 'movie' : 'tv') : _ppS;
   const stripe = (badgeCls && showStripe) ? this._statusStripe(this._statusStripeColor(badgeCls), badgeCls === 'b-dl', _spS) : '';
   const grad = 'rgba(0,0,0,0.88)';
-  const tc   = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const tc   = 'rgba(var(--_ptx, 255, 255, 255), 1)';
   return `
     <div class="mc" data-popup="${popup}" data-tvdbid="${series.tvdbId || ep.series?.tvdbId || ''}" data-tmdbid="${series.tmdbId || ep.series?.tmdbId || ep.tmdbId || ''}" data-title="${title}">
       ${this._goneBadge(series.tmdbId || ep.series?.tmdbId || null, series.tvdbId || ep.series?.tvdbId || null, isMovie)}

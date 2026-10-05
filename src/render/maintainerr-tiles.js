@@ -51,16 +51,16 @@ class _MaintainerrTilesMethods {
       }
       const days = [...byDay.entries()].sort((a, b) => a[0] - b[0]).slice(0, 4);
       rows = days.map(([ms, n], i) => {
-        const sep = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+        const sep = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
         const inDays = Math.round((ms - today) / DAY);
         const label = inDays === 0 ? this._t('mtToday')
           : inDays === 1 ? this._t('mtTomorrow')
           : new Date(ms).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
         // Imminent deletions get the same red the poster "Gone" pill uses
-        const clr = inDays <= 1 ? 'rgba(255,69,58,0.95)' : '#fff';
+        const clr = inDays <= 1 ? 'rgba(var(--arr-error-rgb, 255, 69, 58), 0.95)' : 'rgb(var(--_fg, 255, 255, 255))';
         return `<div style="${sep}display:flex;align-items:center;gap:6px;padding:3px 0">
           <span style="font-size:10px;font-weight:600;color:${clr};flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(label)}</span>
-          <span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.55);flex-shrink:0">${n}</span>
+          <span style="font-size:9px;font-weight:700;color:rgba(var(--_fg2, 255, 255, 255), 0.55);flex-shrink:0">${n}</span>
         </div>`;
       }).join('') || `<div class="u-xxs-dim">${this._t('mtNoActions')}</div>`;
     }
@@ -91,7 +91,7 @@ class _MaintainerrTilesMethods {
     // The number worth surfacing is how much space each collection will free —
     // a bare item count says nothing about whether it is worth running.
     const rows = cols.slice(0, 4).map((c, i) => {
-      const sep = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+      const sep = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
       const cnt = c.mediaCount ?? 0;
       const lib = c.libraryId != null ? this._mtLibName(c.libraryId) : '';
       // Size rides on the title line, not the meta line: the titles repeat and
@@ -101,10 +101,10 @@ class _MaintainerrTilesMethods {
       const meta = [lib, `${cnt} ${this._t('mtQueuedLc')}`].filter(Boolean).join(' · ');
       return `<div style="${sep}padding:3px 0">
         <div style="display:flex;align-items:baseline;gap:6px">
-          <span style="font-size:10px;font-weight:600;color:#fff;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(c.title || c.name || '—')}</span>
-          ${size ? `<span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.6);flex-shrink:0">${size}</span>` : ''}
+          <span style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(c.title || c.name || '—')}</span>
+          ${size ? `<span style="font-size:9px;font-weight:700;color:rgba(var(--_fg2, 255, 255, 255), 0.6);flex-shrink:0">${size}</span>` : ''}
         </div>
-        <div style="font-size:9px;color:rgba(255,255,255,0.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(meta)}</div>
+        <div style="font-size:9px;color:rgba(var(--_fg3, 255, 255, 255), 0.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(meta)}</div>
       </div>`;
     }).join('') || `<div class="u-xxs-dim">${this._t('mtNoCollections')}</div>`;
 
@@ -134,12 +134,12 @@ class _MaintainerrTilesMethods {
 
     const totals = this._mtLibTotals || {};
     const rows = libs.slice(0, 5).map((l, i) => {
-      const sep = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+      const sep = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
       const n = totals[l.id];
       return `<div style="${sep}display:flex;align-items:center;gap:6px;padding:3px 0">
         ${_ico(l.type)}
-        <span style="font-size:10px;font-weight:600;color:#fff;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(l.title || l.name || '—')}</span>
-        ${n != null ? `<span style="font-size:9px;font-weight:700;color:rgba(255,255,255,0.55);flex-shrink:0">${n}</span>` : ''}
+        <span style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(l.title || l.name || '—')}</span>
+        ${n != null ? `<span style="font-size:9px;font-weight:700;color:rgba(var(--_fg2, 255, 255, 255), 0.55);flex-shrink:0">${n}</span>` : ''}
       </div>`;
     }).join('') || `<div class="u-xxs-dim">${this._t('mtNoLibraries')}</div>`;
 
@@ -172,8 +172,8 @@ class _MaintainerrTilesMethods {
     // watches and how many titles its collection is currently holding.
     const colById = new Map((d.collections || []).map(c => [c.id, c]));
     const rows = rules.slice(0, 4).map((r, i) => {
-      const dot = r.isActive ? 'rgba(52,211,153,0.85)' : 'rgba(255,255,255,0.25)';
-      const sep = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+      const dot = r.isActive ? 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.85)' : 'rgba(var(--_fg3, 255, 255, 255), 0.25)';
+      const sep = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
       const lib = r.libraryId != null ? this._mtLibName(r.libraryId) : '';
       const col = colById.get(r.collectionId);
       const queued = col ? (col.mediaCount ?? 0) : null;
@@ -182,8 +182,8 @@ class _MaintainerrTilesMethods {
       return `<div style="${sep}display:flex;align-items:flex-start;gap:6px;padding:3px 0">
         <div style="width:6px;height:6px;border-radius:50%;background:${dot};flex-shrink:0;margin-top:4px"></div>
         <div style="flex:1;min-width:0">
-          <div style="font-size:10px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(r.name || '—')}</div>
-          ${meta ? `<div style="font-size:9px;color:rgba(255,255,255,0.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(meta)}</div>` : ''}
+          <div style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(r.name || '—')}</div>
+          ${meta ? `<div style="font-size:9px;color:rgba(var(--_fg3, 255, 255, 255), 0.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(meta)}</div>` : ''}
         </div>
       </div>`;
     }).join('') || `<div class="u-xxs-dim">${this._t('mtNoRules')}</div>`;

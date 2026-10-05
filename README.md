@@ -334,6 +334,7 @@ Control what appears on poster cards across all categories. All options are avai
 
 ### Appearance & UX
 
+- **Styling** — every colour, surface and corner can be changed, for the whole card or one panel at a time, and the modals by day and by night. A preset takes the look from your Home Assistant theme (`styles.preset: ha`), so the card matches the rest of your dashboard in one line; the editor's **Appearance** tab has a colour picker, a hex/RGB field and an opacity slider for each setting, in folding categories. The same settings work from a Home Assistant theme or card-mod. See **[STYLING.md](STYLING.md)**
 - One visual language across every category and panel — the same capsules, tables, filters and pagination everywhere, so a panel you have never opened still works the way you expect
 - Day / night theming based on `sun.sun`
 - Responsive layout — mobile, tablet, desktop
@@ -343,7 +344,7 @@ Control what appears on poster cards across all categories. All options are avai
 - Visual card editor in HA (no YAML required for basic setup)
 - Performance mode — disables backdrop blur
 - Category colour overlays — colour-tinted poster overlays per section, toggle via `styles.categoryOverlays`
-- Real app icons — uses the actual Radarr, Sonarr, qBittorrent, etc. logos. Switch to MDI icons via `styles.applicationIcons: mdi`
+- Real app icons — uses the actual Radarr, Sonarr, qBittorrent, etc. logos, in their own colours or one colour of your choice; or MDI icons (**App icons** under Icons in the Appearance tab)
 - UI scale — proportionally scales all card content via `styles.uiScale`. Useful on large monitors or TVs where the default size is too small
 - Left panel width — adjustable via `styles.leftPanelWidth` (percentage of card width, default 40)
 - Download client order — enable, disable, and reorder qBittorrent, Deluge, rTorrent, Transmission, SABnzbd, and NZBGet from the visual editor. Only configured clients appear in the list
@@ -439,8 +440,6 @@ Arr Stack Card sends one anonymous ping when it loads in a browser, one more the
 | **Failed window** | The name of a part of the card that could not be downloaded (e.g. `activity`), if that happens |
 
 No IP addresses, hostnames, usernames, media titles, or any personally identifiable information are stored. Rate-limited to one ping per IP per minute on the server side. Data is retained for 6 months.
-
-> **A correction.** Up to v1.9.6 the site ID was not a hash, as this section used to say: it was the first 12 characters of the address you open Home Assistant at, base64-encoded, which can be read back. Every value already stored has been replaced with a one-way hash, and from v1.9.7 the card no longer derives anything from your address. To keep your history continuous, a browser updating to v1.9.7 sends its old ID one last time; the server hashes it on arrival and never stores it as sent.
 
 Live usage stats (public): [argalas.org/arr-stats](https://argalas.org/arr-stats)
 

@@ -163,7 +163,7 @@ class _AutoSearchMethods {
       </div>`;
     }
     if (eps.length === 0) {
-      return `<div class="sn-episodes"><span style="color:rgba(255,255,255,0.4);font-size:11px">${this._t('snNoEpisodes')}</span></div>`;
+      return `<div class="sn-episodes"><span style="color:rgba(var(--_fg3, 255, 255, 255), 0.4);font-size:11px">${this._t('snNoEpisodes')}</span></div>`;
     }
     return `<div class="sn-episodes">${eps.map(ep => this._renderAsEpRow(ep)).join('')}</div>`;
   }

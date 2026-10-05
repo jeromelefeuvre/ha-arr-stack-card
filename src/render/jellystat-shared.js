@@ -29,7 +29,7 @@ class _JellystatSharedMethods {
   }
 
   _jsUserSelect(id, users, selUser) {
-    const _TL_SEL_STY = 'margin:0 4px;background:var(--is-row-hover,rgba(255,255,255,0.06));border:1px solid var(--is-divider,rgba(255,255,255,0.1));border-radius:6px;color:var(--is-text,#fff);padding:4px 8px;font-size:12px';
+    const _TL_SEL_STY = 'margin:0 4px;background:var(--is-row-hover,rgba(var(--_fill, 255, 255, 255), 0.06));border:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.1));border-radius:6px;color:var(--is-text,rgb(var(--_fg, 255, 255, 255)));padding:4px 8px;font-size:12px';
     const opts = ['<option value="">' + this._t('traAllUsers') + '</option>',
       ...(users || []).map(u => {
         const name = u.UserName || u.Name || u.UserId || '';

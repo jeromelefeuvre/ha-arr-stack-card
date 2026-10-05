@@ -101,7 +101,7 @@ class _JellystatGraphsMethods {
 
     const rangeCtrl = '<span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--is-text-muted);flex-shrink:0;padding:0 4px">'
       + (isMob ? '' : '<span>' + this._t('tlGLast') + '</span>')
-      + '<input id="js-g-range" type="number" value="' + range + '" min="1" max="365" style="width:42px;height:26px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);border-radius:999px;color:var(--is-text);padding:0;font-size:12px;text-align:center;font-family:inherit;outline:none;box-sizing:border-box;-webkit-appearance:none;appearance:none">'
+      + '<input id="js-g-range" type="number" value="' + range + '" min="1" max="365" style="width:42px;height:26px;background:rgba(var(--_fill, 255, 255, 255), 0.06);border:1px solid rgba(var(--_line, 255, 255, 255), 0.10);border-radius:999px;color:var(--is-text);padding:0;font-size:12px;text-align:center;font-family:inherit;outline:none;box-sizing:border-box;-webkit-appearance:none;appearance:none">'
       + '<span>' + (isMob ? 'D' : this._t('jsDays')) + '</span></span>';
 
     // A phone has no room for the range in the bar, so it rides in the corner

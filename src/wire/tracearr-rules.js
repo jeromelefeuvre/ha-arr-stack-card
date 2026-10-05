@@ -43,12 +43,12 @@ class _WireTracearrRulesMethods {
         const cur = rfActiveToggle.dataset.active === 'true';
         const next = !cur;
         rfActiveToggle.dataset.active = String(next);
-        rfActiveToggle.style.background = next ? 'rgba(0,122,255,0.7)' : 'rgba(255,255,255,0.06)';
-        rfActiveToggle.style.borderColor = next ? 'rgba(0,122,255,0.8)' : 'rgba(255,255,255,0.12)';
+        rfActiveToggle.style.background = next ? 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.7)' : 'rgba(var(--_fill, 255, 255, 255), 0.06)';
+        rfActiveToggle.style.borderColor = next ? 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.8)' : 'rgba(var(--_fill, 255, 255, 255), 0.12)';
         const knob = rfActiveToggle.querySelector('span');
         if (knob) {
           knob.style.left = next ? '18px' : '4px';
-          knob.style.background = next ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)';
+          knob.style.background = next ? 'rgba(var(--_fg, 255, 255, 255), 0.9)' : 'rgba(var(--_fg3, 255, 255, 255), 0.4)';
         }
       });
     }
@@ -265,17 +265,17 @@ class _WireTracearrRulesMethods {
   }
 
   _traCondGroupHtml(gi) {
-    return `<div class="tra-cg" data-grp="${gi}" style="background:rgba(255,255,255,0.03);border:1px solid var(--is-card-bdr,rgba(255,255,255,0.09));border-radius:16px;padding:12px 14px;margin-bottom:8px">
+    return `<div class="tra-cg" data-grp="${gi}" style="background:rgba(var(--_fill, 255, 255, 255), 0.03);border:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09));border-radius:16px;padding:12px 14px;margin-bottom:8px">
       <div style="font-size:11px;font-weight:600;color:var(--is-text-label);margin-bottom:10px">${this._t('traGroup').replace('{n}', gi+1)} <span style="font-weight:400;font-size:10px;opacity:0.6">${this._t('traGroupOr')}</span></div>
       <div class="tra-cg-rows">${this._traCondRowHtml(gi, 0)}</div>
-      <button class="tra-add-or" data-grp="${gi}" style="font-size:11px;color:rgba(0,122,255,0.8);background:transparent;border:none;cursor:pointer;padding:2px 0;margin-top:2px">+ Add <strong>OR</strong> condition</button>
+      <button class="tra-add-or" data-grp="${gi}" style="font-size:11px;color:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.8);background:transparent;border:none;cursor:pointer;padding:2px 0;margin-top:2px">+ Add <strong>OR</strong> condition</button>
     </div>`;
   }
 
   _traActionRowHtml(idx) {
     const ACTIONS = [['log_only',this._t('traALog')],['send_notification',this._t('traANotify')],['kill_stream',this._t('traAKill')],['adjust_trust_score',this._t('traAAdjust')],['set_trust_score',this._t('traASet')],['reset_trust_score',this._t('traAReset')],['message_client',this._t('traAMessage')]];
     const trash   = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>`;
-    return `<div class="tra-act-row" data-idx="${idx}" style="background:rgba(255,255,255,0.03);border:1px solid var(--is-card-bdr,rgba(255,255,255,0.09));border-radius:14px;padding:10px 12px;margin-bottom:6px">
+    return `<div class="tra-act-row" data-idx="${idx}" style="background:rgba(var(--_fill, 255, 255, 255), 0.03);border:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09));border-radius:14px;padding:10px 12px;margin-bottom:6px">
       <div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center">
         ${this._mtFieldSelectRaw('class="tra-act-type"', ACTIONS.map(([v,l])=>`<option value="${v}"${idx===0&&v==='log_only'?' selected':''}>${l}</option>`).join(''), ACTIONS[0][1], 'flex:1;min-width:0')}
         ${this._mtRoundBtn('class="tra-act-del"', trash, this._t('tlDelete'), { size: 26, tone: 'red' })}
@@ -389,7 +389,7 @@ class _WireTracearrRulesMethods {
         // add OR label
         const orLbl = document.createElement('div');
         orLbl.className = 'tra-or-label';
-        orLbl.style.cssText = 'font-size:10px;font-weight:700;color:rgba(0,122,255,0.8);margin:2px 0 6px';
+        orLbl.style.cssText = 'font-size:10px;font-weight:700;color:rgba(var(--arr-accent-rgb, 0, 122, 255), 0.8);margin:2px 0 6px';
         orLbl.textContent = 'OR';
         rows.appendChild(orLbl);
         const tmp = document.createElement('div');

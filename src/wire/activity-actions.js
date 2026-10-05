@@ -28,7 +28,7 @@ class _WireActivityActionsMethods {
     // pickers with our own trigger, round tonal buttons.
     const overlay = document.createElement('div');
     overlay.className = `popup-overlay${dayClass(this)}`;
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.55)';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;background:rgba(var(--_shade, 0, 0, 0), 0.55)';
     const _row = (label, field, hint = '') => `
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:${hint ? '4px' : '12px'}">
         <div style="width:130px;flex-shrink:0;font-size:11px;font-weight:600;color:var(--is-text-muted);text-align:right">${label}</div>
@@ -37,7 +37,7 @@ class _WireActivityActionsMethods {
       ${hint ? `<div style="margin:0 0 12px 142px;font-size:10px;color:rgba(200,120,0,0.9)" id="qrm-method-warn">${hint}</div>` : ''}`;
 
     overlay.innerHTML = `
-      <div style="background:var(--is-menu-bg,#1c1c2e);border:1px solid var(--is-card-bdr,rgba(255,255,255,0.09));border-radius:20px;padding:20px 22px;width:min(480px,94vw);box-shadow:0 8px 40px rgba(0,0,0,0.35);color:var(--is-text);font-family:inherit">
+      <div style="background:var(--is-menu-bg,#1c1c2e);border:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09));border-radius:20px;padding:20px 22px;width:min(480px,94vw);box-shadow:0 8px 40px rgba(var(--_shadow, 0, 0, 0), 0.35);color:var(--is-text);font-family:inherit">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
           <div style="font-size:14px;font-weight:700">Remove</div>
           ${this._mtRoundBtn('class="qrm-close"', `<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:block"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`, 'Close', { size: 28, tone: 'blue', active: false })}
@@ -48,7 +48,7 @@ class _WireActivityActionsMethods {
             "'Remove from Download Client' will remove the download and the file(s) from the download client.")}
         ${_row('Blocklist Release',
             this._mtFieldSelect('qrm-blocklist', [['none', 'Do not Blocklist'], ['search', 'Blocklist and Search'], ['only', 'Blocklist Only']], 'none', 'width:100%'))}
-        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--is-card-bdr,rgba(255,255,255,0.09))">
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--is-card-bdr,rgba(var(--_line, 255, 255, 255), 0.09))">
           <button class="qrm-close" style="${MT_BTN}">Close</button>
           <button class="qrm-remove" style="${this._mtBtnA('red')}">Remove</button>
         </div>
@@ -156,7 +156,7 @@ class _WireActivityActionsMethods {
       // Radarr and Sonarr explain themselves — "Could not find a part of the
       // path ..." names a broken folder, which the generic wording hid.
       const detail = err?.body?.message || err?.body?.error || err?.message || '';
-      miBody.innerHTML = `<div style="text-align:center;color:rgba(255,100,100,0.85);padding:28px 20px;font-size:12px;line-height:1.5">
+      miBody.innerHTML = `<div style="text-align:center;color:rgba(var(--arr-error-rgb, 255, 100, 100), 0.85);padding:28px 20px;font-size:12px;line-height:1.5">
         <div style="font-weight:700;margin-bottom:6px">Failed to fetch candidates</div>
         ${detail ? `<div style="opacity:0.8">${this._escHtml(String(detail))}</div>` : ''}
       </div>`;
@@ -368,7 +368,7 @@ class _WireActivityActionsMethods {
             const releases = await this._callApi('GET', `arr_stack/${epSvc}/release?episodeId=${epId}`);
             this._renderSisEpReleases(panel, epSvc, releases || []);
           } catch {
-            panel.innerHTML = `<div style="text-align:center;color:rgba(255,100,100,0.8);padding:12px;font-size:11px">${this._t('actNoFiles')}</div>`;
+            panel.innerHTML = `<div style="text-align:center;color:rgba(var(--arr-error-rgb, 255, 100, 100), 0.8);padding:12px;font-size:11px">${this._t('actNoFiles')}</div>`;
           }
           return;
         }
@@ -405,13 +405,13 @@ class _WireActivityActionsMethods {
             grabBtn.style.background = 'rgba(80,200,100,0.15)';
           } catch {
             grabBtn.textContent = '!';
-            grabBtn.style.color = 'rgba(255,100,100,0.9)';
+            grabBtn.style.color = 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)';
           }
         }
       });
     } catch (err) {
       console.error('[arr-card] Season IS error:', err);
-      body.innerHTML = `<div style="text-align:center;color:rgba(255,100,100,0.8);padding:32px 20px">Failed to load episodes</div>`;
+      body.innerHTML = `<div style="text-align:center;color:rgba(var(--arr-error-rgb, 255, 100, 100), 0.8);padding:32px 20px">Failed to load episodes</div>`;
     }
   }
 
@@ -437,7 +437,7 @@ class _WireActivityActionsMethods {
             ${seederHtml}
           </div>
         </div>
-        <button class="sis-grab-btn" data-idx="${i}" data-svc="${svc}" style="flex-shrink:0;height:22px;padding:0 8px;font-size:10px;font-weight:700;border:none;background:rgba(99,140,255,0.15);border-radius:5px;cursor:pointer;color:rgba(99,140,255,0.9)">Grab</button>
+        <button class="sis-grab-btn" data-idx="${i}" data-svc="${svc}" style="flex-shrink:0;height:22px;padding:0 8px;font-size:10px;font-weight:700;border:none;background:rgba(var(--_grab, 99, 140, 255), 0.15);border-radius:5px;cursor:pointer;color:rgba(var(--_grab, 99, 140, 255), 0.9)">Grab</button>
       </div>`;
     }).join('');
     panel.innerHTML = rows;

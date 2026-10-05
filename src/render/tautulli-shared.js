@@ -5,8 +5,8 @@
 const _TL_COLS_SVG  = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>`;
 const _TL_EDIT_SVG  = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
 const _TL_TRASH_SVG = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>`;
-const _TL_SEL_STY = `margin:0 4px;background:var(--is-row-hover,rgba(255,255,255,0.06));border:1px solid var(--is-divider,rgba(255,255,255,0.1));border-radius:6px;color:var(--is-text,#fff);padding:4px 8px;font-size:12px`;
-const _TL_MENU_STY = `position:absolute;right:0;top:calc(100% + 4px);background:var(--is-menu-bg,#18182a);border:1px solid var(--is-divider,rgba(255,255,255,0.12));border-radius:8px;padding:6px 0;min-width:190px;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,0.18)`;
+const _TL_SEL_STY = `margin:0 4px;background:var(--is-row-hover,rgba(var(--_fill, 255, 255, 255), 0.06));border:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.1));border-radius:6px;color:var(--is-text,rgb(var(--_fg, 255, 255, 255)));padding:4px 8px;font-size:12px`;
+const _TL_MENU_STY = `position:absolute;right:0;top:calc(100% + 4px);background:var(--is-menu-bg,#18182a);border:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.12));border-radius:8px;padding:6px 0;min-width:190px;z-index:20;box-shadow:0 8px 24px rgba(var(--_shadow, 0, 0, 0), 0.18)`;
 
 class _TautulliSharedMethods {
 
@@ -132,9 +132,9 @@ class _TautulliSharedMethods {
 
   _tlSearchInput(id, value) {
     const SEARCH_SVG = `<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
-    return `<div style="display:inline-flex;align-items:center;gap:5px;background:var(--is-row-hover,rgba(255,255,255,0.06));border:1px solid var(--is-divider,rgba(255,255,255,0.1));border-radius:6px;padding:0 7px;height:28px;box-sizing:border-box">
+    return `<div style="display:inline-flex;align-items:center;gap:5px;background:var(--is-row-hover,rgba(var(--_fill, 255, 255, 255), 0.06));border:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.1));border-radius:6px;padding:0 7px;height:28px;box-sizing:border-box">
       ${SEARCH_SVG}
-      <input id="${id}" type="search" value="${this._escHtml(value || '')}" placeholder="${this._t('traSearch')}" autocomplete="off" style="background:none;border:none;outline:none;color:var(--is-text,#fff);font-size:12px;line-height:1.4;width:110px;min-width:60px;padding:0;margin:0;box-sizing:border-box">
+      <input id="${id}" type="search" value="${this._escHtml(value || '')}" placeholder="${this._t('traSearch')}" autocomplete="off" style="background:none;border:none;outline:none;color:var(--is-text,rgb(var(--_fg, 255, 255, 255)));font-size:12px;line-height:1.4;width:110px;min-width:60px;padding:0;margin:0;box-sizing:border-box">
     </div>`;
   }
 

@@ -47,15 +47,15 @@ class _TraceaRrTableMethods {
       </div>`;
 
     const tiles = `<div style="display:grid;grid-template-columns:repeat(${isMob?2:4},1fr);gap:${isMob?'8px':'10px'};margin-bottom:${isMob?'14px':'16px'}">
-      ${tile(this._t('traStreamsNow'), Number(st.activeStreams) || 0, null, '#34C759')}
+      ${tile(this._t('traStreamsNow'), Number(st.activeStreams) || 0, null, 'rgb(var(--arr-success-rgb, 52, 199, 89))')}
       ${tile(this._t('traUsers'), Number(st.totalUsers) || 0, st.totalSessions ? (Number(st.totalSessions) || 0) + ' ' + this._t('tlPlays') : null, '#BF5AF2')}
-      ${tile(this._t('traViolations'), Number(st.recentViolations) || 0, this._t('traThisMonth'), st.recentViolations > 0 ? '#FF3B30' : '#34C759')}
-      ${tile(this._t('traActivity7d'), total7, null, '#007AFF')}
+      ${tile(this._t('traViolations'), Number(st.recentViolations) || 0, this._t('traThisMonth'), st.recentViolations > 0 ? 'rgb(var(--arr-error-rgb, 255, 59, 48))' : 'rgb(var(--arr-success-rgb, 52, 199, 89))')}
+      ${tile(this._t('traActivity7d'), total7, null, 'rgb(var(--arr-accent-rgb, 0, 122, 255))')}
     </div>`;
 
     const srvs = (hlth.servers || []).map(s => {
-      const ic = { plex:{bg:'#e5a00d',c:'#000',l:'P'}, jellyfin:{bg:'#7c4dff',c:'#fff',l:'J'}, emby:{bg:'#52b54b',c:'#fff',l:'E'} }[s.type] || {bg:'rgba(255,255,255,0.15)',c:'#fff',l:'?'};
-      const dot = s.online ? '#34d399' : '#f87171';
+      const ic = { plex:{bg:'#e5a00d',c:'rgb(var(--_shade, 0, 0, 0))',l:'P'}, jellyfin:{bg:'#7c4dff',c:'rgb(var(--_fg, 255, 255, 255))',l:'J'}, emby:{bg:'#52b54b',c:'rgb(var(--_fg, 255, 255, 255))',l:'E'} }[s.type] || {bg:'rgba(var(--_fill, 255, 255, 255), 0.15)',c:'rgb(var(--_fg, 255, 255, 255))',l:'?'};
+      const dot = s.online ? 'rgb(var(--arr-success-rgb, 52, 211, 153))' : 'rgb(var(--arr-error-rgb, 248, 113, 113))';
       const streams = s.activeStreams > 0 ? this._uiBadge(`${Number(s.activeStreams) || 0} live`, 'green') : '';
       return `<div style="display:flex;align-items:center;gap:8px;padding:9px 0;border-top:1px solid var(--is-divider)">
         <span style="width:22px;height:22px;border-radius:6px;background:${ic.bg};color:${ic.c};display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0">${ic.l}</span>
@@ -78,8 +78,8 @@ class _TraceaRrTableMethods {
           <div style="font-size:10px;color:var(--is-text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${[user,when].filter(Boolean).join(' · ')}</div>
         </div>
       </div>`;
-    }).join('') || `<div style="font-size:12px;color:#34C759;padding:12px 0;display:flex;align-items:center;gap:8px">
-        <span style="width:8px;height:8px;border-radius:50%;background:#34d399;flex-shrink:0"></span>${this._t('traNoViolations')}
+    }).join('') || `<div style="font-size:12px;color:rgb(var(--arr-success-rgb, 52, 199, 89));padding:12px 0;display:flex;align-items:center;gap:8px">
+        <span style="width:8px;height:8px;border-radius:50%;background:rgb(var(--arr-success-rgb, 52, 211, 153));flex-shrink:0"></span>${this._t('traNoViolations')}
       </div>`;
 
     const sectionLabel = lbl => `<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--is-text-label);margin-bottom:2px">${lbl}</div>`;
@@ -148,15 +148,15 @@ class _TraceaRrTableMethods {
       const vBadge = u.totalViolations > 0
         ? this._uiBadge(String(Number(u.totalViolations) || 0), 'red')
         : this._uiBadge('0', 'neutral');
-      const srvBg = { plex:'#e5a00d', jellyfin:'#7c4dff', emby:'#52b54b' }[u.serverType] || 'rgba(255,255,255,0.15)';
-      const srvC  = u.serverType === 'plex' ? '#000' : '#fff';
+      const srvBg = { plex:'#e5a00d', jellyfin:'#7c4dff', emby:'#52b54b' }[u.serverType] || 'rgba(var(--_fill, 255, 255, 255), 0.15)';
+      const srvC  = u.serverType === 'plex' ? 'rgb(var(--_shade, 0, 0, 0))' : 'rgb(var(--_fg, 255, 255, 255))';
       const srvL  = { plex:'P', jellyfin:'J', emby:'E' }[u.serverType] || '?';
       return `<tr${u.totalViolations > 0 ? ' class="tl-row-warn"' : ''}>
         <td><div class="u-row-8">${this._traUserAvatar(u,22)}<strong class="u-sm-text">${this._escHtml(u.displayName || u.username || '')}</strong></div></td>
         <td><span style="width:18px;height:18px;border-radius:5px;background:${srvBg};color:${srvC};display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;vertical-align:middle;margin-right:5px">${srvL}</span><span style="font-size:11px;color:var(--is-text)">${this._escHtml(u.serverName || '—')}</span></td>
         <td>
           <div class="u-row-6">
-            <div style="width:52px;height:5px;border-radius:4px;background:rgba(255,255,255,0.1);overflow:hidden;flex-shrink:0"><div style="height:100%;border-radius:4px;background:${c.replace('0.9','0.7')};width:${pct}"></div></div>
+            <div style="width:52px;height:5px;border-radius:4px;background:rgba(var(--_fill, 255, 255, 255), 0.1);overflow:hidden;flex-shrink:0"><div style="height:100%;border-radius:4px;background:${c.replace('0.9','0.7')};width:${pct}"></div></div>
             <span style="font-size:11px;font-weight:700;color:${c}">${score}</span>
           </div>
         </td>
@@ -219,7 +219,7 @@ class _TraceaRrTableMethods {
     const podiumOrder = [users[1], users[0], users[2]].filter(Boolean);
     const medals      = ['🥈','🥇','🥉'];
     const borders     = ['#C0C0C0','#FFD700','#CD7F32'];
-    const playsColors = ['rgba(200,200,200,0.9)','#34C759','#CD7F32'];
+    const playsColors = ['rgba(200,200,200,0.9)','rgb(var(--arr-success-rgb, 52, 199, 89))','#CD7F32'];
     // index 1 in display order = gold
     const isGold = [false, true, false];
 
@@ -237,14 +237,14 @@ class _TraceaRrTableMethods {
       const avSz   = gold ? (isMob ? 72 : isTablet ? 84 : 96) : (isMob ? 52 : isTablet ? 60 : 68);
       const pad    = gold ? (isMob ? '20px 8px 14px' : isTablet ? '20px 10px 14px' : '24px 14px 16px') : (isMob ? '12px 6px' : isTablet ? '12px 8px' : '16px 10px');
       const nameSz = gold ? (isMob ? 12 : 14) : (isMob ? 11 : 12);
-      const avFb   = `<div style="width:${avSz}px;height:${avSz}px;border-radius:50%;background:rgba(255,255,255,0.1);border:2px solid ${border};display:flex;align-items:center;justify-content:center;font-size:${Math.round(avSz*0.3)}px;font-weight:800;color:rgba(255,255,255,0.6)">${this._escHtml(rawName.slice(0, 2).toUpperCase())}</div>`;
+      const avFb   = `<div style="width:${avSz}px;height:${avSz}px;border-radius:50%;background:rgba(var(--_fill, 255, 255, 255), 0.1);border:2px solid ${border};display:flex;align-items:center;justify-content:center;font-size:${Math.round(avSz*0.3)}px;font-weight:800;color:rgba(var(--_fg2, 255, 255, 255), 0.6)">${this._escHtml(rawName.slice(0, 2).toUpperCase())}</div>`;
       const avEl   = av
         ? `<img src="${av}" width="${avSz}" height="${avSz}" style="border-radius:50%;object-fit:cover;border:2px solid ${border};flex-shrink:0" loading="lazy" onerror="this.style.display='none'">`
         : avFb;
       const trustBadge = trust != null
-        ? `<div style="display:inline-flex;align-items:center;gap:4px;background:rgba(52,199,89,0.18);border-radius:20px;padding:3px 8px;margin-top:4px">
-            <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="#34C759" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span style="font-size:${isMob?9:10}px;font-weight:700;color:#34C759">${this._t('traTrustPct').replace('{n}', Math.round(trust))}</span>
+        ? `<div style="display:inline-flex;align-items:center;gap:4px;background:rgba(var(--arr-success-rgb, 52, 199, 89), 0.18);border-radius:20px;padding:3px 8px;margin-top:4px">
+            <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="rgb(var(--arr-success-rgb, 52, 199, 89))" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span style="font-size:${isMob?9:10}px;font-weight:700;color:rgb(var(--arr-success-rgb, 52, 199, 89))">${this._t('traTrustPct').replace('{n}', Math.round(trust))}</span>
           </div>`
         : '';
       const lovesEl = loves
@@ -285,11 +285,11 @@ class _TraceaRrTableMethods {
         const lovesTxt = loves && this._escHtml(loves);
         const avSz   = isMob ? 32 : 38;
         const avEl   = `<div style="position:relative;width:${avSz}px;height:${avSz}px;flex-shrink:0">
-          <div style="width:${avSz}px;height:${avSz}px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:${Math.round(avSz*0.32)}px;font-weight:800;color:rgba(255,255,255,0.6)">${this._escHtml(rawName.slice(0, 2).toUpperCase())}</div>
+          <div style="width:${avSz}px;height:${avSz}px;border-radius:50%;background:rgba(var(--_fill, 255, 255, 255), 0.1);display:flex;align-items:center;justify-content:center;font-size:${Math.round(avSz*0.32)}px;font-weight:800;color:rgba(var(--_fg2, 255, 255, 255), 0.6)">${this._escHtml(rawName.slice(0, 2).toUpperCase())}</div>
           ${av ? `<img src="${av}" width="${avSz}" height="${avSz}" style="border-radius:50%;object-fit:cover;position:absolute;inset:0" loading="lazy" onerror="this.style.display='none'">` : ''}
         </div>`;
         const trustEl = trust != null
-          ? `<span style="display:inline-flex;align-items:center;gap:3px;font-size:${isMob?9:10}px;color:#34C759"><svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="#34C759" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>${Math.round(trust)}%</span>`
+          ? `<span style="display:inline-flex;align-items:center;gap:3px;font-size:${isMob?9:10}px;color:rgb(var(--arr-success-rgb, 52, 199, 89))"><svg viewBox="0 0 24 24" width="9" height="9" fill="none" stroke="rgb(var(--arr-success-rgb, 52, 199, 89))" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>${Math.round(trust)}%</span>`
           : '';
         const statsEl = [
           `<span style="font-size:${isMob?10:11}px;font-weight:700;color:var(--is-text)">${this._t('traNPlays').replace('{n}', plays)}</span>`,

@@ -19,15 +19,15 @@ class _TracearrWatchMethods {
     const ip = (Number(ri) / Number(ro) * 100).toFixed(0);
     const defs = '<defs>' + segs.map((sg, i) =>
       `<radialGradient id="dg-${uid}-${i}" cx="${cx}" cy="${cy}" r="${ro}" fx="${cx}" fy="${cy}" gradientUnits="userSpaceOnUse">` +
-      `<stop offset="${ip}%" stop-color="${sg.color}" stop-opacity="0.5"/>` +
-      `<stop offset="100%" stop-color="${sg.color}" stop-opacity="1"/>` +
+      `<stop offset="${ip}%" stop-opacity="0.5" style="stop-color:${sg.color}"/>` +
+      `<stop offset="100%" stop-opacity="1" style="stop-color:${sg.color}"/>` +
       `</radialGradient>`
     ).join('') + '</defs>';
     const rings = segs.map(sg => {
       const full = sg.value / total * C;
       const dash = Math.max(0, full - gap);
       const off  = -cum; cum += full;
-      return `<circle class="donut-ring" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${sg.color}" stroke-width="${sw * 1.9}" stroke-linecap="butt" stroke-dasharray="${dash.toFixed(2)} ${(C-dash).toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}" transform="rotate(-90 ${cx} ${cy})" stroke-opacity="0" style="transition:stroke-opacity 0.15s"/>`;
+      return `<circle class="donut-ring" cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke-width="${sw * 1.9}" stroke-linecap="butt" stroke-dasharray="${dash.toFixed(2)} ${(C-dash).toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}" transform="rotate(-90 ${cx} ${cy})" stroke-opacity="0" style="stroke:${sg.color};transition:stroke-opacity 0.15s"/>`;
     }).join('');
     cum = 0;
     const arcs = segs.map((sg, i) => {
@@ -40,10 +40,10 @@ class _TracearrWatchMethods {
     const fs = Math.min(size * 0.14, 12);
     return `<div class="donut-wrap" style="position:relative;display:inline-block;flex-shrink:0"><svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;overflow:visible">
       ${defs}
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="${sw}"/>
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(var(--_fill, 255, 255, 255), 0.05)" stroke-width="${sw}"/>
       <g><animateTransform attributeName="transform" type="rotate" from="-360 ${cx} ${cy}" to="0 ${cx} ${cy}" dur="0.8s" begin="0s" fill="freeze" calcMode="spline" keySplines="0.25 0.46 0.45 0.94" keyTimes="0;1"/>${rings}${arcs}</g>
-      <text x="${cx}" y="${cy + fs * 0.4}" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-size="${fs}" font-weight="700">${total}</text>
-    </svg><div class="donut-tt" style="display:none;position:absolute;pointer-events:none;background:rgba(15,15,20,0.92);border:1px solid rgba(255,255,255,0.13);border-radius:6px;padding:5px 9px;white-space:nowrap;z-index:10;color:rgba(255,255,255,0.9)"></div></div>`;
+      <text x="${cx}" y="${cy + fs * 0.4}" text-anchor="middle" fill="rgba(var(--_fg, 255, 255, 255), 0.9)" font-size="${fs}" font-weight="700">${total}</text>
+    </svg><div class="donut-tt" style="display:none;position:absolute;pointer-events:none;background:rgba(15,15,20,0.92);border:1px solid rgba(var(--_line, 255, 255, 255), 0.13);border-radius:6px;padding:5px 9px;white-space:nowrap;z-index:10;color:rgba(var(--_fg, 255, 255, 255), 0.9)"></div></div>`;
   }
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -102,7 +102,7 @@ class _TracearrWatchMethods {
       }
       const cmpltCell = cmplt !== null
         ? `<div style="display:flex;align-items:center;gap:5px;justify-content:flex-end">${this._traWatchPie(cmplt)}<span style="font-size:11px;color:var(--is-text-muted)">${cmplt}%</span></div>`
-        : `<span style="font-size:10px;color:rgba(255,255,255,0.25)">—</span>`;
+        : `<span style="font-size:10px;color:rgba(var(--_fg3, 255, 255, 255), 0.25)">—</span>`;
       const ROW_H = 'height:40px';
       return `<tr style="${ROW_H}">
         <td style="width:22px;font-size:10px;color:var(--is-text-muted);text-align:center">${i+1}</td>
@@ -261,7 +261,7 @@ class _TracearrWatchMethods {
 
     const scoreTag2 = (score) => {
       const lbl = score >= 80 ? 'highly addictive' : score >= 60 ? 'addictive' : 'bingeable';
-      const [bg, txt] = lbl.includes('highly') ? ['rgba(255,59,48,0.18)','#FF3B30'] : lbl.includes('addict') ? ['rgba(255,149,0,0.18)','#FF9500'] : ['rgba(52,199,89,0.15)','#34C759'];
+      const [bg, txt] = lbl.includes('highly') ? ['rgba(var(--arr-error-rgb, 255, 59, 48), 0.18)','rgb(var(--arr-error-rgb, 255, 59, 48))'] : lbl.includes('addict') ? ['rgba(var(--arr-warning-rgb, 255, 149, 0), 0.18)','rgb(var(--arr-warning-rgb, 255, 149, 0))'] : ['rgba(var(--arr-success-rgb, 52, 199, 89), 0.15)','rgb(var(--arr-success-rgb, 52, 199, 89))'];
       const dl = lbl.includes('highly') ? this._t('traHighlyAddictive') : lbl.includes('addict') ? this._t('traAddictive') : this._t('traBingeable');
       return `${this._uiBadge(`${dl}`, this._hexToRgbTriple(txt), { small: true })}`;
     };
@@ -341,13 +341,13 @@ class _TracearrWatchMethods {
       const remaining = Math.max(0, total - watched);
       const segs = [
         { label: this._t('traWatchedOf'), value: watched,   color },
-        { label: this._t('traRemaining'),             value: remaining, color: 'rgba(255,255,255,0.12)' },
+        { label: this._t('traRemaining'),             value: remaining, color: 'rgba(var(--_fill, 255, 255, 255), 0.12)' },
       ].filter(s => s.value > 0);
       const ds = isMob ? 72 : 104;
       const pct = total ? Math.round(watched / total * 100) : 0;
       const legendItems = [
         { label: this._t('traWatchedOf'), value: watched,   color, pct },
-        { label: this._t('traRemaining'),             value: remaining, color: 'rgba(255,255,255,0.25)', pct: 100 - pct },
+        { label: this._t('traRemaining'),             value: remaining, color: 'rgba(var(--_fg3, 255, 255, 255), 0.25)', pct: 100 - pct },
       ].filter(s => s.value > 0).map(s =>
         `<div style="display:flex;align-items:center;gap:5px;margin-bottom:4px">
           <span style="width:7px;height:7px;border-radius:2px;background:${s.color};flex-shrink:0"></span>
@@ -364,15 +364,15 @@ class _TracearrWatchMethods {
         </div>
       </div>`;
     };
-    const moviesDonutCard = watchDonut(this._t('traMovies'), watchedMovies, totalMovies, '#007AFF');
+    const moviesDonutCard = watchDonut(this._t('traMovies'), watchedMovies, totalMovies, 'rgb(var(--arr-accent-rgb, 0, 122, 255))');
     const showsDonutCard  = watchDonut(this._t('tlFilterTvShows'), watchedShows, totalShows, '#BF5AF2');
 
-    const _tipEl = `<div class="tl-g-tip" style="display:none;position:absolute;top:0;left:0;background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:7px;padding:7px 10px;font-size:11px;pointer-events:none;z-index:50;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div>`;
+    const _tipEl = `<div class="tl-g-tip" style="display:none;position:absolute;top:0;left:0;background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:7px;padding:7px 10px;font-size:11px;pointer-events:none;z-index:50;white-space:nowrap;box-shadow:0 4px 12px rgba(var(--_shadow, 0, 0, 0), 0.3)"></div>`;
     const _badge = (txt, color, bg) => `${this._uiBadge(`${txt}`, this._hexToRgbTriple(color), { small: true })}`;
 
     // ── Viewing Hours bar chart ───────────────────────────────────────────────
     const peakBadge = hourVals.some(v=>v>0)
-      ? _badge(`Peak: ${peakHourLabel}`, 'var(--is-text)', 'rgba(255,255,255,0.08)')
+      ? _badge(`Peak: ${peakHourLabel}`, 'var(--is-text)', 'rgba(var(--_fill, 255, 255, 255), 0.08)')
       : '';
     const viewingHoursCard = `<div class="tl-g-card" style="flex:1;box-sizing:border-box;display:flex;flex-direction:column;position:relative">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-shrink:0">
@@ -392,7 +392,7 @@ class _TracearrWatchMethods {
     };
     const mVals  = mArr.map(r => Number(r.watchCount ?? r.count ?? r.plays) || 0);
     const mMax   = Math.max(1, ...mVals);
-    const _MC    = '#007AFF';
+    const _MC    = 'rgb(var(--arr-accent-rgb, 0, 122, 255))';
     const _mEsc  = v => this._escHtml(v);
     const mSvg = (() => {
       if (mN < 2) return '';
@@ -403,8 +403,8 @@ class _TracearrWatchMethods {
       const pts = mVals.map((v, i) => ({ x: xOf(i), y: yOf(v), v, cat: _mFmt(mArr[i]?.month || '') }));
       const defs = `<defs>
         <linearGradient id="tra-mt-g" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="${_MC}" stop-opacity="0.28"/>
-          <stop offset="100%" stop-color="${_MC}" stop-opacity="0"/>
+          <stop offset="0%" stop-opacity="0.28" style="stop-color:${_MC}"/>
+          <stop offset="100%" stop-opacity="0" style="stop-color:${_MC}"/>
         </linearGradient>
         <mask id="tra-mt-mask" maskUnits="userSpaceOnUse">
           <rect x="0" y="0" width="${VBW}" height="${SVH}" fill="white"/>
@@ -413,7 +413,7 @@ class _TracearrWatchMethods {
       </defs>`;
       let inner = defs;
       inner += `<path d="${this._tlGSmoothArea(pts, baseY)}" style="fill:url(#tra-mt-g);animation:fade-in 0.8s ease-out both"/>`;
-      inner += `<path d="${this._tlGSmoothLine(pts)}" fill="none" stroke="${_MC}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" class="tl-g-anim-line" mask="url(#tra-mt-mask)"/>`;
+      inner += `<path d="${this._tlGSmoothLine(pts)}" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" class="tl-g-anim-line" mask="url(#tra-mt-mask)" style="stroke:${_MC}"/>`;
       pts.forEach(p => {
         if (!p.v) return;
         inner += `<circle class="tl-g-dot" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" style="fill:transparent;stroke:${_MC};stroke-width:2.5;cursor:pointer" vector-effect="non-scaling-stroke" data-tl-g-dot="${_mEsc(JSON.stringify({lbl:p.cat,name:this._t('traWatches'),val:p.v,hex:_MC}))}"/>`;
@@ -433,8 +433,8 @@ class _TracearrWatchMethods {
       return this._tlGWrap(svgEl, xLbls, '');
     })();
     const mTags = `<div style="display:flex;gap:4px;flex-wrap:wrap">
-      ${busiestMonth  ? _badge(`${this._t('traBusiest')}: ${busiestMonth}`,  '#34C759', 'rgba(52,199,89,0.15)') : ''}
-      ${quietestMonth && quietestMonth !== busiestMonth ? _badge(`${this._t('traQuietest')}: ${quietestMonth}`, 'var(--is-text)', 'rgba(255,255,255,0.08)') : ''}
+      ${busiestMonth  ? _badge(`${this._t('traBusiest')}: ${busiestMonth}`,  'rgb(var(--arr-success-rgb, 52, 199, 89))', 'rgba(var(--arr-success-rgb, 52, 199, 89), 0.15)') : ''}
+      ${quietestMonth && quietestMonth !== busiestMonth ? _badge(`${this._t('traQuietest')}: ${quietestMonth}`, 'var(--is-text)', 'rgba(var(--_fill, 255, 255, 255), 0.08)') : ''}
     </div>`;
     const monthlyCard = `<div class="tl-g-card" style="flex:1;box-sizing:border-box;display:flex;flex-direction:column;position:relative">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;gap:4px;flex-wrap:wrap;flex-shrink:0">

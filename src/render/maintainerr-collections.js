@@ -56,8 +56,8 @@ class _MaintainerrCollectionsRenderMethods {
     // Day mode lightens the poster scrim instead of darkening it, so every
     // colour on the card has to flip with it.
     const _day = this._isDay;
-    const _labelSt = `font-size:9px;text-transform:uppercase;letter-spacing:0.05em;color:${_day ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.55)'};margin-bottom:2px`;
-    const _txt = _day ? '#000' : '#fff';
+    const _labelSt = `font-size:9px;text-transform:uppercase;letter-spacing:0.05em;color:${_day ? 'rgba(var(--_shade, 0, 0, 0), 0.55)' : 'rgba(var(--_fg2, 255, 255, 255), 0.55)'};margin-bottom:2px`;
+    const _txt = _day ? 'rgb(var(--_shade, 0, 0, 0))' : 'rgb(var(--_fg, 255, 255, 255))';
 
     // Measured page size, same as the rules list
     const PAGE = m.colPerPage || 12;
@@ -80,8 +80,8 @@ class _MaintainerrCollectionsRenderMethods {
       const isActive = rule ? rule.isActive : true;
       const statusLabel = isActive ? this._t('mtActive') : this._t('mtInactive');
       const statusColor = isActive
-        ? (this._isDay ? 'rgba(5,150,105,0.95)' : 'rgba(52,211,153,0.85)')
-        : (this._isDay ? 'rgba(0,0,0,0.45)' : 'rgba(255,255,255,0.4)');
+        ? (this._isDay ? 'rgba(5,150,105,0.95)' : 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.85)')
+        : (this._isDay ? 'rgba(var(--_shade, 0, 0, 0), 0.45)' : 'rgba(var(--_fg3, 255, 255, 255), 0.4)');
 
       // Poster mosaic background — up to 4 posters side by side, heavily dimmed
       // The mosaic puts these inside a CSS url(), where an apostrophe or a
@@ -103,7 +103,7 @@ class _MaintainerrCollectionsRenderMethods {
       // Over a mosaic the text needs to lift off the artwork; on a plain card
       // there is nothing to lift off and a halo would just look smudged.
       const _sh = posterUrls.length
-        ? (_day ? 'text-shadow:0 1px 3px rgba(255,255,255,0.95)' : 'text-shadow:0 1px 4px rgba(0,0,0,0.5)')
+        ? (_day ? 'text-shadow:0 1px 3px rgba(255,255,255,0.95)' : 'text-shadow:0 1px 4px rgba(var(--_shadow, 0, 0, 0), 0.5)')
         : '';
       const bgStyle = 'background:var(--is-btn-bg)';
 
@@ -162,11 +162,11 @@ class _MaintainerrCollectionsRenderMethods {
       const cnt = Number(c.mediaCount ?? (c.media || []).length) || 0;
       const size = c.totalSizeBytes ? fmtBytes(c.totalSizeBytes) : 'N/A';
       const active = c.isActive !== false;
-      const statusColor = active ? 'rgba(52,211,153,0.85)' : 'rgba(255,255,255,0.4)';
+      const statusColor = active ? 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.85)' : 'rgba(var(--_fg3, 255, 255, 255), 0.4)';
       const statusLabel = active ? this._t('mtActive') : this._t('mtInactive');
 
       if (isMob) {
-        return `<div data-mt-col-detail="${this._escHtml(c.id)}" style="display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid var(--is-divider,rgba(255,255,255,0.07));cursor:pointer">
+        return `<div data-mt-col-detail="${this._escHtml(c.id)}" style="display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.07));cursor:pointer">
           <div style="flex:1;min-width:0">
             <div style="font-size:12px;font-weight:600;color:var(--is-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${this._escHtml(name)}</div>
             <div style="font-size:10px;color:var(--is-text-muted);margin-top:2px">${this._escHtml(libName)} · ${cnt} · <span style="color:${statusColor}">${statusLabel}</span></div>
@@ -247,7 +247,7 @@ class _MaintainerrCollectionsRenderMethods {
       { id: 'mt-col-d-sort', items: sortItems, value: sort },
     ])}</div>`;
 
-    const _rnd = (bdr, bg) => `width:34px;height:34px;padding:0;border-radius:50%;border:1px solid ${bdr};background:${bg};color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:0;backdrop-filter:blur(8px)`;
+    const _rnd = (bdr, bg) => `width:34px;height:34px;padding:0;border-radius:50%;border:1px solid ${bdr};background:${bg};color:rgb(var(--_fg, 255, 255, 255));cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:0;backdrop-filter:blur(8px)`;
     const EXCL_ICO = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:block"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>`;
 
     const CHECK_ICO = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:block"><polyline points="20 6 9 17 4 12"/></svg>`;
@@ -260,20 +260,20 @@ class _MaintainerrCollectionsRenderMethods {
 
       let overlay = '', actions = '';
       if (excluded) {
-        overlay = `<div style="position:absolute;inset:0;z-index:5;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center">
+        overlay = `<div style="position:absolute;inset:0;z-index:5;background:rgba(var(--_shade, 0, 0, 0), 0.6);display:flex;align-items:center;justify-content:center">
           ${this._uiBadge(this._t('mtExcluded'), 'green', { extra: 'padding:4px 14px;font-size:11px' })}
         </div>`;
       } else if (confirming) {
-        overlay = `<div style="position:absolute;inset:0;z-index:5;background:rgba(0,0,0,0.75);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
-          <span style="font-size:11px;font-weight:600;color:#fff">${this._t('mtExcludeQ')}</span>
+        overlay = `<div style="position:absolute;inset:0;z-index:5;background:rgba(var(--_shade, 0, 0, 0), 0.75);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+          <span style="font-size:11px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255))">${this._t('mtExcludeQ')}</span>
           <div style="display:flex;gap:10px">
-            <button data-mt-exclude-confirm="${itemId}" title="${this._t('mtYes')}" style="${_rnd('rgba(52,211,153,0.55)', 'rgba(52,211,153,0.32)')}">${CHECK_ICO}</button>
-            <button data-mt-exclude-cancel="${itemId}" title="${this._t('mtNo')}" style="${_rnd('rgba(248,113,113,0.55)', 'rgba(248,113,113,0.32)')}">${CROSS_ICO}</button>
+            <button data-mt-exclude-confirm="${itemId}" title="${this._t('mtYes')}" style="${_rnd('rgba(var(--arr-success-rgb, 52, 211, 153), 0.55)', 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.32)')}">${CHECK_ICO}</button>
+            <button data-mt-exclude-cancel="${itemId}" title="${this._t('mtNo')}" style="${_rnd('rgba(var(--arr-error-rgb, 248, 113, 113), 0.55)', 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.32)')}">${CROSS_ICO}</button>
           </div>
         </div>`;
       } else {
         actions = `<div style="position:absolute;bottom:8px;right:8px;z-index:5">
-          <button data-mt-exclude="${itemId}" title="${this._t('mtExcludeMedia')}" style="${_rnd('rgba(52,211,153,0.50)', 'rgba(52,211,153,0.28)')}">${EXCL_ICO}</button>
+          <button data-mt-exclude="${itemId}" title="${this._t('mtExcludeMedia')}" style="${_rnd('rgba(var(--arr-success-rgb, 52, 211, 153), 0.50)', 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.28)')}">${EXCL_ICO}</button>
         </div>`;
       }
 
@@ -345,13 +345,13 @@ class _MaintainerrCollectionsRenderMethods {
     const safePage = Math.min(exclPage, totalPages - 1);
     const pageItems = filteredExcl.slice(safePage * perPage, (safePage + 1) * perPage);
 
-    const _rnd = (bdr, bg) => `width:34px;height:34px;padding:0;border-radius:50%;border:1px solid ${bdr};background:${bg};color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:0;backdrop-filter:blur(8px)`;
+    const _rnd = (bdr, bg) => `width:34px;height:34px;padding:0;border-radius:50%;border:1px solid ${bdr};background:${bg};color:rgb(var(--_fg, 255, 255, 255));cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:0;backdrop-filter:blur(8px)`;
     const UNDO_ICO = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-4"/></svg>`;
 
     const posters = pageItems.map(item => {
       const exclId = item.id;
       const actions = `<div style="position:absolute;bottom:8px;right:8px;z-index:5">
-        <button data-mt-unexclude="${exclId}" title="${this._t('mtRemoveExclusion')}" style="${_rnd('rgba(248,113,113,0.50)', 'rgba(248,113,113,0.28)')}">${UNDO_ICO}</button>
+        <button data-mt-unexclude="${exclId}" title="${this._t('mtRemoveExclusion')}" style="${_rnd('rgba(var(--arr-error-rgb, 248, 113, 113), 0.50)', 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.28)')}">${UNDO_ICO}</button>
       </div>`;
       return this._mtOvPosterCard(item, {
         compact: cols >= 8,

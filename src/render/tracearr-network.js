@@ -91,7 +91,7 @@ class _TracearrNetworkMethods {
     const _lv = m.devicesLeftView || 'health';
     const _hP = m.devHealthPage || 0;
     const _mP = m.devMatrixPage || 0;
-    const _dpC = p => p >= 80 ? '#34C759' : p >= 50 ? '#FF9500' : '#FF3B30';
+    const _dpC = p => p >= 80 ? 'rgb(var(--arr-success-rgb, 52, 199, 89))' : p >= 50 ? 'rgb(var(--arr-warning-rgb, 255, 149, 0))' : 'rgb(var(--arr-error-rgb, 255, 59, 48))';
 
     const dhPage     = dh.slice(_hP * PAGE, (_hP + 1) * PAGE);
     const healthRows = dhPage.map(d => {
@@ -104,7 +104,7 @@ class _TracearrNetworkMethods {
           <span style="font-size:11px;font-weight:600;color:var(--is-text)">${name}</span>
           <span class="u-xs-muted">${this._t('traNSessions').replace('{n}', sess)}&nbsp;<span style="font-weight:700;color:${col}">${pct}%</span></span>
         </div>
-        <div style="height:5px;border-radius:3px;background:rgba(255,255,255,0.08);overflow:hidden">
+        <div style="height:5px;border-radius:3px;background:rgba(var(--_fill, 255, 255, 255), 0.08);overflow:hidden">
           <div style="height:100%;width:${pct}%;background:${col};border-radius:3px"></div>
         </div>
       </div>`;
@@ -114,8 +114,8 @@ class _TracearrNetworkMethods {
     const matCodecs   = dmat.codecs  || [];
     const matData     = dmat.devices || [];
     const matDataPage = matData.slice(_mP * PAGE, (_mP + 1) * PAGE);
-    const _mc = p => p >= 80 ? 'rgba(52,199,89,0.18)' : p >= 50 ? 'rgba(255,149,0,0.15)' : 'rgba(255,59,48,0.15)';
-    const _mt = p => p >= 80 ? '#34C759' : p >= 50 ? '#FF9500' : '#FF3B30';
+    const _mc = p => p >= 80 ? 'rgba(var(--arr-success-rgb, 52, 199, 89), 0.18)' : p >= 50 ? 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.15)' : 'rgba(var(--arr-error-rgb, 255, 59, 48), 0.15)';
+    const _mt = p => p >= 80 ? 'rgb(var(--arr-success-rgb, 52, 199, 89))' : p >= 50 ? 'rgb(var(--arr-warning-rgb, 255, 149, 0))' : 'rgb(var(--arr-error-rgb, 255, 59, 48))';
     let matInner = `<div style="color:var(--is-text-muted);font-size:11px;text-align:center;padding:12px">${this._t('tlNoData')}</div>`;
     if (matCodecs.length && matDataPage.length) {
       const cW = `${Math.max(12, Math.floor(75 / matCodecs.length))}%`;
@@ -128,7 +128,7 @@ class _TracearrNetworkMethods {
         const dC    = d.codecs || {};
         const cells = matCodecs.map(codec => {
           const cell = dC[codec];
-          if (!cell) return `<td style="text-align:center;color:rgba(255,255,255,0.2);font-size:10px;padding:5px 8px">—</td>`;
+          if (!cell) return `<td style="text-align:center;color:rgba(var(--_fg3, 255, 255, 255), 0.2);font-size:10px;padding:5px 8px">—</td>`;
           const p = Math.round(Number(cell.directPct ?? cell.directPlayRate ?? cell.rate ?? 0));
           const s = Number(cell.sessions ?? cell.count) || 0;
           return `<td style="text-align:center;background:${_mc(p)};padding:5px 8px">
@@ -148,9 +148,9 @@ class _TracearrNetworkMethods {
         <tbody>${tRows}</tbody>
       </table>
       <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center">
-        ${this._uiBadge(`≥80% Direct`, this._hexToRgbTriple('#34C759'), { small: true })}
-        ${this._uiBadge(`50-79%`, this._hexToRgbTriple('#FF9500'), { small: true })}
-        ${this._uiBadge(`&lt;50%`, this._hexToRgbTriple('#FF3B30'), { small: true })}
+        ${this._uiBadge(`≥80% Direct`, this._hexToRgbTriple('rgb(var(--arr-success-rgb, 52, 199, 89))'), { small: true })}
+        ${this._uiBadge(`50-79%`, this._hexToRgbTriple('rgb(var(--arr-warning-rgb, 255, 149, 0))'), { small: true })}
+        ${this._uiBadge(`&lt;50%`, this._hexToRgbTriple('rgb(var(--arr-error-rgb, 255, 59, 48))'), { small: true })}
       </div>`;
     }
 
@@ -180,8 +180,8 @@ class _TracearrNetworkMethods {
       const cod = this._escHtml([vid, aud].filter(Boolean).join(' + ') || h.codecCombination || '?');
       const tr  = Number(h.transcodeCount ?? h.transcodes ?? h.count) || 0;
       const pct = Math.round(Number(h.pctOfTotalTranscodes ?? h.percentage ?? h.percent ?? 0));
-      const pc  = pct >= 50 ? '#FF3B30' : '#FF9500';
-      const pb  = pct >= 50 ? 'rgba(255,59,48,0.12)' : 'rgba(255,149,0,0.1)';
+      const pc  = pct >= 50 ? 'rgb(var(--arr-error-rgb, 255, 59, 48))' : 'rgb(var(--arr-warning-rgb, 255, 149, 0))';
+      const pb  = pct >= 50 ? 'rgba(var(--arr-error-rgb, 255, 59, 48), 0.12)' : 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.1)';
       return `<tr>
         <td style="padding:5px 0;font-size:11px;color:var(--is-text)">
           <div style="font-weight:600">${dev}</div>
@@ -198,8 +198,8 @@ class _TracearrNetworkMethods {
       const cod = this._escHtml([vid, aud].filter(Boolean).join(' + ') || h.codecCombination || '?');
       const tr  = Number(h.transcodeCount ?? h.transcodes ?? h.count) || 0;
       const pct = Math.round(Number(h.pctOfTotalTranscodes ?? h.percentage ?? h.percent ?? 0));
-      const pc  = pct >= 50 ? '#FF3B30' : '#FF9500';
-      const pb  = pct >= 50 ? 'rgba(255,59,48,0.12)' : 'rgba(255,149,0,0.1)';
+      const pc  = pct >= 50 ? 'rgb(var(--arr-error-rgb, 255, 59, 48))' : 'rgb(var(--arr-warning-rgb, 255, 149, 0))';
+      const pb  = pct >= 50 ? 'rgba(var(--arr-error-rgb, 255, 59, 48), 0.12)' : 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.1)';
       return `<div class="tl-mob-card" style="display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center">
         <span style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${dev}</span>
         ${this._uiBadge(`${pct}%`, this._hexToRgbTriple(pc), { extra: 'font-size:10px' })}
@@ -217,11 +217,11 @@ class _TracearrNetworkMethods {
       const dpN  = Math.round(Number(u.directPlayPct ?? u.directPlayRate ?? 0));
       const tr   = Number(u.transcodeCount ?? u.transcodes) || 0;
       const pctN = Math.round(Number(u.pctOfTotalTranscodes ?? u.percentage ?? (sess ? tr / sess * 100 : 0)));
-      const dc2  = dpN >= 80 ? '#34C759' : dpN >= 50 ? '#FF9500' : '#FF3B30';
-      const db2  = dpN >= 80 ? 'rgba(52,199,89,0.12)' : dpN >= 50 ? 'rgba(255,149,0,0.1)' : 'rgba(255,59,48,0.12)';
+      const dc2  = dpN >= 80 ? 'rgb(var(--arr-success-rgb, 52, 199, 89))' : dpN >= 50 ? 'rgb(var(--arr-warning-rgb, 255, 149, 0))' : 'rgb(var(--arr-error-rgb, 255, 59, 48))';
+      const db2  = dpN >= 80 ? 'rgba(var(--arr-success-rgb, 52, 199, 89), 0.12)' : dpN >= 50 ? 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.1)' : 'rgba(var(--arr-error-rgb, 255, 59, 48), 0.12)';
       const avEl = av
         ? `<img src="${av}" width="20" height="20" style="border-radius:50%;object-fit:cover;flex-shrink:0">`
-        : `<div style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--is-text-muted)">${this._escHtml((rawName[0]||'?').toUpperCase())}</div>`;
+        : `<div style="width:20px;height:20px;border-radius:50%;background:rgba(var(--_fill, 255, 255, 255), 0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--is-text-muted)">${this._escHtml((rawName[0]||'?').toUpperCase())}</div>`;
       return `<tr>
         <td style="padding:6px 0;font-size:11px;font-weight:600;color:var(--is-text)">
           <div class="u-row-6">${avEl}<span>${name}</span></div>
@@ -229,7 +229,7 @@ class _TracearrNetworkMethods {
         <td style="padding:6px 6px;font-size:11px;text-align:right;color:var(--is-text)">${sess}</td>
         <td style="padding:6px 6px;text-align:right">${this._uiBadge(`${dpN}%`, this._hexToRgbTriple(dc2), { extra: 'font-size:10px' })}</td>
         <td style="padding:6px 6px;font-size:11px;text-align:right;color:var(--is-text)">${tr}</td>
-        <td style="padding:6px 0;text-align:right">${this._uiBadge(`${pctN}%`, this._hexToRgbTriple('#FF3B30'), { extra: 'font-size:10px' })}</td>
+        <td style="padding:6px 0;text-align:right">${this._uiBadge(`${pctN}%`, this._hexToRgbTriple('rgb(var(--arr-error-rgb, 255, 59, 48))'), { extra: 'font-size:10px' })}</td>
       </tr>`;
     }).join('');
     const usersMobCards = dtuPage.map(u => {
@@ -240,11 +240,11 @@ class _TracearrNetworkMethods {
       const dpN  = Math.round(Number(u.directPlayPct ?? u.directPlayRate ?? 0));
       const tr   = Number(u.transcodeCount ?? u.transcodes) || 0;
       const pctN = Math.round(Number(u.pctOfTotalTranscodes ?? u.percentage ?? (sess ? tr / sess * 100 : 0)));
-      const dc2  = dpN >= 80 ? '#34C759' : dpN >= 50 ? '#FF9500' : '#FF3B30';
-      const db2  = dpN >= 80 ? 'rgba(52,199,89,0.12)' : dpN >= 50 ? 'rgba(255,149,0,0.1)' : 'rgba(255,59,48,0.12)';
+      const dc2  = dpN >= 80 ? 'rgb(var(--arr-success-rgb, 52, 199, 89))' : dpN >= 50 ? 'rgb(var(--arr-warning-rgb, 255, 149, 0))' : 'rgb(var(--arr-error-rgb, 255, 59, 48))';
+      const db2  = dpN >= 80 ? 'rgba(var(--arr-success-rgb, 52, 199, 89), 0.12)' : dpN >= 50 ? 'rgba(var(--arr-warning-rgb, 255, 149, 0), 0.1)' : 'rgba(var(--arr-error-rgb, 255, 59, 48), 0.12)';
       const avEl = av
         ? `<img src="${av}" width="18" height="18" style="border-radius:50%;object-fit:cover;flex-shrink:0">`
-        : `<div style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--is-text-muted)">${this._escHtml((rawName[0]||'?').toUpperCase())}</div>`;
+        : `<div style="width:18px;height:18px;border-radius:50%;background:rgba(var(--_fill, 255, 255, 255), 0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--is-text-muted)">${this._escHtml((rawName[0]||'?').toUpperCase())}</div>`;
       return `<div class="tl-mob-card" style="display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:center">
         <div style="display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden">
           ${avEl}
@@ -415,8 +415,8 @@ class _TracearrNetworkMethods {
       const bw      = Math.max(4, slotW * bwFrac);
       const rr      = Math.min(bw * 0.38, 10);
 
-      const BAR_HEX  = '#34C759';
-      const LINE_HEX = '#007AFF';
+      const BAR_HEX  = 'rgb(var(--arr-success-rgb, 52, 199, 89))';
+      const LINE_HEX = 'rgb(var(--arr-accent-rgb, 0, 122, 255))';
 
       // Rounded-top bar path (same as _tlGRoundedTop)
       const roundTop = (x, y, w, h, r) => {
@@ -495,25 +495,25 @@ class _TracearrNetworkMethods {
         const rx = (PL + i * slotW).toFixed(1);
         const rw = slotW.toFixed(1);
         return `<g class="tl-g-lcol" data-tl-g-col="${td}" style="cursor:pointer">` +
-               `<rect class="tl-g-lhlt" x="${rx}" y="${PT}" width="${rw}" height="${cH}" style="fill:rgba(255,255,255,0.08);opacity:0"/>` +
+               `<rect class="tl-g-lhlt" x="${rx}" y="${PT}" width="${rw}" height="${cH}" style="fill:rgba(var(--_fg3, 255, 255, 255), 0.08);opacity:0"/>` +
                `<rect x="${rx}" y="${PT}" width="${rw}" height="${cH}" fill="transparent"/></g>`;
       }).join('');
 
       const svgInner = `
         <defs>
           <linearGradient id="bwbg" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stop-color="${BAR_HEX}" stop-opacity="0.92"/>
-            <stop offset="100%" stop-color="${BAR_HEX}" stop-opacity="0.42"/>
+            <stop offset="0%"   stop-opacity="0.92" style="stop-color:${BAR_HEX}"/>
+            <stop offset="100%" stop-opacity="0.42" style="stop-color:${BAR_HEX}"/>
           </linearGradient>
           <linearGradient id="bwag" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%"   stop-color="${LINE_HEX}" stop-opacity="0.18"/>
-            <stop offset="100%" stop-color="${LINE_HEX}" stop-opacity="0"/>
+            <stop offset="0%"   stop-opacity="0.18" style="stop-color:${LINE_HEX}"/>
+            <stop offset="100%" stop-opacity="0" style="stop-color:${LINE_HEX}"/>
           </linearGradient>
         </defs>
         ${[0,0.5,1].map(f => `<line x1="${PL}" y1="${(PT+cH-f*cH).toFixed(1)}" x2="${VBW-PR}" y2="${(PT+cH-f*cH).toFixed(1)}" stroke="rgba(255,255,255,${f===0?'0.08':'0.05'})" stroke-width="1" ${f===0.5?'stroke-dasharray="4 3"':''}/>` ).join('')}
         ${bars}
         <path d="${areaD}" fill="url(#bwag)" style="animation:fade-in 0.8s ease-out both"/>
-        <polyline points="${sessPts}" fill="none" stroke="${LINE_HEX}" stroke-width="2" vector-effect="non-scaling-stroke" class="tl-g-anim-line"/>
+        <polyline points="${sessPts}" fill="none" stroke-width="2" vector-effect="non-scaling-stroke" class="tl-g-anim-line" style="stroke:${LINE_HEX}"/>
         ${hitColsBw}
       `;
 
@@ -523,7 +523,7 @@ class _TracearrNetworkMethods {
       const PW = 38; // side panel width
 
       const yHtmlL = yTicksL.filter(t => t.lbl).map(t =>
-        `<span style="position:absolute;right:2px;top:${mapY(t.y)}px;transform:translateY(-50%);font-size:9px;line-height:1;color:#34C759;white-space:nowrap">${t.lbl}</span>`
+        `<span style="position:absolute;right:2px;top:${mapY(t.y)}px;transform:translateY(-50%);font-size:9px;line-height:1;color:rgb(var(--arr-success-rgb, 52, 199, 89));white-space:nowrap">${t.lbl}</span>`
       ).join('');
       const yHtmlR = yTicksR.filter(t => t.lbl).map(t =>
         `<span style="position:absolute;left:2px;top:${mapY(t.y)}px;transform:translateY(-50%);font-size:9px;line-height:1;color:rgba(107,170,255,0.85);white-space:nowrap">${t.lbl}</span>`
@@ -532,7 +532,7 @@ class _TracearrNetworkMethods {
       return `<div style="position:relative;padding-left:${PW}px;padding-right:${PW}px">
         <div style="position:absolute;left:0;top:0;width:${PW}px;height:${SVGH_DISP}px;overflow:visible">
           <span style="position:absolute;left:0;top:0;width:${PW}px;height:${SVGH_DISP}px;display:flex;align-items:center;justify-content:center">
-            <span style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:9px;color:rgba(52,199,89,0.7);white-space:nowrap">GB</span>
+            <span style="writing-mode:vertical-rl;transform:rotate(180deg);font-size:9px;color:rgba(var(--arr-success-rgb, 52, 199, 89), 0.7);white-space:nowrap">GB</span>
           </span>
           ${yHtmlL}
         </div>
@@ -551,7 +551,7 @@ class _TracearrNetworkMethods {
       </div>`;
     })();
 
-    const _tipEl = `<div class="tl-g-tip" style="display:none;position:absolute;top:0;left:0;background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:7px;padding:7px 10px;font-size:11px;pointer-events:none;z-index:50;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.3)"></div>`;
+    const _tipEl = `<div class="tl-g-tip" style="display:none;position:absolute;top:0;left:0;background:var(--is-menu-bg,#18182a);border:1px solid var(--is-btn-bdr);border-radius:7px;padding:7px 10px;font-size:11px;pointer-events:none;z-index:50;white-space:nowrap;box-shadow:0 4px 12px rgba(var(--_shadow, 0, 0, 0), 0.3)"></div>`;
     const chartCard = `<div class="tl-g-card" style="margin-bottom:8px;flex-shrink:0;position:relative">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <span class="tl-graph-title" style="font-size:11px">${this._t('traDailyBw')}</span>
@@ -578,7 +578,7 @@ class _TracearrNetworkMethods {
       const av   = this._imgSrc(u.thumbUrl || u.avatarUrl || u.avatar) || null;
       const avEl = av
         ? `<img src="${av}" width="22" height="22" style="border-radius:50%;object-fit:cover;flex-shrink:0">`
-        : `<div style="width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--is-text-muted)">${this._escHtml((rawName[0]||'?').toUpperCase())}</div>`;
+        : `<div style="width:22px;height:22px;border-radius:50%;background:rgba(var(--_fill, 255, 255, 255), 0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--is-text-muted)">${this._escHtml((rawName[0]||'?').toUpperCase())}</div>`;
       return `<tr>
         <td style="padding:6px 8px;font-size:11px;color:var(--is-text-muted);text-align:center;width:28px">${rank}</td>
         <td style="padding:6px 0;font-size:11px;font-weight:600;color:var(--is-text)">
@@ -587,7 +587,7 @@ class _TracearrNetworkMethods {
         <td style="padding:6px 8px;font-size:11px;text-align:right;color:var(--is-text)">${Number(u.sessions) || 0}</td>
         <td style="padding:6px 8px;font-size:11px;text-align:right;color:var(--is-text)">${_fmtGb(u.totalGb)}</td>
         <td style="padding:6px 8px;font-size:11px;text-align:right;color:var(--is-text)">${_fmtHrs(u.totalHours)}</td>
-        <td style="padding:6px 0;text-align:right">${this._uiBadge(`${_fmtBr(u.avgBitrateMbps)}`, this._hexToRgbTriple('#FF9500'), { extra: 'font-size:10px' })}</td>
+        <td style="padding:6px 0;text-align:right">${this._uiBadge(`${_fmtBr(u.avgBitrateMbps)}`, this._hexToRgbTriple('rgb(var(--arr-warning-rgb, 255, 149, 0))'), { extra: 'font-size:10px' })}</td>
       </tr>`;
     }).join('') || `<tr><td colspan="6" style="text-align:center;color:var(--is-text-muted);font-size:11px;padding:14px">${this._t('tlNoData')}</td></tr>`;
 
@@ -598,7 +598,7 @@ class _TracearrNetworkMethods {
       const av   = this._imgSrc(u.thumbUrl || u.avatarUrl || u.avatar) || null;
       const avEl = av
         ? `<img src="${av}" width="18" height="18" style="border-radius:50%;object-fit:cover;flex-shrink:0">`
-        : `<div style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--is-text-muted)">${this._escHtml((rawName[0]||'?').toUpperCase())}</div>`;
+        : `<div style="width:18px;height:18px;border-radius:50%;background:rgba(var(--_fill, 255, 255, 255), 0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:var(--is-text-muted)">${this._escHtml((rawName[0]||'?').toUpperCase())}</div>`;
       const metaParts = [
         `${Number(u.sessions) || 0} sess`,
         _fmtHrs(u.totalHours) !== '—' ? _fmtHrs(u.totalHours) : null,
@@ -609,7 +609,7 @@ class _TracearrNetworkMethods {
         <span style="font-size:11px;font-weight:700;color:var(--is-text)">${_fmtGb(u.totalGb)}</span>
         <span></span>
         <span class="u-xs-muted">${metaParts}</span>
-        ${this._uiBadge(`${_fmtBr(u.avgBitrateMbps)}`, this._hexToRgbTriple('#FF9500'), { extra: 'font-size:10px' })}
+        ${this._uiBadge(`${_fmtBr(u.avgBitrateMbps)}`, this._hexToRgbTriple('rgb(var(--arr-warning-rgb, 255, 149, 0))'), { extra: 'font-size:10px' })}
       </div>`;
     }).join('') || `<div style="color:var(--is-text-muted);font-size:11px;text-align:center;padding:14px">${this._t('tlNoData')}</div>`;
 

@@ -57,7 +57,7 @@ _renderRadarrCard(m) {
   const poster = this._getRadarrPoster(m);
   const title  = this._escHtml(m.title || 'Unknown');
   const grad = 'rgba(0,0,0,0.88)';
-  const tc   = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const tc   = 'rgba(var(--_ptx, 255, 255, 255), 1)';
   const hasFile      = m.hasFile;
   const cutoffNotMet = m.movieFile?.qualityCutoffNotMet;
   const dlFailed     = this._radarrQueueFailed.has(m.id);
@@ -131,7 +131,7 @@ _renderSonarrCard(s) {
   const poster = this._getSonarrPoster(s);
   const title  = this._escHtml(s.title || 'Unknown');
   const grad = 'rgba(0,0,0,0.88)';
-  const tc   = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const tc   = 'rgba(var(--_ptx, 255, 255, 255), 1)';
   const stats      = s.statistics || {};
   const fileCount  = stats.episodeFileCount || 0;
   const totalCount = stats.episodeCount || 0;
@@ -194,7 +194,7 @@ _renderRecentlyAddedCard(item) {
   const typeTag = isMovie ? this._t('typeMovie') : this._t('typeTv');
   const popup   = isMovie ? POPUP_TYPE.RADARR : POPUP_TYPE.SONARR;
   const grad = 'rgba(0,0,0,0.88)';
-  const tc   = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const tc   = 'rgba(var(--_ptx, 255, 255, 255), 1)';
   const img = this._mcImg(poster, isMovie ? '🎬' : '📺', item.id);
   const tvdbAttr   = !isMovie && item.tvdbId ? ` data-tvdbid="${item.tvdbId}"` : '';
   const tmdbAttr   = item.tmdbId ? ` data-tmdbid="${item.tmdbId}"` : '';
@@ -394,7 +394,7 @@ _renderRecentlyRequestedCard(item) {
     ? (isMovie ? POPUP_TYPE.MOVIE : POPUP_TYPE.TV)
     : (isMovie ? POPUP_TYPE.RADARR : POPUP_TYPE.SONARR);
   const grad = 'rgba(0,0,0,0.88)';
-  const tc   = 'rgba(var(--arr-pt-rgb, 255, 255, 255), 1)';
+  const tc   = 'rgba(var(--_ptx, 255, 255, 255), 1)';
   const img = this._mcImg(poster, isMovie ? '🎬' : '📺', item.id || item.tmdbId);
   const tvdbAttr   = !isMovie && item.tvdbId ? ` data-tvdbid="${item.tvdbId}"` : '';
   const tmdbAttr   = item.tmdbId ? ` data-tmdbid="${item.tmdbId}"` : '';

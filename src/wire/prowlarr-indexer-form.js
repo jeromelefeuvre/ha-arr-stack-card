@@ -84,7 +84,7 @@ class _WireProwlarrIndexerFormMethods {
           const priv = (s.privacy||'private').toLowerCase();
           const privBadge = this._uiBadge(this._escHtml(s.privacy || this._t('pwPrivate')),
             priv === 'public' ? 'green' : priv === 'semipublic' ? 'amber' : 'red');
-          return `<tr class="pw-schema-item" data-pw-schema-name="${this._escHtml(s.name||'')}" style="cursor:pointer" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background=''">
+          return `<tr class="pw-schema-item" data-pw-schema-name="${this._escHtml(s.name||'')}" style="cursor:pointer" onmouseover="this.style.background='rgba(var(--_fill, 255, 255, 255), 0.04)'" onmouseout="this.style.background=''">
             <td style="${tdSty}">${protoBadge}</td>
             <td style="${tdSty};font-weight:600">${this._escHtml(s.name||'—')}</td>
             <td style="${tdSty};color:var(--is-text-muted)">${this._escHtml(s.language||'—')}</td>
@@ -184,7 +184,7 @@ class _WireProwlarrIndexerFormMethods {
     const fields = data.fields || [];
 
     // Capsule field; an error only recolours the rim rather than reshaping it.
-    const inputSty = (err) => `width:100%${err ? ';border-color:rgba(248,113,113,0.8)' : ''}`;
+    const inputSty = (err) => `width:100%${err ? ';border-color:rgba(var(--arr-error-rgb, 248, 113, 113), 0.8)' : ''}`;
     const _chk = (attrs, checked, label) => `<label class="mt-chk">
       <input ${attrs} type="checkbox"${checked ? ' checked' : ''}>
       <span class="mt-chk-box">${_ICO_CHECK}</span>
@@ -214,7 +214,7 @@ class _WireProwlarrIndexerFormMethods {
       }
       const val    = f.value !== undefined && f.value !== null ? f.value : (f.advanced ? '' : '');
       const valStr = typeof val === 'boolean' ? (val ? 'true' : 'false') : String(val ?? '');
-      const errMsg = errors[`field_${fi}`] ? `<div style="font-size:10px;color:rgba(248,113,113,0.8);margin-top:3px">${this._escHtml(errors[`field_${fi}`])}</div>` : '';
+      const errMsg = errors[`field_${fi}`] ? `<div style="font-size:10px;color:rgba(var(--arr-error-rgb, 248, 113, 113), 0.8);margin-top:3px">${this._escHtml(errors[`field_${fi}`])}</div>` : '';
       const hint   = f.helpText && f.type !== 'info' ? `<div style="font-size:10px;color:var(--is-text-muted);margin-top:3px">${this._escHtml(f.helpText.substring(0,120))}</div>` : '';
 
       let fieldEl;
@@ -336,24 +336,24 @@ class _WireProwlarrIndexerFormMethods {
           // Show Prowlarr error messages at top of form
           const msgs = (result.errors || [])
             .map(e => e.errorMessage).filter(Boolean).join('\n');
-          if (btn) { btn.textContent = '✗ Failed'; btn.style.color = 'rgba(255,100,100,0.9)'; }
+          if (btn) { btn.textContent = '✗ Failed'; btn.style.color = 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)'; }
           testPassed = false;
           if (msgs) {
             body.querySelector('#pw-test-err')?.remove();
             const errDiv = document.createElement('div');
             errDiv.id = 'pw-test-err';
-            errDiv.style.cssText = 'margin-bottom:14px;padding:10px 12px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:8px;font-size:11px;color:rgba(248,113,113,0.9);line-height:1.6;white-space:pre-wrap;word-break:break-word';
+            errDiv.style.cssText = 'margin-bottom:14px;padding:10px 12px;background:rgba(var(--arr-error-rgb, 248, 113, 113), 0.1);border:1px solid rgba(var(--arr-error-rgb, 248, 113, 113), 0.3);border-radius:8px;font-size:11px;color:rgba(var(--arr-error-rgb, 248, 113, 113), 0.9);line-height:1.6;white-space:pre-wrap;word-break:break-word';
             errDiv.textContent = msgs;
             body.prepend(errDiv);
           }
         } else {
           testPassed = true;
           body.querySelector('#pw-test-err')?.remove();
-          if (btn) { btn.textContent = '✓ OK'; btn.style.color = 'rgba(52,211,153,0.9)'; }
+          if (btn) { btn.textContent = '✓ OK'; btn.style.color = 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.9)'; }
         }
       } catch (err) {
         testPassed = false;
-        if (btn) { btn.textContent = '✗ Failed'; btn.style.color = 'rgba(255,100,100,0.9)'; }
+        if (btn) { btn.textContent = '✗ Failed'; btn.style.color = 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)'; }
       }
       if (btn) { btn.disabled = false; setTimeout(() => { if (btn) { btn.textContent = this._t('pwTest'); btn.style.color = ''; } }, 3000); }
     });
@@ -389,8 +389,8 @@ class _WireProwlarrIndexerFormMethods {
       if (!testPassed) {
         const btn = body.querySelector('#pw-form-save');
         if (btn) {
-          btn.style.background = 'rgba(248,113,113,0.25)';
-          btn.style.color = 'rgba(248,113,113,0.95)';
+          btn.style.background = 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.25)';
+          btn.style.color = 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.95)';
           setTimeout(() => {
             btn.style.background = 'rgba(99,140,255,0.2)';
             btn.style.color = 'rgba(99,140,255,0.95)';
@@ -399,7 +399,7 @@ class _WireProwlarrIndexerFormMethods {
         if (!body.querySelector('#pw-test-err')) {
           const errDiv = document.createElement('div');
           errDiv.id = 'pw-test-err';
-          errDiv.style.cssText = 'margin-bottom:14px;padding:10px 12px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:8px;font-size:11px;color:rgba(248,113,113,0.9);line-height:1.6';
+          errDiv.style.cssText = 'margin-bottom:14px;padding:10px 12px;background:rgba(var(--arr-error-rgb, 248, 113, 113), 0.1);border:1px solid rgba(var(--arr-error-rgb, 248, 113, 113), 0.3);border-radius:8px;font-size:11px;color:rgba(var(--arr-error-rgb, 248, 113, 113), 0.9);line-height:1.6';
           errDiv.textContent = this._t('pwRunTestIdx');
           body.prepend(errDiv);
         }
@@ -431,7 +431,7 @@ class _WireProwlarrIndexerFormMethods {
       } catch (err) {
         if (btn) { btn.disabled = false; btn.textContent = isNew ? this._t('libTagAdd') : this._t('mtSave'); }
         const errDiv = document.createElement('div');
-        errDiv.style.cssText = 'color:rgba(255,100,100,0.8);font-size:11px;margin-top:8px';
+        errDiv.style.cssText = 'color:rgba(var(--arr-error-rgb, 255, 100, 100), 0.8);font-size:11px;margin-top:8px';
         errDiv.textContent   = err?.body?.message || String(err);
         body.querySelector('#pw-form-save')?.after(errDiv);
       }

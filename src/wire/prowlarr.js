@@ -63,7 +63,7 @@ class _WireProwlarrMethods {
     const mob = this._isMob;
     const bg  = mob ? (this._isDay ? '#fafafc' : '#14141a') : `rgba(${rgb},0.12)`;
     const pos = mob
-      ? 'position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1200;padding:6px 16px;box-shadow:0 6px 20px rgba(0,0,0,0.55)'
+      ? 'position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:1200;padding:6px 16px;box-shadow:0 6px 20px rgba(var(--_shadow, 0, 0, 0), 0.55)'
       : 'margin-left:8px;padding:2px 12px';
     return `<span style="font-size:11px;font-weight:600;color:rgba(${rgb},0.9);background:${bg};border:1px solid rgba(${rgb},0.45);border-radius:999px;white-space:nowrap;flex-shrink:0;${pos}">${spin}${this._escHtml(m._statusMsg)}</span>`;
   }
@@ -136,8 +136,8 @@ class _WireProwlarrMethods {
     btn.innerHTML = hasErrors
       ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" style="display:block"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
       : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:block"><polyline points="20 6 9 17 4 12"/></svg>`;
-    btn.style.background = hasErrors ? 'rgba(255,100,100,0.18)' : 'rgba(52,211,153,0.18)';
-    btn.style.color      = hasErrors ? 'rgba(255,100,100,0.9)'  : 'rgba(52,211,153,0.9)';
+    btn.style.background = hasErrors ? 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.18)' : 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.18)';
+    btn.style.color      = hasErrors ? 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.9)'  : 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.9)';
     await new Promise(r => setTimeout(r, 2000));
     btn.innerHTML = btn._pwIco || btn.innerHTML;
     if (btn._pwSty != null) btn.setAttribute('style', btn._pwSty);

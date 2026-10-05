@@ -176,7 +176,7 @@ class _ActivityMissingRenderMethods {
           </div>
         </div>`).join('');
       }
-      return seasons.map(ss => `<tr data-act-season style="background:rgba(255,255,255,0.015)">
+      return seasons.map(ss => `<tr data-act-season style="background:rgba(var(--_fill, 255, 255, 255), 0.015)">
         <td style="padding:0;width:24px"></td>
         <td style="padding:5px 8px;overflow:hidden;max-width:300px">
           <span style="font-size:11px;font-weight:700;color:var(--is-text-sec)">S${String(ss.n).padStart(2,'0')}</span>

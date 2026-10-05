@@ -15,25 +15,25 @@ class _ProwlarrTilesMethods {
 
     const testResults = this._prowlarr?.appTestResults || {};
     const rows = apps.slice(0, 5).map((app, i) => {
-      const sep   = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+      const sep   = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
       const impl  = (app.implementationName || app.implementation || '').toLowerCase();
       const color = IMPL_COLORS[impl] || '#9ca3af';
       const lv    = app.syncLevel || '';
       const lvl   = lv.toLowerCase();
       const sync  = lvl === 'fullsync' ? this._t('pwSyncFull') : lvl === 'addonly' ? this._t('libTagAdd') : lvl === 'disabled' ? this._t('pwOff') : (lv || '—');
       const tr    = testResults[app.id];
-      const dotClr = !app.enable ? 'rgba(255,255,255,0.2)' : !tr ? 'rgba(200,200,200,0.3)' : tr.ok ? 'rgba(52,211,153,0.85)' : 'rgba(255,100,100,0.85)';
+      const dotClr = !app.enable ? 'rgba(var(--_fg3, 255, 255, 255), 0.2)' : !tr ? 'rgba(200,200,200,0.3)' : tr.ok ? 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.85)' : 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.85)';
       return `<div style="${sep}padding:3px 0">
         <div class="u-row-5">
           <div style="width:6px;height:6px;border-radius:50%;background:${dotClr};flex-shrink:0"></div>
-          <span style="font-size:10px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1">${this._escHtml(app.name||'—')}</span>
-          <span style="font-size:8px;color:rgba(255,255,255,0.35);flex-shrink:0">${sync}</span>
+          <span style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1">${this._escHtml(app.name||'—')}</span>
+          <span style="font-size:8px;color:rgba(var(--_fg3, 255, 255, 255), 0.35);flex-shrink:0">${sync}</span>
         </div>
       </div>`;
     }).join('') || `<div class="u-xxs-dim">${this._t('pwNoApps')}</div>`;
 
     const badge = apps.length > 0
-      ? `<span style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.12);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${apps.length}</span>`
+      ? `<span style="font-size:10px;font-weight:700;color:rgba(var(--_fg2, 255, 255, 255), 0.7);background:rgba(var(--_fill, 255, 255, 255), 0.12);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${apps.length}</span>`
       : '';
 
     return `<div class="tl-card u-sec-body" data-pw-open="apps">
@@ -42,7 +42,7 @@ class _ProwlarrTilesMethods {
         <span class="u-media-badge">${this._t('pwApplications')}</span>
         ${badge}
       </div>
-      <div class="u-flex-ovh-rel"><div style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.25);margin-bottom:4px">${this._t('pwTop5')}</div>${rows}</div>
+      <div class="u-flex-ovh-rel"><div style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(var(--_fg3, 255, 255, 255), 0.25);margin-bottom:4px">${this._t('pwTop5')}</div>${rows}</div>
     </div>`;
   }
 
@@ -58,16 +58,16 @@ class _ProwlarrTilesMethods {
     };
 
     const rowsHtml = recent.slice(0, 5).map((h, i) => {
-      const sep     = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+      const sep     = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
       const indexer = (this._prowlarr?.indexers||[]).find(ix=>ix.id===h.indexerId)?.name || h.indexer || '—';
       const ago     = h.date ? timeAgo(h.date) : '';
       return `<div style="${sep}padding:3px 0;display:flex;align-items:center;justify-content:space-between;gap:4px">
-        <span style="font-size:9px;font-weight:600;color:rgba(255,255,255,0.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1">${this._escHtml(indexer)}</span>
-        <span style="font-size:8px;color:rgba(255,255,255,0.35);flex-shrink:0">${ago}</span>
+        <span style="font-size:9px;font-weight:600;color:rgba(var(--_fg2, 255, 255, 255), 0.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1">${this._escHtml(indexer)}</span>
+        <span style="font-size:8px;color:rgba(var(--_fg3, 255, 255, 255), 0.35);flex-shrink:0">${ago}</span>
       </div>`;
     }).join('');
     const rows = recent.length
-      ? `<div><div style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.25);margin-bottom:4px">${this._t('pwLastGrabs')}</div>${rowsHtml}</div>`
+      ? `<div><div style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(var(--_fg3, 255, 255, 255), 0.25);margin-bottom:4px">${this._t('pwLastGrabs')}</div>${rowsHtml}</div>`
       : `<div class="u-xxs-dim">${this._t('pwNoRecentGrabs')}</div>`;
 
     return `<div class="tl-card u-sec-body" data-pw-open="history">
@@ -92,25 +92,25 @@ class _ProwlarrTilesMethods {
     const rows = sorted.slice(0, 5).map((idx, i) => {
       const hasErr  = !!idx._status;
       const isOff   = !idx.enable;
-      const dot     = isOff ? 'rgba(255,255,255,0.25)' : hasErr ? 'rgba(255,100,100,0.85)' : 'rgba(52,211,153,0.85)';
+      const dot     = isOff ? 'rgba(var(--_fg3, 255, 255, 255), 0.25)' : hasErr ? 'rgba(var(--arr-error-rgb, 255, 100, 100), 0.85)' : 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.85)';
       const proto   = (idx.protocol || '').toLowerCase() === 'usenet' ? 'NZB' : 'TRK';
       const name    = idx.name || '—';
-      const sep     = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+      const sep     = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
       const errMsg  = '';
       return `<div style="${sep}padding:3px 0">
         <div class="u-row-5">
           <div style="width:6px;height:6px;border-radius:50%;background:${dot};flex-shrink:0"></div>
-          <span style="font-size:10px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1">${this._escHtml(name)}</span>
-          <span style="font-size:8px;color:rgba(255,255,255,0.35);flex-shrink:0">${proto}</span>
+          <span style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1">${this._escHtml(name)}</span>
+          <span style="font-size:8px;color:rgba(var(--_fg3, 255, 255, 255), 0.35);flex-shrink:0">${proto}</span>
         </div>
         ${errMsg}
       </div>`;
     }).join('') || `<div class="u-xxs-dim">${this._t('pwNoIndexers')}</div>`;
 
     const badge = errors > 0
-      ? `<span style="font-size:10px;font-weight:700;color:#fff;background:rgba(255,149,0,0.15);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${errors} error${errors>1?'s':''}</span>`
+      ? `<span style="font-size:10px;font-weight:700;color:rgb(var(--_fg, 255, 255, 255));background:rgba(var(--arr-warning-rgb, 255, 149, 0), 0.15);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${errors} error${errors>1?'s':''}</span>`
       : active > 0
-        ? `<span style="font-size:10px;font-weight:700;color:#fff;background:rgba(52,211,153,0.30);border:1px solid rgba(52,211,153,0.62);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${active} ok</span>`
+        ? `<span style="font-size:10px;font-weight:700;color:rgb(var(--_fg, 255, 255, 255));background:rgba(var(--arr-success-rgb, 52, 211, 153), 0.30);border:1px solid rgba(var(--arr-success-rgb, 52, 211, 153), 0.62);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${active} ok</span>`
         : '';
 
     return `<div class="tl-card u-sec-body" data-pw-open="indexers">
@@ -119,7 +119,7 @@ class _ProwlarrTilesMethods {
         <span class="u-media-badge">${this._t('pwIndexers')}</span>
         ${badge}
       </div>
-      <div class="u-flex-ovh-rel"><div style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.25);margin-bottom:4px">${this._t('pwTop5')}</div>${rows}</div>
+      <div class="u-flex-ovh-rel"><div style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(var(--_fg3, 255, 255, 255), 0.25);margin-bottom:4px">${this._t('pwTop5')}</div>${rows}</div>
     </div>`;
   }
 
@@ -142,21 +142,21 @@ class _ProwlarrTilesMethods {
       const name = i.indexerName || i.name || '—';
       return `<div style="margin-bottom:2px">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1px">
-          <div style="font-size:8px;color:rgba(255,255,255,0.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1">${this._escHtml(name)}</div>
-          <div style="font-size:7px;color:rgba(255,255,255,0.3);flex-shrink:0;margin-left:3px">${i.numberOfGrabs||0}</div>
+          <div style="font-size:8px;color:rgba(var(--_fg2, 255, 255, 255), 0.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1">${this._escHtml(name)}</div>
+          <div style="font-size:7px;color:rgba(var(--_fg3, 255, 255, 255), 0.3);flex-shrink:0;margin-left:3px">${i.numberOfGrabs||0}</div>
         </div>
-        <div style="height:4px;background:rgba(255,255,255,0.07);border-radius:2px"><div style="width:${w}%;height:100%;background:linear-gradient(to right,rgba(255,255,255,0.2),rgba(255,255,255,0.5));border-radius:2px"></div></div>
+        <div style="height:4px;background:rgba(var(--_fill, 255, 255, 255), 0.07);border-radius:2px"><div style="width:${w}%;height:100%;background:linear-gradient(to right,rgba(var(--_fg, 255, 255, 255), 0.2),rgba(var(--_fg, 255, 255, 255), 0.5));border-radius:2px"></div></div>
       </div>`;
     }).join('');
     const bars = top4.length
-      ? `<div style="margin-bottom:2px"><div style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.25);margin-bottom:4px">${this._t('pwMostGrabs')}</div>${barsHtml}</div>`
+      ? `<div style="margin-bottom:2px"><div style="font-size:7px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:rgba(var(--_fg3, 255, 255, 255), 0.25);margin-bottom:4px">${this._t('pwMostGrabs')}</div>${barsHtml}</div>`
       : '';
 
     const chips = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:6px">
       ${[[this._t('pwIndexers'), active], [this._t('pwQueries'), fmtNum(totalQ)], [this._t('pwGrabs'), fmtNum(totalG)]].map(([l, v]) =>
-        `<div style="background:rgba(255,255,255,0.06);border-radius:5px;padding:3px 6px">
-          <div style="font-size:8px;color:rgba(255,255,255,0.4)">${l}</div>
-          <div style="font-size:11px;font-weight:700;color:#fff">${v}</div>
+        `<div style="background:rgba(var(--_fill, 255, 255, 255), 0.06);border-radius:5px;padding:3px 6px">
+          <div style="font-size:8px;color:rgba(var(--_fg3, 255, 255, 255), 0.4)">${l}</div>
+          <div style="font-size:11px;font-weight:700;color:rgb(var(--_fg, 255, 255, 255))">${v}</div>
         </div>`
       ).join('')}
     </div>`;

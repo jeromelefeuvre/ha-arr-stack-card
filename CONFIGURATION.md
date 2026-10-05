@@ -1,8 +1,9 @@
 # Arr Stack Card — configuration reference
 
 Every option the card understands. Most of them are also in the visual editor —
-open the dashboard editor and click the pencil on the card. Only the `styles.*`
-and `security.*` keys have to be written by hand.
+open the dashboard editor and click the pencil on the card. Only the `security.*`
+keys have to be written by hand; colours, surfaces and presets are in the
+editor's Appearance tab, and every styling key is in [STYLING.md](STYLING.md).
 
 Back to the [README](README.md).
 
@@ -123,28 +124,18 @@ styles:
   applicationIcons: real          # real | mdi — use real app logos or MDI icons  (default: real)
   uiScale: 1                      # scale all card content — use >1 on large screens/TVs  (default: 1)
   leftPanelWidth: 40              # downloads panel width as % of card width  (default: 40)
-  searchBarIconColor: ""
-  headingTextColor: "#ffffff"
-  headingColor: "#ffffff"
-  primaryTextColor: "#ffffff"
-  secondaryTextColor: "#aaaaaa"
-  pagingButtonTextColor: "#ffffff"
-  pagingButtonBackgroundColor: "#1e1e2e"
-  pagingDotColor: "#555555"
-  pagingDotActiveColor: "#ffffff"
-  downloadButtonTextColor: "#ffffff"
-  tagPillTextColor: "#ffffff"
-  modalHeadingTextColor: "#ffffff"
-  modalPrimaryTextColor: "#ffffff"
-  modalSecondaryTextColor: "#aaaaaa"
-  modalBackgroundColor: "#121216"      # set dayNightMode: false when using a custom colour
-  modalOverlayColor: "#000000"
+  preset: glass                   # glass | ha | solid — see STYLING.md
+  text: "#ffffff"                 # every colour, surface and opacity key, and the
+  radius: 34                      #   left:/right:/modal:/modalDay: groups: STYLING.md
+  iconStyle: brand                # brand | mono — real logos in their own colours or the icon colour
   modalCloseButtonIconColor: "#ffffff"
   modalCloseButtonBackgroundColor: "#333344"
   modalButtonTextColor: "#ffffff"
   modalButtonBackgroundColor: "#1e1e2e"
   modalRemoveButtonBackgroundColor: "#ff6030"
 ```
+
+The older colour keys (`headingTextColor`, `primaryTextColor`, `modalBackgroundColor` …) keep working — [STYLING.md](STYLING.md#the-older-keys) lists what each one sets now.
 
 ## Category IDs
 

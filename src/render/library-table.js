@@ -80,7 +80,7 @@ class _LibraryTableMethods {
       const selKey = `${item._libType}-${item._libInst||'1'}-${item.id}`;
       const checked = m._selected?.has(selKey);
       const inner = checked ? `<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none"><polyline points="20 6 9 17 4 12"/></svg>` : '';
-      const el = `<div data-lib-sel="${selKey}" style="width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,0.7);background:${checked ? 'rgba(0,122,255,0.9)' : 'transparent'};display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-sizing:border-box">${inner}</div>`;
+      const el = `<div data-lib-sel="${selKey}" style="width:16px;height:16px;border-radius:50%;border:2px solid rgba(var(--_line, 255, 255, 255), 0.7);background:${checked ? 'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.9)' : 'transparent'};display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-sizing:border-box">${inner}</div>`;
       return tag === 'td' ? `<td style="width:28px;padding:0 6px">${el}</td>` : el;
     };
     const _monIcon = (item) => item.monitored
@@ -98,12 +98,12 @@ class _LibraryTableMethods {
         const profile = item.qualityProfileName || '';
         const _mtMob = (txt) => txt ? `<span class="media-type-tag" style="position:static;font-size:9px;padding:1px 5px">${txt}</span>` : '';
         const metaTags = [_mtMob(profile), _mtMob(sizeStr)].filter(Boolean).join('');
-        return `<div class="lib-table-row"${_popupAttrs(item)} style="display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid var(--is-divider,rgba(255,255,255,0.07))">
+        return `<div class="lib-table-row"${_popupAttrs(item)} style="display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.07))">
           ${_checkEl(item)}
           ${_monIcon(item)}
           <span style="display:inline-flex;flex-shrink:0">${isMovie ? _icoMov : _icoTv}</span>
           <div style="flex:1;min-width:0">
-            <div style="font-size:12px;font-weight:600;color:var(--is-text,#fff);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${title}</div>
+            <div style="font-size:12px;font-weight:600;color:var(--is-text,rgb(var(--_fg, 255, 255, 255)));white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${title}</div>
             ${metaTags ? `<div style="display:flex;gap:4px;margin-top:2px">${metaTags}</div>` : ''}
           </div>
           ${_statusBadge(st)}
@@ -210,11 +210,11 @@ class _LibraryTableMethods {
           .filter(Boolean)
           .map(t => `<span class="media-type-tag" style="position:static;font-size:9px;padding:1px 5px">${t}</span>`)
           .join('');
-        return `<div class="lib-table-row${this._libFlashArtist && this._libFlashArtist === a.id ? ' lib-flash' : ''}"${_attrs(a)} style="display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid var(--is-divider,rgba(255,255,255,0.07))">
+        return `<div class="lib-table-row${this._libFlashArtist && this._libFlashArtist === a.id ? ' lib-flash' : ''}"${_attrs(a)} style="display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid var(--is-divider,rgba(var(--_line, 255, 255, 255), 0.07))">
           ${_mon(a)}
           <span style="display:inline-flex;flex-shrink:0">${_ico}</span>
           <div style="flex:1;min-width:0">
-            <div style="font-size:12px;font-weight:600;color:var(--is-text,#fff);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div>
+            <div style="font-size:12px;font-weight:600;color:var(--is-text,rgb(var(--_fg, 255, 255, 255)));white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div>
             ${tags ? `<div style="display:flex;gap:4px;margin-top:2px">${tags}</div>` : ''}
           </div>
           ${r.badge}

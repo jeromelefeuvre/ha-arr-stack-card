@@ -5,12 +5,12 @@
 // and the request overlays all draw with it, so it is core — only the Maintainerr
 // modal itself loads on demand (chunks/maintainerr.js).
 
-export const MT_BTN = `background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.10);border-radius:999px;color:var(--is-text);font-size:12px;height:32px;padding:0 14px;box-sizing:border-box;cursor:pointer;outline:none;display:inline-flex;align-items:center;justify-content:center;gap:4px;font-weight:600;white-space:nowrap`;
+export const MT_BTN = `background:rgba(var(--_fill, 255, 255, 255), 0.06);border:1px solid rgba(var(--_line, 255, 255, 255), 0.10);border-radius:999px;color:var(--is-text);font-size:12px;height:32px;padding:0 14px;box-sizing:border-box;cursor:pointer;outline:none;display:inline-flex;align-items:center;justify-content:center;gap:4px;font-weight:600;white-space:nowrap`;
 export const _ICO_CHECK = `<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
 export const MT_ACCENTS = {
-  blue:  ['rgba(0,122,255,0.2)',   'rgba(0,122,255,0.5)',   '#007aff'],
-  red:   ['rgba(248,113,113,0.14)','rgba(248,113,113,0.35)','#e5484d'],
-  green: ['rgba(52,211,153,0.14)', 'rgba(52,211,153,0.35)', '#0f9d60'],
+  blue:  ['rgba(var(--arr-accent-rgb, 0, 122, 255), 0.2)',   'rgba(var(--arr-accent-rgb, 0, 122, 255), 0.5)',   'rgb(var(--arr-accent-rgb, 0, 122, 255))'],
+  red:   ['rgba(var(--arr-error-rgb, 248, 113, 113), 0.14)','rgba(var(--arr-error-rgb, 248, 113, 113), 0.35)','rgb(var(--arr-error-rgb, 229, 72, 77))'],
+  green: ['rgba(var(--arr-success-rgb, 52, 211, 153), 0.14)', 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.35)', '#0f9d60'],
 };
 
 class _MtKitMethods {
@@ -47,7 +47,7 @@ class _MtKitMethods {
 
   _mtBtnA(kind) {
     const [bg, bdr, tint] = MT_ACCENTS[kind] || MT_ACCENTS.blue;
-    const color = this._isDay ? tint : '#fff';
+    const color = this._isDay ? tint : 'rgb(var(--_fg, 255, 255, 255))';
     return `${MT_BTN};background:${bg};border-color:${bdr};color:${color};font-weight:700`;
   }
 
@@ -77,7 +77,7 @@ class _MtKitMethods {
     // "GONE AUGUST 26TH" is wider than a poster at 11px/nowrap, and clipping it
     // looked like a rendering fault. Wrapping keeps it inside; spanning the
     // poster's full width between the type tag's margins buys back a size.
-    const base = `font-size:10px;font-weight:800;letter-spacing:0.02em;color:#fff;background:${bg};border:1px solid #ff3b30;border-radius:5px;max-width:100%;box-sizing:border-box;white-space:normal;text-align:center;line-height:1.2;box-shadow:0 2px 8px rgba(0,0,0,0.45)${stretch ? ';flex:1' : ''}`;
+    const base = `font-size:10px;font-weight:800;letter-spacing:0.02em;color:rgb(var(--_fg, 255, 255, 255));background:${bg};border:1px solid #ff3b30;border-radius:5px;max-width:100%;box-sizing:border-box;white-space:normal;text-align:center;line-height:1.2;box-shadow:0 2px 8px rgba(var(--_shadow, 0, 0, 0), 0.45)${stretch ? ';flex:1' : ''}`;
 
     if (prefix && compact) {
       return `<span title="${this._escHtml(full)}" style="${base};padding:3px 6px">${this._escHtml(prefix)} ${this._escHtml(this._mtGoneText(days, dueMs, true))}</span>`;
@@ -99,9 +99,9 @@ class _MtKitMethods {
     // White-on-white washed the whole control out in day mode; the track, the
     // filled portion and the knob each need an opaque counterpart.
     const day = this._isDay;
-    const track = day ? 'rgba(0,0,0,0.16)' : 'rgba(255,255,255,0.18)';
-    const fill  = day ? 'rgba(0,0,0,0.42)' : 'rgba(255,255,255,0.45)';
-    const knob  = day ? '#ffffff' : 'rgba(255,255,255,0.85)';
+    const track = day ? 'rgba(var(--_shade, 0, 0, 0), 0.16)' : 'rgba(var(--_fg3, 255, 255, 255), 0.18)';
+    const fill  = day ? 'rgba(var(--_shade, 0, 0, 0), 0.42)' : 'rgba(var(--_fg3, 255, 255, 255), 0.45)';
+    const knob  = day ? 'rgb(var(--_fg, 255, 255, 255))' : 'rgba(var(--_fg, 255, 255, 255), 0.85)';
     const knobBdr = day ? 'border:1px solid rgba(0,0,0,0.30);' : '';
     const shadow = day ? '0 1px 3px rgba(0,0,0,0.30)' : '0 1px 4px rgba(0,0,0,0.4)';
     return `<div id="mt-drag-handle" style="position:absolute;right:0;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:6px;padding:6px 0 6px 8px;touch-action:none;user-select:none;cursor:ew-resize">
@@ -245,7 +245,7 @@ class _MtKitMethods {
     const sty = active
       ? (day
         ? `border:1px solid rgba(${rgb},0.65);background:rgba(${rgb},0.18);color:${solid}`
-        : `border:1px solid rgba(${rgb},${bdrA});background:rgba(${rgb},${bgA});color:#fff`)
+        : `border:1px solid rgba(${rgb},${bdrA});background:rgba(${rgb},${bgA});color:rgb(var(--_fg, 255, 255, 255))`)
       : 'border:1px solid var(--is-divider);background:var(--is-btn-bg);color:var(--is-text-muted)';
     return `<button ${attr} title="${this._escHtml(title)}"${off ? ' disabled' : ''} style="width:${size}px;height:${size}px;padding:0;border-radius:50%;cursor:${off ? 'default' : 'pointer'};display:flex;align-items:center;justify-content:center;line-height:0;flex-shrink:0;transition:background 0.15s,color 0.15s;backdrop-filter:blur(8px);${disabled && !busy ? 'opacity:0.55;' : ''}${sty}">${busy ? '<span class="is-spin"></span>' : icon}</button>`;
   }

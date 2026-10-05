@@ -459,7 +459,7 @@ class _WireActivityMethods {
     const slot = this._isMob ? null : host.querySelector('#act-status-slot');
     const pos = slot
       ? ''
-      : `position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:1300;box-shadow:0 4px 18px rgba(0,0,0,0.5);`;
+      : `position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:1300;box-shadow:0 4px 18px rgba(var(--_shadow, 0, 0, 0), 0.5);`;
     const el = document.createElement('div');
     el.innerHTML = `<div data-act-status style="${pos}display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:rgba(${rgb},0.95);background:${this._isDay ? '#fafafc' : '#14141a'};border:1px solid rgba(${rgb},0.45);border-radius:999px;padding:6px 16px;white-space:nowrap">
       ${opts.spin ? '<span class="is-spin"></span>' : ''}${this._escHtml(msg)}

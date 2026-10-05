@@ -39,18 +39,18 @@ class _TracearrTilesMethods {
       const day = new Date(p.date).getDate();
       return `<div style="flex:1;display:flex;flex-direction:column;padding:0 1.5px">
         <div style="flex:${gap}"></div>
-        ${p.count ? `<div style="flex:${h};background:linear-gradient(to bottom,rgba(255,255,255,0.75),rgba(255,255,255,0.3));border-radius:3px 3px 0 0"></div>` : `<div style="flex:${h};display:none"></div>`}
+        ${p.count ? `<div style="flex:${h};background:linear-gradient(to bottom,rgba(var(--_fg, 255, 255, 255), 0.75),rgba(var(--_fg, 255, 255, 255), 0.3));border-radius:3px 3px 0 0"></div>` : `<div style="flex:${h};display:none"></div>`}
       </div>`;
     }).join('');
     const labels = plays.map(p => {
       const day   = new Date(p.date).getDate();
       const today = day === todayD;
-      return `<div style="flex:1;font-size:7px;font-weight:${today?'700':'500'};color:${today?'rgba(255,255,255,0.75)':'rgba(255,255,255,0.3)'};text-align:center;padding:2px 0 0">${day}</div>`;
+      return `<div style="flex:1;font-size:7px;font-weight:${today?'700':'500'};color:${today?'rgba(var(--_fg2, 255, 255, 255), 0.75)':'rgba(var(--_fg3, 255, 255, 255), 0.3)'};text-align:center;padding:2px 0 0">${day}</div>`;
     }).join('');
     const dp = quality.directPlayPercent ?? 0;
 
     const playsTag = total > 0
-      ? `<span style="font-size:10px;font-weight:700;color:#fff;background:rgba(130,80,255,0.2);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${total} ${this._t('tlPlays')}</span>`
+      ? `<span style="font-size:10px;font-weight:700;color:rgb(var(--_fg, 255, 255, 255));background:rgba(130,80,255,0.2);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${total} ${this._t('tlPlays')}</span>`
       : '';
 
     return `<div class="tl-card u-sec-body" data-tra-open="activity">
@@ -64,9 +64,9 @@ class _TracearrTilesMethods {
       </div>
       <div style="flex:1;display:flex;flex-direction:column;position:relative;z-index:2;min-height:0">
         <div style="flex:1;display:flex;gap:0">${bars}</div>
-        <div style="height:1px;background:rgba(255,255,255,0.08);margin:1px 0"></div>
+        <div style="height:1px;background:rgba(var(--_fill, 255, 255, 255), 0.08);margin:1px 0"></div>
         <div style="display:flex;gap:0;margin-top:1px">${labels}</div>
-        ${dp > 0 ? `<div style="font-size:9px;color:rgba(255,255,255,0.38);margin-top:5px;display:flex;justify-content:space-between"><span>${this._t('traDirectPlayLc')}</span><span style="color:rgba(110,231,183,0.85);font-weight:700">${dp}%</span></div>` : ''}
+        ${dp > 0 ? `<div style="font-size:9px;color:rgba(var(--_fg3, 255, 255, 255), 0.38);margin-top:5px;display:flex;justify-content:space-between"><span>${this._t('traDirectPlayLc')}</span><span style="color:rgba(var(--arr-success-rgb, 110, 231, 183), 0.85);font-weight:700">${dp}%</span></div>` : ''}
       </div>
     </div>`;
   }
@@ -82,26 +82,26 @@ class _TracearrTilesMethods {
       const dpN   = Math.round(Number(u.directPlayPct ?? u.directPlayRate ?? 0));
       const trPct = Math.round(Number(u.pctOfTotalTranscodes ?? (totalTr ? tr / totalTr * 100 : 0)));
       const av    = this._imgSrc(u.avatar || u.avatarUrl) || null;
-      const sep   = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+      const sep   = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
       const avEl  = av
-        ? `<img src="${av}" width="15" height="15" style="border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(255,255,255,0.12)" loading="lazy" onerror="this.style.display='none'">`
-        : `<span style="width:15px;height:15px;border-radius:50%;background:rgba(255,255,255,0.12);display:inline-flex;align-items:center;justify-content:center;font-size:6px;font-weight:800;color:rgba(255,255,255,0.6);flex-shrink:0">${this._escHtml(rawName.slice(0, 2).toUpperCase())}</span>`;
-      const dpColor = dpN >= 80 ? 'rgba(52,211,153,0.9)' : dpN >= 50 ? 'rgba(251,191,36,0.9)' : 'rgba(248,113,113,0.9)';
-      const dpBg    = dpN >= 80 ? 'rgba(52,211,153,0.12)' : dpN >= 50 ? 'rgba(251,191,36,0.1)' : 'rgba(248,113,113,0.12)';
+        ? `<img src="${av}" width="15" height="15" style="border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(var(--_line, 255, 255, 255), 0.12)" loading="lazy" onerror="this.style.display='none'">`
+        : `<span style="width:15px;height:15px;border-radius:50%;background:rgba(var(--_fill, 255, 255, 255), 0.12);display:inline-flex;align-items:center;justify-content:center;font-size:6px;font-weight:800;color:rgba(var(--_fg2, 255, 255, 255), 0.6);flex-shrink:0">${this._escHtml(rawName.slice(0, 2).toUpperCase())}</span>`;
+      const dpColor = dpN >= 80 ? 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.9)' : dpN >= 50 ? 'rgba(var(--arr-warning-rgb, 251, 191, 36), 0.9)' : 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.9)';
+      const dpBg    = dpN >= 80 ? 'rgba(var(--arr-success-rgb, 52, 211, 153), 0.12)' : dpN >= 50 ? 'rgba(var(--arr-warning-rgb, 251, 191, 36), 0.1)' : 'rgba(var(--arr-error-rgb, 248, 113, 113), 0.12)';
       return `<div style="${sep}display:flex;align-items:center;gap:5px;padding:4px 0">
         ${avEl}
-        <span style="font-size:10px;font-weight:600;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</span>
-        <span style="font-size:9px;color:rgba(255,255,255,0.4);flex-shrink:0">${tr}×</span>
-        <span style="font-size:9px;font-weight:700;color:#fff;background:rgba(248,113,113,0.18);border-radius:10px;padding:1px 5px;flex-shrink:0">${trPct}%</span>
+        <span style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</span>
+        <span style="font-size:9px;color:rgba(var(--_fg3, 255, 255, 255), 0.4);flex-shrink:0">${tr}×</span>
+        <span style="font-size:9px;font-weight:700;color:rgb(var(--_fg, 255, 255, 255));background:rgba(var(--arr-error-rgb, 248, 113, 113), 0.18);border-radius:10px;padding:1px 5px;flex-shrink:0">${trPct}%</span>
       </div>`;
     }).join('');
 
-    const empty = `<div style="display:flex;align-items:center;gap:5px;padding:6px 0;font-size:9px;color:rgba(110,231,183,0.8)">
-      <span style="width:7px;height:7px;border-radius:50%;background:#34d399;flex-shrink:0"></span>${this._t('traAllDirectPlay')}
+    const empty = `<div style="display:flex;align-items:center;gap:5px;padding:6px 0;font-size:9px;color:rgba(var(--arr-success-rgb, 110, 231, 183), 0.8)">
+      <span style="width:7px;height:7px;border-radius:50%;background:rgb(var(--arr-success-rgb, 52, 211, 153));flex-shrink:0"></span>${this._t('traAllDirectPlay')}
     </div>`;
 
     const badge = totalTr > 0
-      ? `<span style="font-size:10px;font-weight:700;color:#fff;background:rgba(248,113,113,0.18);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${totalTr}×</span>`
+      ? `<span style="font-size:10px;font-weight:700;color:rgb(var(--_fg, 255, 255, 255));background:rgba(var(--arr-error-rgb, 248, 113, 113), 0.18);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${totalTr}×</span>`
       : '';
 
     return `<div class="tl-card u-sec-body" data-tra-open="devices">
@@ -125,22 +125,22 @@ class _TracearrTilesMethods {
       const rawName = String(u.displayName || u.username || '—');
       const name  = this._escHtml(rawName);
       const score = u.trustScore == null ? 100 : (Number(u.trustScore) || 0);
-      const color = score >= 80 ? 'rgba(110,231,183,0.9)' : score >= 50 ? 'rgba(252,211,77,0.9)' : 'rgba(252,165,165,0.9)';
+      const color = score >= 80 ? 'rgba(var(--arr-success-rgb, 110, 231, 183), 0.9)' : score >= 50 ? 'rgba(var(--arr-warning-rgb, 252, 211, 77), 0.9)' : 'rgba(var(--arr-error-rgb, 252, 165, 165), 0.9)';
       const avSrc = this._imgSrc(u.thumbUrl || u.avatarUrl);
       const av    = avSrc
-        ? `<img src="${avSrc}" style="width:15px;height:15px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(255,255,255,0.15)" loading="lazy" onerror="this.style.display='none'">`
-        : `<span style="width:15px;height:15px;border-radius:50%;background:rgba(255,255,255,0.12);display:inline-flex;align-items:center;justify-content:center;font-size:6px;font-weight:800;color:rgba(255,255,255,0.6);flex-shrink:0">${this._escHtml(rawName.slice(0, 2).toUpperCase())}</span>`;
-      const sep = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+        ? `<img src="${avSrc}" style="width:15px;height:15px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(var(--_line, 255, 255, 255), 0.15)" loading="lazy" onerror="this.style.display='none'">`
+        : `<span style="width:15px;height:15px;border-radius:50%;background:rgba(var(--_fill, 255, 255, 255), 0.12);display:inline-flex;align-items:center;justify-content:center;font-size:6px;font-weight:800;color:rgba(var(--_fg2, 255, 255, 255), 0.6);flex-shrink:0">${this._escHtml(rawName.slice(0, 2).toUpperCase())}</span>`;
+      const sep = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
       return `<div style="${sep}display:flex;align-items:center;gap:6px;padding:4px 0">
         ${av}
-        <span style="font-size:10px;font-weight:600;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</span>
+        <span style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</span>
         <span style="font-size:10px;font-weight:700;color:${color};flex-shrink:0">${score}</span>
       </div>`;
     }).join('') || `<div class="u-xxs-dim">${this._t('tlNoData')}</div>`;
 
     const flagTag = flagged > 0
-      ? `<span style="font-size:10px;font-weight:700;color:#fff;background:rgba(248,113,113,0.18);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${this._t('traFlagged').replace('{n}', flagged)}</span>`
-      : `<span style="font-size:10px;font-weight:700;color:#fff;background:rgba(52,211,153,0.16);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${this._t('traAllClear')}</span>`;
+      ? `<span style="font-size:10px;font-weight:700;color:rgb(var(--_fg, 255, 255, 255));background:rgba(var(--arr-error-rgb, 248, 113, 113), 0.18);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${this._t('traFlagged').replace('{n}', flagged)}</span>`
+      : `<span style="font-size:10px;font-weight:700;color:rgb(var(--_fg, 255, 255, 255));background:rgba(var(--arr-success-rgb, 52, 211, 153), 0.16);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${this._t('traAllClear')}</span>`;
 
     return `<div class="tl-card u-sec-body" data-tra-open="users">
       <div class="u-bg-icon">
@@ -163,27 +163,27 @@ class _TracearrTilesMethods {
       concurrent_streams:    this._t('traVtConcurrent'),
       device_velocity:       this._t('traVtVelocity'),
     };
-    const severityColor = { high: 'rgba(252,165,165,0.9)', medium: 'rgba(252,211,77,0.9)', low: 'rgba(110,231,183,0.9)' };
-    const dotColor     = { high: '#f87171', medium: '#fbbf24', low: '#34d399' };
+    const severityColor = { high: 'rgba(var(--arr-error-rgb, 252, 165, 165), 0.9)', medium: 'rgba(var(--arr-warning-rgb, 252, 211, 77), 0.9)', low: 'rgba(var(--arr-success-rgb, 110, 231, 183), 0.9)' };
+    const dotColor     = { high: 'rgb(var(--arr-error-rgb, 248, 113, 113))', medium: 'rgb(var(--arr-warning-rgb, 251, 191, 36))', low: 'rgb(var(--arr-success-rgb, 52, 211, 153))' };
 
     const items = viols.map((v, i) => {
       const label = this._escHtml(typeLabel[v.type] || v.type || '—');
       const user  = this._escHtml(v.user?.displayName || v.username || '');
-      const sep   = i > 0 ? 'border-top:1px solid rgba(255,255,255,0.06);' : '';
+      const sep   = i > 0 ? 'border-top:1px solid rgba(var(--_line, 255, 255, 255), 0.06);' : '';
       const dot   = dotColor[v.severity] || dotColor.high;
       return `<div style="${sep}padding:4px 0">
         <div class="u-row-5">
           <span style="width:7px;height:7px;border-radius:50%;background:${dot};box-shadow:0 0 6px ${dot};flex-shrink:0"></span>
-          <span style="font-size:10px;font-weight:600;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</span>
+          <span style="font-size:10px;font-weight:600;color:rgb(var(--_fg, 255, 255, 255));flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</span>
         </div>
-        ${user ? `<div style="font-size:9px;color:rgba(255,255,255,0.38);padding-left:12px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${user}</div>` : ''}
+        ${user ? `<div style="font-size:9px;color:rgba(var(--_fg3, 255, 255, 255), 0.38);padding-left:12px;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${user}</div>` : ''}
       </div>`;
-    }).join('') || `<div style="font-size:9px;color:rgba(110,231,183,0.7);padding:8px 0;display:flex;align-items:center;gap:5px">
-        <span style="width:7px;height:7px;border-radius:50%;background:#34d399;flex-shrink:0"></span>${this._t('traNoViolations')}
+    }).join('') || `<div style="font-size:9px;color:rgba(var(--arr-success-rgb, 110, 231, 183), 0.7);padding:8px 0;display:flex;align-items:center;gap:5px">
+        <span style="width:7px;height:7px;border-radius:50%;background:rgb(var(--arr-success-rgb, 52, 211, 153));flex-shrink:0"></span>${this._t('traNoViolations')}
       </div>`;
 
     const badge = total > 0
-      ? `<span style="font-size:10px;font-weight:700;color:#fff;background:rgba(248,113,113,0.18);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${total} ${this._t('traNew')}</span>`
+      ? `<span style="font-size:10px;font-weight:700;color:rgb(var(--_fg, 255, 255, 255));background:rgba(var(--arr-error-rgb, 248, 113, 113), 0.18);border-radius:20px;padding:1px 7px;white-space:nowrap;flex-shrink:0">${total} ${this._t('traNew')}</span>`
       : '';
 
     return `<div class="tl-card u-sec-body" data-tra-open="violations">
