@@ -268,8 +268,10 @@ class ArrStackCard extends HTMLElement {
     this._jellyfinLastFetch = 0;
     this._embySessions      = [];
     this._embyLastFetch     = 0;
+    this._embyConfigured    = null;  // null=unknown, false=not set up and never asked again
     this._kodiSessions      = [];
     this._kodiLastFetch     = 0;
+    this._kodiConfigured    = null;  // null=unknown, false=no Kodi player in Home Assistant
     this._kodiEntityIds     = new Set();
     this._overseerrConfigured = null;   // null=unknown, true=configured, false=not configured
     this._tmdbPinged = false;

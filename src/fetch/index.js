@@ -51,6 +51,11 @@ async _fetchCapabilities() {
     if (!caps.maintainerr) this._maintainerrConfigured  = false;
     if (!caps.gluetun)  this._gluetunConfigured      = false;
     if (caps.jellyfin)  this._jellyfinConfigured     = true;
+    // Sessions are asked every thirty seconds, and every five while anything
+    // streams elsewhere. An integration too old to send these leaves the flags
+    // unknown, and the first answer settles them (see _fetchEmbySessions).
+    if ('emby' in caps) this._embyConfigured         = !!caps.emby;
+    if ('kodi' in caps) this._kodiConfigured         = !!caps.kodi;
     this._seerrType = caps.seerrType || 'overseerr';
     this._arrHosts = caps.arrHosts || {};
   } catch (_) {
