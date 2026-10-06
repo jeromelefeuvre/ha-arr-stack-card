@@ -453,6 +453,7 @@ class ArrStackCard extends HTMLElement {
     }
     this._config = config;
     this._debug = !!config.debug;
+    this._applyDefaultSort();
     // Pokud je karta už inicializována, obnov sticky nav observer s novým offsetem
     if (this._initialized) {
       this._wireStickyNav();
@@ -671,6 +672,19 @@ class ArrStackCard extends HTMLElement {
     const flat = this._config?.[key];
     if (flat !== undefined) return flat;
     return fallback;
+  }
+
+  // The order the torrent queues open in (downloads.defaultSort). It is only
+  // applied when the setting itself changes, so a sort picked with the buttons
+  // is not thrown away by an unrelated edit in the card editor.
+  _applyDefaultSort() {
+    const SORTS = ['progress_desc', 'progress_asc', 'speed_desc', 'speed_asc', 'added_desc', 'added_asc'];
+    const want = this._cfgGet('downloads', 'defaultSort', 'progress_desc');
+    const sort = SORTS.includes(want) ? want : 'progress_desc';
+    if (sort === this._defaultSort) return;
+    this._defaultSort = sort;
+    this._sort = this._sortDeluge = this._sortRtorrent = this._sortTransmission = sort;
+    if (this._pages) this._pages.qbit = this._pages.deluge = this._pages.rtorrent = this._pages.transmission = 0;
   }
 
   // The card's language: cs, fr or en, from the card's localisation setting.

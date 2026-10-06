@@ -268,6 +268,17 @@ class ArrStackCardEditor extends HTMLElement {
             <input type="number" data-group="downloads" data-key="usenetItems" value="${this._cfg('downloads','usenetItems',3)}" min="1" max="20"/>
           </div>
           <div class="row">
+            <span class="row-label">Default sort</span>
+            <select data-group="downloads" data-key="defaultSort">
+              ${[
+                ['progress_desc', 'Progress ↓'], ['progress_asc', 'Progress ↑'],
+                ['speed_desc', 'Speed ↓'],       ['speed_asc', 'Speed ↑'],
+                ['added_desc', 'Date added ↓'],  ['added_asc', 'Date added ↑'],
+              ].map(([v, l]) => `<option value="${v}" ${this._cfg('downloads','defaultSort','progress_desc')===v?'selected':''}>${l}</option>`).join('')}
+            </select>
+          </div>
+          <div class="hint">The order qBittorrent, Deluge, rTorrent and Transmission queues open in. The sort buttons still change it until the page is reloaded.</div>
+          <div class="row">
             <span class="row-label">Allow download controls</span>
             <label class="toggle"><input type="checkbox" data-group="downloads" data-key="allowControls" ${this._cfg('downloads','allowControls',true) !== false ? 'checked' : ''}><span class="toggle-slider"></span></label>
           </div>
